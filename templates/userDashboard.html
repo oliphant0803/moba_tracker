@@ -36,6 +36,21 @@
 
   <body class="d-flex flex-column min-vh-100">
     <!--Navbar -->
+    <nav class="navbar navbar-expand-xl">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="">My Profile</a>
+          </li>
+      </div>
+    </nav>
     <!--Navbar -->
 
     <!--Search bar -->
@@ -50,22 +65,25 @@
 
         <div class="row">
           <!-- recent -->
-          <div class="col recent-container justify-content-center">
+          <div class="col recent-container justify-content-center active-button" id="recentCon">
             <button type="button" class="btn btn-recent" onclick="showRecent()">Recent Search</button>
           </div>
           <!-- recent -->
 
           <!-- fav -->
-          <div class="col fav-container justify-content-center">
+          <div class="col fav-container justify-content-center" id="favCon">
             <button type="button" class="btn btn-fav" onclick="showFav()">Favorite</button>
-            <div id="favS" class="row">
-            </div>
           </div>
 
           <!-- fav -->
         </div>
 
-        <div id="recentS" class="row recent-search-body">
+        <div id="recentS" class="row search-body">
+            <!-- recent users searches divs -->
+        </div>
+
+        <div id="favS" class="row search-body">
+            <!-- fav users searches divs -->
         </div>
       </div>
     </div>
