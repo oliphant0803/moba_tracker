@@ -4,11 +4,23 @@
  */
 
  #rectangle {
-    background-color: #e6ecf0;
+    background-color: var(--white);
     width: 70%;
     height: 60vh;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#logo {
+    background-color: var(--txt-grey);
+    /* padding: 100px; */
+    position: relative;
+    width: 70%;
+    height: 15%;
+    
+    top: 20%;
+    left: 50%;
+    transform: translate(-20%, -20%);
 }
