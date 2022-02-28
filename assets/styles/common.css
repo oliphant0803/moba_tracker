@@ -7,8 +7,14 @@
     --bg-grey: #EAEAEA;
 }
 
-body {
+body.bg-blue {
     background: var(--dark-blue);
+    margin: 0;
+    font-family: cursive;
+}
+
+body.bg-grey {
+    background: var(--bg-grey);
     margin: 0;
     font-family: cursive;
 }
@@ -26,4 +32,41 @@ body {
 .footer-text a:hover{
     text-decoration: none;
     color:var(--bg-grey);
+}
+
+.header{
+    width: 100%;
+    height: 50px;
+    display: inline-block;
+}
+
+.header-announcement{
+    display: inline-block;
+    width: 70%;
+    padding-top: 15px;
+    padding-left: 15px;
+    max-height: 50px;
+}
+
+.header-name{
+    display: inline-block;
+    float: right;
+    max-width: 100px;
+    padding-top: 15px;
+    max-height: 50px;
+}
+
+.header-img-container{
+    float: right;
+    width: 50px;
+    height: 50px;
+    padding-top: 5px;
+    display: inline-block;
+}
+
+.img-profile{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--txt-grey);
 }
