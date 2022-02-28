@@ -13,14 +13,72 @@
     transform: translate(-50%, -50%);
 }
 
-#logo {
+.logo {
     background-color: var(--txt-grey);
-    /* padding: 100px; */
     position: relative;
     width: 70%;
     height: 15%;
-    
-    top: 20%;
+    margin-top: 10%;
     left: 50%;
-    transform: translate(-20%, -20%);
+    transform: translate(-50%);
+}
+
+.username{
+    margin-top: 5%;
+    display: block;
+}
+
+.password{
+    margin-top: 2%;
+    display: block;
+}
+
+.userType{
+    margin-top: 10%;
+    display: block;
+}
+
+.infoBar{
+    background-color: var(--dark-blue);
+    position: relative;
+    border-radius: 20px;
+    height: 40px;
+    width: 40%;
+    left: 28%;
+}
+
+.typeBar{
+    background-color: var(--dark-blue);
+    border-radius: 20px;
+    height: 40px;
+    width: 40%;
+    position: relative;
+}
+
+::placeholder{
+    color: var(--white);
+}
+
+.register{
+    margin-top: 10%;
+    background-color: var(--light-blue);
+    position: relative;
+    border-radius: 20px;
+    height: 40px;
+    width: 40%;
+    left: 50%;
+}
+
+.login{
+    margin-top: 10%;
+    background-color: var(--dark-blue);
+    position: relative;
+    border-radius: 20px;
+    height: 40px;
+    width: 40%;
+    left: 10%
+}
+
+button{
+    color: var(--white);
 }
