@@ -7,7 +7,7 @@
     --bg-grey: #EAEAEA;
 }
 
-body {
+body{
     background: var(--dark-blue);
     margin: 0;
     font-family: cursive;

@@ -1,3 +1,31 @@
+.nav-item{
+    background-color: var(--light-blue);
+    border-radius: 15px;
+    margin-left: 5rem;
+    margin-top: 1rem;
+    width: max-content;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.navbar-toggler{
+    background-color: var(--light-blue);
+    color: var(--white);
+}
+
+.nav-link{
+    color: var(--white);
+}
+
+.nav-link:hover, .nav-link:active{
+    color: var(--bg-grey);
+}
+
+.nav-item.active{
+    background-color: var(--dark-blue);
+    border: 1px solid var(--white);
+}
+
 #search-section {
     background-color: var(--white);
     margin: 15rem 10rem 0rem 10rem;
@@ -17,10 +45,14 @@
     margin-bottom: 0.5rem;
 }
 
-.recent-container{
+.active-button{
     border-top: 1px solid var(--txt-grey);
+    background-color: var(--white) !important;
+}
+
+.recent-container{
     display:flex;
-    background-color: var(--white);
+    background-color: var(--bg-grey);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 }
@@ -74,7 +106,7 @@ img.img-tiger{
     z-index: 1;
 }
 
-.recent-search-body{
+.search-body{
     margin-left: 5rem;
     margin-right: 5rem;
 }
@@ -94,24 +126,24 @@ img.img-tiger{
 @media (min-width: 1450px) {
     #search-section {
         background-color: var(--white);
-        margin-top: 15rem;
+        margin-top: 10rem;
         height: 30rem;
-        margin-left: 30rem;
-        margin-right: 30rem;
+        margin-left: 20rem;
+        margin-right: 20rem;
     }
 
     img.img-bag{
-        margin-left: 20rem;
+        margin-left: 10rem;
     }
     
     img.img-tiger{
         right: 5rem;
         width: 20rem;
-        margin-right: 18rem;
+        margin-right: 8rem;
     }
 }
 
-@media (min-width: 2100px) {
+@media (min-width: 1750px) {
     #search-section {
         background-color: var(--white);
         margin-top: 15rem;
