@@ -3,20 +3,20 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Todo: change title name -->
   <title>User dashboard</title>
-  <link rel="icon" href="/team47/assets/images/login3.png" />
+  <link rel="icon" href="../assets/images/login3.png" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-  <link rel="stylesheet" href="/team47/assets/styles/userDash.css"/>
-  <link rel="stylesheet" href="/team47/assets/styles/common.css"/>
+  <link rel="stylesheet" href="../assets/styles/userDash.css"/>
+  <link rel="stylesheet" href="../assets/styles/common.css"/>
 
   <!-- Bootstrap js -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -30,7 +30,7 @@
   </script>
 
   <!-- Custom js -->
-  <script src="/team47/assets/js/userDash.js">
+  <script src="../assets/js/userDash.js">
   </script>
 </head>
 
@@ -39,10 +39,10 @@
     <!--Navbar -->
 
     <!--Search bar -->
-    <section id="search-section">
+    <div id="search-section">
       <div class="container text-center text-white">
         <!-- search -->
-        <div class="input-group search-container">
+        <div class="input-group search-container w-100 p-3">
           <input type="search" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
           <button type="button" class="btn btn-search">Search</button>
         </div>
@@ -51,23 +51,29 @@
         <div class="row">
           <!-- recent -->
           <div class="col recent-container justify-content-center">
-            <button type="button" class="btn btn-recent">Recent Search</button>
+            <button type="button" class="btn btn-recent" onclick="showRecent()">Recent Search</button>
           </div>
           <!-- recent -->
 
           <!-- fav -->
           <div class="col fav-container justify-content-center">
-            <button type="button" class="btn btn-fav">Favorite</button>
+            <button type="button" class="btn btn-fav" onclick="showFav()">Favorite</button>
+            <div id="favS" class="row">
+            </div>
           </div>
+
           <!-- fav -->
         </div>
+
+        <div id="recentS" class="row recent-search-body">
+        </div>
       </div>
-    </section>
+    </div>
     <!--Search bar -->
 
     <!-- decor -->
     <img src="/team47/assets/images/login1.png" class="img-fluid img-bag" alt="">
-    <img src="/team47/assets/images/tiger1.png" class="img-fluid img-tiger" alt="">
+    <div class="float-right"><img src="/team47/assets/images/tiger1.png" class="img-fluid img-tiger" alt=""></div>
     <!-- decor -->
 
     <!-- Footer -->
