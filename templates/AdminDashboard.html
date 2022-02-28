@@ -24,7 +24,7 @@
   </script>
 
   <!-- Custom js -->
-  <script src="../assets/js/userDash.js">
+  <script src="../assets/js/adminDash.js">
   </script>
 </head>
 
@@ -33,21 +33,22 @@
     <div class="container-fluid header bg-white">
       
       <div class="container header-announcement">
-        Welcome, XXXX. 
+        <!-- fill in by adminDash.js -->
       </div>
       <div class="container header-name">
-        BestAdmin
+        <!-- fill in by adminDash.js -->
       </div>
       <div class="header-img-container">
+        <!-- modify by adminDash.js -->
         <img src="../assets/images/tiger1.png" class="img-profile" alt="">
       </div>
     </div>
     <!--Header bar -->
     <!--Navbar -->
-    <div class="menu-container">
-      <button type="button" class="btn btn-action">View Users</button>
-      <button type="button" class="btn btn-action">Remove Users</button>
-      <button type="button" class="btn btn-action">Add Game</button>
+    <div id="menu-container">
+      <button type="button" class="btn btn-action viewUser">View Users</button>
+      <button type="button" class="btn btn-action removeUser">Remove Users</button>
+      <button type="button" class="btn btn-action addGame">Add Game</button>
     </div>
     <!--Navbar -->
 
@@ -56,11 +57,11 @@
       <div class="container text-center text-white">
         <!-- search -->
         <div class="input-group search-container">
-          <input type="search" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
-          <button type="button" class="btn btn-action">Search</button>
+          <input id="search" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
+          <button type="button" class="btn btn-action searchBut">Search</button>
         </div>
         <!-- search -->
-
+        <div id="result-container">
         <div class="row">
           <div class="col user-info-container">
             <div class="user-img-container">
@@ -135,7 +136,7 @@
               Favourite Champion<br>
               <a href="https://github.com/csc309-winter-2022/team47">Teemo</a>
             </div>
-            <div class="col user-kda-container">
+            <div class="user-kda-container">
               Avg KDA<br>
               3.77
             </div>
@@ -151,7 +152,7 @@
             <div class="user-img-container">
               <img src="../assets/images/tiger1.png" class="img-profile" alt="">
             </div>
-            <div class="col user-champ-container">
+            <div class="user-champ-container">
               Favourite Champion<br>
               <a href="https://github.com/csc309-winter-2022/team47">Teemo</a>
             </div>
@@ -161,6 +162,7 @@
             </div>
           </div>
         </div>
+      </div>
         <div class="row">
           <div class="col user-info-container justify-content-center">
             <button type="button" class="btn btn-recent">Show more</button>
