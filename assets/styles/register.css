@@ -42,7 +42,8 @@
     background-color: var(--dark-blue);
     background-clip: padding-box;
     border: 1px solid var(--dark-blue);
-    border-radius: 3rem;
+    border-radius: 3rem;    
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 #profile-img {
