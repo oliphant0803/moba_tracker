@@ -26,6 +26,7 @@
     background-color: var(--white);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    color: var(--txt-grey);
 }
 
 .user-img-container{
@@ -34,6 +35,7 @@
     height: 50px;
     padding-top: 5px;
 }
+
 .username{
     float: left;
     width: 70px;
@@ -44,7 +46,15 @@
 }
 
 .user-champ-container{
-    float: left;
+    border-top: 1px solid var(--txt-grey);
+    display:flex;
+    flex-grow: 2;
+    background-color: var(--white);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.user-champ-link-container{
     max-width: 170px;
     height: 50px;
     margin-left: 5px;
@@ -54,38 +64,6 @@
     text-align: left;
     color: var(--txt-grey);
 }
-.user-kda-container{
-    float: left;
-    max-width: 100px;
-    max-height: 50px;
-    margin-left: 5px;
-    padding-top: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-    text-align: left;
-    color: var(--txt-grey);
-}
-
-.fav-container{
-    display:flex;
-    background-color: var(--bg-grey);
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-
-
-
-.btn-recent, .btn-fav{
-    border: none;
-    box-shadow: none;
-    color: var(--txt-grey);  
-}
-
-.btn-recent:hover, .btn-fav:hover, .btn-recent:focus, .btn-fav:focus{
-    color: gray;  
-    box-shadow: none;
-}
-
 
 .btn-action{
     background-color: var(--light-blue);
