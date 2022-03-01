@@ -1,21 +1,26 @@
-.login-container{
+/*
+ * This code is for creating a register page styles.
+ * Author: Zewen Ma
+ */
+
+.reg-container{
     background-color: var(--white);
     margin-top: 5%;
     margin-bottom: 5%;
 }
-.login-form-1{
+.reg-form-1{
     padding: 5%;
     
 }
-.login-form-1 h3{
+/* .login-form-1 h3{
     text-align: center;
     color:var(--white);
-}
+} */
 
 .login-container form{
     padding: 10%;
 }
-.btnSubmit
+.submit-button
 {
     width: 50%;
     border-radius: 3rem;
@@ -24,7 +29,7 @@
     cursor: pointer;
     margin-left: 25%;
 }
-.login-form-1 .btnSubmit{
+.reg-form-1 .submit-button{
     font-weight: 600;
     color: #fff;
     background-color: var(--light-blue);

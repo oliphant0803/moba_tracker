@@ -25,46 +25,45 @@
     </script>
 
     <!-- Custom js -->
-    <script src="/team47/assets/js/register.js">
+    <script src="../assets/js/register.js">
     </script>
+      <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+      <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
   </head>
-  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <!------ Include the above in your HEAD tag ---------->
-  
-  <div class="container login-container">
+  <body class="d-flex flex-column min-vh-100">
+  <div class="container reg-container">
               <div class="row">
-                  <div class="col login-form-1">
-                      <form>
+                  <div class="col reg-form-1">
+                      <form id="userInfo">
                           <div class="form-group">
                               <div class="text-center">
                                 <img id="profile-img" src="../assets/images/login3.png" />
                               </div>
                           </div>
                           <div class="form-group">
-                              <input type="text" class="design" placeholder="Email:" value="" >
+                              <input id='email' type="text" class="design" placeholder="Email:">
                           </div>
                           <div class="form-group">
-                            <input type="text" class="design" placeholder="Username:" value="" >
+                            <input id='userName' type="text" class="design" placeholder="Username:">
                         </div>
                           <div class="form-group">
-                              <input type="text" class="design" placeholder="Password:" value="" >
+                              <input id='password' type="text" class="design" placeholder="Password:">
                           </div>
                           <div class="form-group">
-                            <input type="text" class="design" placeholder="User Type: Admin / User" value="" >
+                            <input id='usertype' type="text" class="design" placeholder="User Type: Admin / User">
                         </div>
                           <div class="form-group">
-                              <input type="submit" class="btnSubmit" value="Register" />
+                              <input type="submit" class="submit-button" value="Register" />
                           </div>
                       </form>
                   </div>
               </div>
           </div>
           <img src="../assets/images/login1.png" class="img-fluid img-bag" alt="">
-          <div class="float-right"><img src="../assets/images/tiger1.png" class="img-fluid img-tiger" alt=""></div>
-    
-  <body class="d-flex flex-column min-vh-100">
+          <div class="float-right"><img src="../assets/images/tiger1.png" class="img-fluid img-tiger" alt=""></div> 
+ 
    
 
     <!-- Footer -->
@@ -74,5 +73,5 @@
       </div>
     </footer>
   <!-- Footer -->
-  </body>
+</body>
 </html>
