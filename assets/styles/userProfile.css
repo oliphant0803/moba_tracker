@@ -35,9 +35,16 @@
 
 .match-container{
     margin-right: 10rem;
-    padding: 1rem 1rem 0rem 1rem;
-    margin-top: 1rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-bottom: 1px var(--txt-grey) solid;
+}
+
+.victory-bg{
     background-color: var(--victory-blue);
+}
+
+.defeat-bg{
+    background-color: var(--defeat-red);
 }
 
 .mod-btn{
@@ -75,6 +82,7 @@
 
 .img-champ{
     margin-left: 1rem;
+    width: 6rem;
 }
 
 h5{
@@ -82,16 +90,14 @@ h5{
 }
 
 .img-rune{
-    margin-bottom: 1rem;
-    width: 45%;
+    margin-left: 0.5rem;
+    width: 3rem;
 }
 
 .img-sumon{
     border-radius: 15px;
     border: 1px var(--txt-grey) solid;
-    margin-bottom: 1rem;
-    margin-right: 1rem;
-    width: 45%;
+    width: 3rem;
 }
 
 .grey-text{
@@ -107,14 +113,41 @@ h5{
 
 .img-item{
     width: 10%;
-    margin: 0.1rem 0.5rem 0.2rem 0.5rem;
+    margin: 0.2rem 0.5rem 0.2rem 0.5rem;
     border-radius: 15px;
     border: 1px var(--txt-grey) solid;
+}
+.btn-victory{
+    color:var(--expand-blue);
+    font-size: xx-large;
+    position: relative;
+    box-shadow: none;
+    outline: none;
+}
+
+.btn-loss{
+    color:var(--expand-red);
+    font-size: xx-large;
+    position: relative;
+    box-shadow: none;
+    outline: none;
+}
+
+.collapse{
+    margin-top: 1rem;
 }
 
 @media (max-width: 1450px) {
     h5{
         font-size: small;
+    }
+
+    .btn-victory, .btn-loss{
+        font-size:medium;
+    }
+
+    .match-container{
+        margin-right: 5rem;
     }
 }
 
