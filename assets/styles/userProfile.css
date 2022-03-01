@@ -4,6 +4,7 @@
 
 .profilePic-container img{
     width: 12rem;
+    height: 12rem;
     border-radius: 15px;
     border: 1px var(--txt-grey) solid;
     padding: 1rem 1rem 1rem 1rem;
@@ -155,4 +156,16 @@ h5{
     h5{
         font-size: xx-large;
     }
+}
+
+#analysis, .cap-fav{
+    display: none;
+}
+
+.cap-fav, .cap-fav:active, .cap-fav:hover, .cap-fav:visited, .cap-fav:focus{
+    float: right;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
 }

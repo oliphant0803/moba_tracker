@@ -28,12 +28,54 @@ function editProfile(){
 }
 
 function startCapture(){
-
+    if(document.getElementById("cap").innerHTML != "Discard"){
+        document.getElementById("analysis").style.display = "block";
+        document.getElementById("cap").innerHTML = "Discard";
+        const caps = document.getElementsByClassName("cap-fav");
+        for(var i = 0; i<caps.length; i++){
+            caps[i].style.display = "block";
+        }
+    } else if(document.getElementById("cap").innerHTML == "Discard"){
+        document.getElementById("analysis").style.display = "none";
+        document.getElementById("cap").innerHTML = "Capture";
+        const caps = document.getElementsByClassName("cap-fav");
+        for(var i = 0; i<caps.length; i++){
+            caps[i].style.display = "none";
+        }
+    }
 }
 
-function changePic(){
-
+function addToCap(id){
+    const gameid = "favgame".concat(id);
+    document.getElementById(gameid).firstChild.classList.add("saved");
+    console.log(id);
 }
+
+function changeIcon(image){
+    if (image.files && image.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e){
+            var profielPic = document.getElementById("iconPic");
+            profielPic.src = e.target.result;
+            console.log(profielPic.src);
+        };
+
+        reader.readAsDataURL(image.files[0]);
+    }
+}
+
+function dismissChange(){
+    var profielPic = document.getElementById("iconPic");
+    profielPic.src = icon_path;
+}
+
+function confirmChange(){
+    icon_path = document.getElementById("iconPic").src;
+}
+
+//hard coded value for user profile
+icon_path = "../assets/images/login3.png";
 
 //hard coded match data
 const match1 = 
@@ -131,6 +173,19 @@ function displayGames(){
     }
 }
 
+function displayCap(id){
+    const gameid = "favgame".concat(id);
+    var favBtn = document.createElement("button");
+    favBtn.onclick = function(){addToCap(id)};
+    favBtn.classList.add("cap-fav");
+    favBtn.setAttribute("id", gameid);
+    var star = document.createElement("i");
+    star.classList.add("fa");
+    star.classList.add("fa-star");
+    favBtn.appendChild(star);
+    return favBtn;
+}
+
 function displayOneGame(match_i){
     var  matchContainer = document.createElement("div");
     matchContainer.classList.add("match-container"); 
@@ -147,9 +202,11 @@ function displayOneGame(match_i){
     rowCol4.appendChild(appendChamp(match_i));
     rowCol4.appendChild(appendKDA(match_i.kill, match_i.death, match_i.assists));
     rowCol4.appendChild(appendItems(match_i.items, match_i.winLoss, match_i.gameId));
+    rowCol4.appendChild(displayCap( match_i.gameId));
 
     matchContainer.appendChild(rowCol4);
     matchContainer.appendChild(appendCollapse(match1.teammateIds, match_i.gameId));
+    // matchContainer.appendChild(displayCap( match_i.gameId));
     document.getElementById("history").appendChild(matchContainer);
 }
 
