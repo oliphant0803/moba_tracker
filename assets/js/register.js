@@ -2,6 +2,7 @@
  * This code is for creating a register page.
  * Author: Zewen Ma
  */
+
 window.onload=function(){
     // // DOM elements
     const userInfo = document.querySelector('#userInfo');
