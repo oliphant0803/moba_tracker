@@ -41,30 +41,65 @@ function addNewUser(e){
     const username = document.querySelector('#userName').value;
     const password = document.querySelector('#password').value;
     const type = document.querySelector('#usertype').value;
+    var canJumpAdmin = 0;
+    var canJumpEmail = 0;
+    var canJumpName = 0;
+    var canJumpPassword = 0;
+    if (username == '') {
+        addErrorMsg("name");
+        canJumpName = 0;
+    }
+    else{
+        noError(2);
+        canJumpName = 1;
+    }
+    if (password == '') {
+        addErrorMsg("password");
+        canJumpPassword = 0;
+    }
+    else{
+        noError(3);
+        canJumpPassword = 1;
+    }
     if (type == "Admin" || type == "User") {
         noError(4);
+        canJumpAdmin = 1;
     }
     else{
         addErrorMsg("type");
+        canJumpAdmin = 0;
     }
     var invalid = 0;
-    for (let index = 0; index < userLibrary.length; index++) {
-        const storedUser = userLibrary[index];
-        if (storedUser.email === email && storedUser.type == type) {
-            invalid = 1;
-        }
-        
-    }
-
-    if (invalid == 0) {
-        const newUser = new User(email, username, password, type);
-        userLibrary.push(newUser);
-        noError(1);
+    if (email == '') {
+        console.log("no email");
+        addErrorMsg("email");
+        canJumpEmail = 0;
+        invalid = 1;
     }
     else{
-        addErrorMsg("email");
+        for (let index = 0; index < userLibrary.length; index++) {
+            const storedUser = userLibrary[index];
+            if (storedUser.email === email && storedUser.type == type) {
+                invalid = 1;
+            }
+            
+        }
+    
+        if (invalid == 0) {
+            const newUser = new User(email, username, password, type);
+            userLibrary.push(newUser);
+            noError(1);
+            canJumpEmail = 1;
+        }
+        else{
+            registeredEmail();
+            canJumpEmail = 0;
+        }
     }
 
+    if (canJumpAdmin && canJumpEmail && canJumpName && canJumpPassword) {
+        backToIndex();
+    }
     // addNewUserToLibraray(newUser);
 }
 
@@ -73,7 +108,17 @@ function addErrorMsg(section){
     if (section == "email") {
         const emailsec = userInfo.children[1].children;
         const warning = emailsec[1];
-        warning.innerText = "You've already registered using this email";
+        warning.innerText = "Please enter your email";
+    }
+    else if (section == "name") {
+        const emailsec = userInfo.children[2].children;
+        const warning = emailsec[1];
+        warning.innerText = "Please enter your username";
+    }
+    else if (section == "password") {
+        const emailsec = userInfo.children[3].children;
+        const warning = emailsec[1];
+        warning.innerText = "Please enter your password";
     }
     else{
         const typesec = userInfo.children[4].children;
@@ -82,9 +127,18 @@ function addErrorMsg(section){
     }
 }
 
+function registeredEmail(){
+    const emailsec = userInfo.children[1].children;
+    const warning = emailsec[1];
+    warning.innerText = "You've already registered using this email";
+}
+
 function noError(section){
     const sec = userInfo.children[section].children;
     const warning = sec[1];
     warning.innerText = "";
 }
 
+function backToIndex(){
+    window.location.href="index.html";
+}
