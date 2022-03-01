@@ -59,6 +59,9 @@ function init(){
     const search = document.querySelector('.searchBut');
     search.addEventListener('click', searchAction);
 
+    resultSection = document.querySelector('#result-container');
+    resultSection.addEventListener('click', banUser);
+
     const currAdminName = 'BestAdmin'
     const currAdminPassword = 'password'
     const currAdminprofilePic = '../assets/images/tiger1.png'
@@ -75,7 +78,6 @@ function init(){
 
     champions.push(new Champion('Teemo', '../assets/images/login3.png'));
 
-    resultSection = document.querySelector('#result-container');
     
     for (var i = user_value.length - 1; i >= 0; i--) {
         user = new User(user_value[i][1], 'password', user_value[i][0])
@@ -243,6 +245,7 @@ function displayBanUser(user){
     banContainer.classList.add('col');
     const ban = document.createElement('button');
     ban.classList.add('btn');
+    ban.classList.add('banUser');
     ban.classList.add('btn-action');
     ban.innerHTML = 'Ban';
     banContainer.appendChild(ban);
@@ -266,6 +269,18 @@ function mode(arr){
 
 function displayAddGame(user){
 
+}
+
+function banUser(e){
+    e.preventDefault();
+    // check if return button was clicked, otherwise do nothing.
+    if (e.target.classList.contains('banUser')) {
+        console.log('Try ban a user');
+        //const banUserId = parseInt(e.target.children[0].innerHTML)
+        console.log(e.target);
+        // Call removeBookFromPatronTable()
+        //removeBookFromPatronTable(libraryBooks[returnBookId])
+    }
 }
 
 
