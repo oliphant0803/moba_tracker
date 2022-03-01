@@ -55,7 +55,7 @@ function addNewUser(e){
         }
         
     }
-    console.log(invalid);
+
     if (invalid == 0) {
         const newUser = new User(email, username, password, type);
         userLibrary.push(newUser);
