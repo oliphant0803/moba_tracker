@@ -4,7 +4,7 @@
  */
 window.onload=function(){
     // // DOM elements
-    userInfo = document.querySelector('#userInfo');
+    const userInfo = document.querySelector('#userInfo');
     // Event Listerners
     userInfo.addEventListener('submit', addNewUser);
 }
@@ -41,8 +41,50 @@ function addNewUser(e){
     const username = document.querySelector('#userName').value;
     const password = document.querySelector('#password').value;
     const type = document.querySelector('#usertype').value;
-    const newUser = new User(email, username, password, type);
-    userLibrary.push(newUser);
+    if (type == "Admin" || type == "User") {
+        noError(4);
+    }
+    else{
+        addErrorMsg("type");
+    }
+    var invalid = 0;
+    for (let index = 0; index < userLibrary.length; index++) {
+        const storedUser = userLibrary[index];
+        if (storedUser.email === email && storedUser.type == type) {
+            invalid = 1;
+        }
+        
+    }
+    console.log(invalid);
+    if (invalid == 0) {
+        const newUser = new User(email, username, password, type);
+        userLibrary.push(newUser);
+        noError(1);
+    }
+    else{
+        addErrorMsg("email");
+    }
 
     // addNewUserToLibraray(newUser);
 }
+
+// DOM function
+function addErrorMsg(section){
+    if (section == "email") {
+        const emailsec = userInfo.children[1].children;
+        const warning = emailsec[1];
+        warning.innerText = "You've already registered using this email";
+    }
+    else{
+        const typesec = userInfo.children[4].children;
+        const warning = typesec[1];
+        warning.innerText = "Invalid user type inserted, please enter Admin or User";
+    }
+}
+
+function noError(section){
+    const sec = userInfo.children[section].children;
+    const warning = sec[1];
+    warning.innerText = "";
+}
+
