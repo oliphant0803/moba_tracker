@@ -32,7 +32,7 @@
       <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
   </head>
   <!------ Include the above in your HEAD tag ---------->
-  <body class="d-flex flex-column min-vh-100">
+  <body class="d-flex flex-column min-vh-100 bg-blue">
   <div class="container reg-container">
               <div class="row">
                   <div class="col reg-form-1">
@@ -55,8 +55,14 @@
                               <span class='red'></span>
                             </div>
                           <div class="form-group">
-                            <input id='usertype' type="text" class="design" placeholder="User Type: Admin / User">
-                            <span class='red'></span>
+                            <!-- <input id='usertype' type="text" class="design" placeholder="User Type: Admin / User">
+                            <span class='red'></span> -->
+                            <select id="type" class="design">
+                              <option value="User Type">User Type</option>
+                              <option value="Admin">Admin</option>
+                              <option value="User">User</option>
+                            </select>
+                            <span class='red'></span> 
                         </div>
                           <div class="form-group">
                               <button class="submit-button">Register</button>
