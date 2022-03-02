@@ -28,7 +28,7 @@ class User{
 // Some initial users
 kath = new User("katherinema0905@gmail.com", "MasLayerKaka", "Katherine0905", "Admin");
 oli = new User("oliver.h0803@gmail.com", "Hide on Bush", "0803", "User");
-rachel = new User("rachel1231@gmail.com", "Distruction10000", "Rachel1231", "User");
+rachel = new User("rachelzeng1231@gmail.com", "Distruction10000", "Rachel1231", "User");
 userLibrary.push(kath);
 userLibrary.push(oli);
 userLibrary.push(rachel);
