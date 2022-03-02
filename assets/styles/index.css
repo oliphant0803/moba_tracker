@@ -134,6 +134,23 @@ img.img-tiger{
     display: flex;
 }
 
-.social #midButton{
-    left: 50%;
+.social-1{
+    display: flex;
+}
+
+.socialerror {
+    margin-left: 45%;
+    display: flex;
+}
+
+.success{
+    margin-left: 62%;
+    display: flex;
+    color: green;
+}
+
+.fail{
+    margin-left: 62%;
+    display: flex;
+    color: red;
 }
