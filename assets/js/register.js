@@ -41,7 +41,7 @@ function addNewUser(e){
     const email = document.querySelector('#email').value;
     const username = document.querySelector('#userName').value;
     const password = document.querySelector('#password').value;
-    const type = document.querySelector('#usertype').value;
+    const type = document.querySelector('#type').value;
     var canJumpAdmin = 0;
     var canJumpEmail = 0;
     var canJumpName = 0;
@@ -83,12 +83,15 @@ function addNewUser(e){
             if (storedUser.email === email && storedUser.type == type) {
                 registered("email");
                 invalid = 1;
+                break;
             }
             if (storedUser.username === username) {
                 registered("username");
                 canJumpName = 0;
             }
-            
+            else{
+                noError(1);
+            }
         }
     
         if (invalid == 0 && canJumpName == 1) {
@@ -129,7 +132,7 @@ function addErrorMsg(section){
     else{
         const typesec = userInfo.children[4].children;
         const warning = typesec[1];
-        warning.innerText = "Invalid user type inserted, please enter Admin or User";
+        warning.innerText = "Please select a user type";
     }
 }
 

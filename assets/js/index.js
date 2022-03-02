@@ -114,7 +114,7 @@ function emptyMsg(section){
     }
     else{
         const typesec = userInfo.children[1].children[1];
-        const warning = typesec.children[0].children[1].children[0];
+        const warning = typesec.children[1].children[0];
         warning.innerText = "Please select a User Type";
     }
 }
@@ -132,11 +132,8 @@ function noError(section){
     }
     else{
         const typesec = userInfo.children[1].children[1];
-        const warning = typesec.children[0].children[1].children[0];
+        const warning = typesec.children[1].children[0];
         warning.innerText = "";
-        const another = userInfo.children[3].children[1];
-        another.className = 'success';
-        another.innerText = "";
     }
 }
 
@@ -151,12 +148,12 @@ function canLogin(type){
 
 function wrongInput(section){
     if (section == "type") {
-        const typesec = userInfo.children[3].children[1];
-        typesec.className = 'fail';
-        typesec.innerText = "Invalid usertype inserted"
+        const typesec = userInfo.children[1].children[1];
+        const warning = typesec.children[1].children[0];
+        warning.innerText = "User type does not match"
     } else {
         const emailsec = userInfo.children[2].children;
         const warning = emailsec[1];
-        warning.innerText = "Password and username do not match";
+        warning.innerText = "Password and username does not match";
     }
 }
