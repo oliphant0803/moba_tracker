@@ -99,6 +99,9 @@ function loginCheck(e){
             wrongInput("password");
         }
     }
+    else{
+        wrongInput("user");
+    }
 }
 
 function emptyMsg(section){
@@ -151,9 +154,15 @@ function wrongInput(section){
         const typesec = userInfo.children[1].children[1];
         const warning = typesec.children[1].children[0];
         warning.innerText = "User type does not match"
-    } else {
+    } 
+    else if(section == "password"){
         const emailsec = userInfo.children[2].children;
         const warning = emailsec[1];
         warning.innerText = "Password and username does not match";
+    }
+    else{
+        const emailsec = userInfo.children[1].children[1];
+        const warning = emailsec.children[0].children[0];
+        warning.innerText = "No username found, please register";
     }
 }
