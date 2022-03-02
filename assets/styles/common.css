@@ -5,25 +5,119 @@
     --light-blue: #61CAFF;
     --txt-grey: #AFAFAF;
     --bg-grey: #EAEAEA;
+    --expand-red: #CF5C57;
+    --defeat-red: #E2B6B3;
+    --expand-blue: #187BB6;
+    --victory-blue: #A3CFEC;
 }
 
-body {
+body.bg-blue {
     background: var(--dark-blue);
     margin: 0;
     font-family: cursive;
+    overflow-x: hidden;
+    width:100%
 }
 
-.footer-text {
+body.bg-grey {
+    background: var(--bg-grey);
+    margin: 0;
+    font-family: cursive;
+    overflow-x: hidden;
+    width:100%
+}
+
+.bg-blue .footer-text {
     color: var(--bg-grey);
     font-weight: bolder;
 }
 
-.footer-text a{
+.bg-blue .footer-text a{
     color: var(--white);
     font-weight: bolder;
 }
 
-.footer-text a:hover{
+.bg-blue .footer-text a:hover{
     text-decoration: none;
     color:var(--bg-grey);
+}
+
+.bg-grey .footer-text {
+    color: var(--txt-grey);
+    font-weight: bolder;
+}
+
+.bg-grey .footer-text a{
+    color: var(--txt-grey);
+    font-weight: bolder;
+}
+
+.bg-grey .footer-text a:hover{
+    text-decoration: none;
+    color: grey;
+}
+
+.nav-item{
+    background-color: var(--light-blue);
+    border-radius: 15px;
+    margin-left: 5rem;
+    margin-top: 1rem;
+    width: max-content;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.navbar-toggler{
+    background-color: var(--light-blue);
+    color: var(--white);
+}
+
+.nav-link{
+    color: var(--white);
+}
+
+.nav-link:hover, .nav-link:active{
+    color: var(--bg-grey);
+}
+
+.nav-item.active{
+    background-color: var(--dark-blue);
+    border: 1px solid var(--white);
+}
+
+.header{
+    width: 100%;
+    height: 50px;
+    display: inline-block;
+}
+
+.header-announcement{
+    display: inline-block;
+    width: 70%;
+    padding-top: 15px;
+    padding-left: 15px;
+    max-height: 50px;
+}
+
+.header-name{
+    display: inline-block;
+    float: right;
+    max-width: 100px;
+    padding-top: 15px;
+    max-height: 50px;
+}
+
+.header-img-container{
+    float: right;
+    width: 50px;
+    height: 50px;
+    padding-top: 5px;
+    display: inline-block;
+}
+
+.img-profile{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--txt-grey);
 }
