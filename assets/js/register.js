@@ -81,19 +81,24 @@ function addNewUser(e){
         for (let index = 0; index < userLibrary.length; index++) {
             const storedUser = userLibrary[index];
             if (storedUser.email === email && storedUser.type == type) {
+                registered("email");
                 invalid = 1;
+            }
+            if (storedUser.username === username) {
+                registered("username");
+                canJumpName = 0;
             }
             
         }
     
-        if (invalid == 0) {
+        if (invalid == 0 && canJumpName == 1) {
             const newUser = new User(email, username, password, type);
             userLibrary.push(newUser);
             noError(1);
             canJumpEmail = 1;
         }
         else{
-            registeredEmail();
+            // registeredEmail();
             canJumpEmail = 0;
         }
     }
@@ -128,10 +133,17 @@ function addErrorMsg(section){
     }
 }
 
-function registeredEmail(){
-    const emailsec = userInfo.children[1].children;
-    const warning = emailsec[1];
-    warning.innerText = "You've already registered using this email";
+function registered(section){
+    if (section == "email") {
+        const emailsec = userInfo.children[1].children;
+        const warning = emailsec[1];
+        warning.innerText = "You've already registered using this email";
+    }
+    else{
+        const emailsec = userInfo.children[2].children;
+        const warning = emailsec[1];
+        warning.innerText = "Username used";
+    }
 }
 
 function noError(section){
