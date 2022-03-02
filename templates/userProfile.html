@@ -59,7 +59,7 @@
           <div class="col-6 col-md-4">
             <div class="profile-container d-block text-center">
                 <div class="profilePic-container">
-                    <a href="#"><img src="/team47/assets/images/login3.png" class="img-fluid img-tiger" alt=""></a>
+                    <a href="#"><img src="/team47/assets/images/login3.png" id="iconPic" class="img-fluid img-tiger" alt=""></a>
                 </div>
                 <div class="fav-container">
                     <button onclick="saveAsFav()" class="fav-btn"><i id="star" class="fa fa-star" aria-hidden="true"></i></button>
@@ -69,8 +69,16 @@
                   <button onclick="editProfile()" class="mod-btn" id="edit">Edit</button>
                 </div>
 
+                <div class="change-container">
+                  <button data-toggle="modal" data-target="#changeIcon" class="mod-btn">Change</button>
+                </div>
+
                 <div class="capture-container">
                   <button onclick="startCapture()" class="mod-btn" id="cap">Capture</button>
+                </div>
+
+                <div class="analysis-container" id="analysis">
+                  <a href="userAnalysis.html"><button class="mod-btn">Analysis</button></a>
                 </div>
             </div>
           </div>
@@ -98,48 +106,7 @@
 
               <!-- user history -->
               <div class="user-history" id="history">
-                <div class="match-container">
-                  <div class="row row-cols-4">
-                    <div class="col">
-                      <div class="row">
-                        <div class="col">
-                          <img src="/team47/assets/images/login3.png" class="img-fluid img-champ" alt="">
-                        </div>
-                        <div class="col">
-                          <div class="d-flex">
-                            <img src="/team47/assets/images/login3.png" class="img-fluid img-sumon" alt="">
-                            <img src="/team47/assets/images/login3.png" class="img-fluid img-rune" alt="">
-                          </div>
-                          <div class="d-flex">
-                            <img src="/team47/assets/images/login3.png" class="img-fluid img-sumon" alt="">
-                            <img src="/team47/assets/images/login3.png" class="img-fluid img-rune" alt="">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col text-center kda-container">
-                      <div id="kda-s">
-                        <h5>9/2/6</h5>
-                      </div>
-                      <div id="kda-a" class="d-flex justify-content-center">
-                        <h5>7.50:1</h5>
-                        <h5 class="grey-text">&nbsp KDA</h5>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="d-flex">
-                          <img src="/team47/assets/images/login3.png" class="img-fluid img-item" alt="">
-                          <img src="/team47/assets/images/login3.png" class="img-fluid img-item" alt="">
-                          <img src="/team47/assets/images/login3.png" class="img-fluid img-item" alt="">
-                        </div>
-                        <div class="d-flex">
-                          <img src="/team47/assets/images/login3.png" class="img-fluid img-item" alt="">
-                          <img src="/team47/assets/images/login3.png" class="img-fluid img-item" alt="">
-                          <img src="/team47/assets/images/login3.png" class="img-fluid img-item" alt="">
-                        </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
               <!-- user history -->
           </div>
@@ -148,6 +115,26 @@
     </section>
     <!--body section -->
 
+    <div class="modal fade" id="changeIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Change User Icon</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label class="form-label">Upload Your Icon</label>
+            <input onchange="changeIcon(this)" class="form-control form-control-lg" accept="image/*" type="file"/>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="dismissChange()" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="confirmChange()" data-dismiss="modal">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="page-footer mt-auto bg-grey">
