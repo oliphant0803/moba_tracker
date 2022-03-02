@@ -84,7 +84,12 @@ function loginCheck(e){
             if (type == user.type) {
                 // Redirect to user profile page
                 // So far changes to a message
-                canLogin();
+                if (type == "Admin") {
+                    canLogin("admin");
+                }
+                else{
+                    canLogin("user");
+                }
             }
             else{
                 wrongInput("type");
@@ -135,9 +140,13 @@ function noError(section){
     }
 }
 
-function canLogin(){
-    const typesec = userInfo.children[3].children[1];
-    typesec.innerText = "Successfully logged in!"
+function canLogin(type){
+    if (type == "admin") {
+        window.location.href="AdminDashboard.html";
+    } else {
+        window.location.href="userDashboard.html";
+    }
+    
 }
 
 function wrongInput(section){
