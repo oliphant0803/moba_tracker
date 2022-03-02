@@ -138,7 +138,6 @@ function noError(section){
 function canLogin(){
     const typesec = userInfo.children[3].children[1];
     typesec.innerText = "Successfully logged in!"
-    console.log(typesec);
 }
 
 function wrongInput(section){
