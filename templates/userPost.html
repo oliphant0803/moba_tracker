@@ -80,6 +80,14 @@
                 
                 <div class="d-flex filter-container">
                   <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle filter" type="button" data-toggle="dropdown">Filter User
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu" id="dropdownUser">
+                      <input class="form-control" id="userSelect" type="text" placeholder="Search User.." onkeyup="filterUser()">
+
+                    </ul>
+                  </div>
+                  <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle filter" type="button" data-toggle="dropdown">Filter Game
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu" id="dropdownGame">

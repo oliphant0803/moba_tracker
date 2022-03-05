@@ -9,7 +9,7 @@ window.onload = init;
             displaySelect("select-input-champion", champions[i]);
             console.log(champions[i]);
         }
-
+        displayUser();
         displayAllFilter("dropdownGame", gameIds);
         displayAllFilter("dropdownChamp", champions);
 
@@ -26,18 +26,107 @@ function clearSelection(){
     document.getElementById("input-post").value = '';
 }
 
-function removePost(filter){
-    var p = document.getElementById("posts");
-    for(let i = 0; i<p.children.length; i++){
-        if (p.children[i].children[1].children[1].children[0].id == filter || p.children[i].children[1].children[1].children[1].id == filter){
-            continue;
-        } 
-        p.removeChild(p.children[i]);
+var filter_posts = [];
+var filter_users = [];
+var curr_posts =[];
+
+
+function disablePtr(id){
+    var selectionDiv = document.getElementById(id);
+    for(let i = 2; i < selectionDiv.children.length; i++){
+        selectionDiv.children[i].firstChild.classList.add("disable");
     }
-    if(filter=="all"){
+}
+
+function enablePtr(id){
+    var selectionDiv = document.getElementById(id);
+    for(let i = 2; i < selectionDiv.children.length; i++){
+        selectionDiv.children[i].firstChild.classList.remove("disable");
+    }
+}
+
+function showUser(filter){
+    console.log(filter);
+    var p = document.getElementById("posts"); 
+
+    if(filter == "favourite"){
+        //display only posts from favourite users
         for(let i = 0; i<p.children.length; i++){
-            p.removeChild(p.children[i]);
+            var curr_child = p.children[i];
+            if (!favs.includes(curr_child.children[0].children[1].children[0].innerHTML)){
+                filter_users.push(i);
+            } 
         }
+    }
+    else if(filter=="all"){
+        while (p.firstChild) {
+            p.removeChild(p.lastChild);
+        }
+        for(let i = 0; i< posts.length; i++){
+            displayPost(posts[i]);
+        }
+        enablePtr("dropdownUser");
+        enablePtr("dropdownChamp");
+        enablePtr("dropdownGame");
+        return;
+    }
+    else {
+        for(let i = 0; i<p.children.length; i++){
+            var curr_child = p.children[i];
+            console.log(curr_child.children[0].children[1].children[0].innerHTML);
+            if (curr_child.children[0].children[1].children[0].innerHTML != filter){
+                filter_users.push(i);
+            } 
+        }
+    }
+    disablePtr("dropdownUser");
+    console.log(filter_users);
+    if(filter_users.length == posts.length || p.children.length == posts.length - filter_users.length){
+        alert("Selected user has not posted");
+        return;
+    }
+
+    for(let i = 0; i<filter_users.length; i++){
+        console.log(filter_users[i]);
+        p.removeChild(p.children[filter_users[i]-i]);
+    }
+
+}
+
+function removePost(filter){
+    
+    var p = document.getElementById("posts"); 
+    
+    if(filter=="all"){
+        while (p.firstChild) {
+            p.removeChild(p.lastChild);
+        }
+        for(let i = 0; i< posts.length; i++){
+            displayPost(posts[i]);
+        }
+        enablePtr("dropdownUser");
+        enablePtr("dropdownChamp");
+        enablePtr("dropdownGame");
+        return;
+    }
+
+    for(let i = 0; i<p.children.length; i++){
+        var curr_child = p.children[i];
+        if (curr_child.children[1].children[1].children[0].id != filter && curr_child.children[1].children[1].children[1].id != filter){
+            filter_posts.push(i);
+        } 
+    }
+    console.log(filter_posts);
+    disablePtr("dropdownChamp");
+    disablePtr("dropdownGame");
+    if(filter_posts.length == posts.length){
+        alert("Selected filter is not available");
+        return;
+    }
+
+    for(let i = 0; i<filter_posts.length; i++){
+        console.log(filter_posts[i]);
+        p.removeChild(p.children[filter_posts[i]-i]);
     }
 }
 
@@ -68,14 +157,17 @@ function saveSelection(){
 function showFilter(instance){
     console.log(instance);
     removePost(instance.toString());
-    
 }
 
 
 //hard coded value for tag game id, champion, and posts
 const gameIds=[1, 2, 3, 4, 5, 6];
 
-const champions=["champion1", "champion2", "champion3"];
+const champions=["Champion 1", "Champion 2", "Champion 3"];
+
+const users=["User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9"];
+
+const favs=["User 2"];
 
 //the way we expect to get from json
 const post1={
@@ -119,6 +211,36 @@ function displaySelect(id, instance){
     selectCon.add(selectOption);
 }
 
+function displayUser(){
+    var uldiv = document.getElementById("dropdownUser");
+    var li = document.createElement("li");
+    var link = document.createElement("a");
+    link.innerHTML = "all";
+    li.onclick = function(){showUser("all")};
+    li.appendChild(link);
+    uldiv.appendChild(li);
+    uldiv = document.getElementById("dropdownUser");
+    li = document.createElement("li");
+    link = document.createElement("a");
+    link.innerHTML = "favourite";
+    li.onclick = function(){showUser("favourite")};
+    li.appendChild(link);
+    uldiv.appendChild(li);
+    for(let i = 0; i< users.length; i++){
+        displayUserFilter("dropdownUser", users[i]);
+    }
+}
+
+function displayUserFilter(id, instance){
+    var uldiv = document.getElementById(id);
+    var li = document.createElement("li");
+    var link = document.createElement("a");
+    link.innerHTML = instance;
+    li.onclick = function(){showUser(instance)};
+    li.appendChild(link);
+    uldiv.appendChild(li);
+}
+
 function displayAllFilter(id, list){
     var uldiv = document.getElementById(id);
     var li = document.createElement("li");
@@ -128,7 +250,7 @@ function displayAllFilter(id, list){
     li.appendChild(link);
     uldiv.appendChild(li);
     for(let i = 0; i< list.length; i++){
-            displayFilter(id, list[i]);
+        displayFilter(id, list[i]);
     }
 }
 
@@ -206,6 +328,21 @@ function timeDiff(curr_date){
         return "Posted " + Math.abs(diffHrs) + " hours ago";
     }
     return "Posted " + Math.abs(diffDays) + " days, " + Math.abs(diffHrs) + " hours ago";
+}
+
+function filterUser(){
+    var input = document.getElementById("userSelect");
+    var filter = input.value.toUpperCase();
+    var div = document.getElementById("dropdownUser");
+    var a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+      txtValue = a[i].textContent || a[i].innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        a[i].style.display = "";
+      } else {
+        a[i].style.display = "none";
+      }
+    }
 }
 
 function filterChamp() {

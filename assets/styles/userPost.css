@@ -106,9 +106,14 @@ body {
     padding-right: 0.5rem;
 }
 
-.dropdown-menu a{
+.dropdown-menu a:hover{
     text-decoration: none;
-    color: inherit;
+    color: var(--dark-blue);
+}
+
+.dropdown-menu a.disable{
+    pointer-events: none;
+    color: var(--txt-grey);
 }
 
 .tag-area{
