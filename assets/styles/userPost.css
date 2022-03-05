@@ -1,0 +1,127 @@
+body {
+    border: 1px solid var(--white);
+}
+
+.timeline {
+    overflow: hidden;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.btn-post{
+    background-color: var(--light-blue);
+    color: var(--white);
+    margin-left: 1rem;
+}
+
+.btn-post.btn-clear{
+    background-color: var(--defeat-red);
+}
+
+.editor{
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.posted-timeline {
+    padding: 1rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.input-post {
+    height: 10rem;
+    border-radius: 15px;
+    padding: 1rem;
+    border-color: transparent;
+    width: 100%;
+    resize: vertical;
+}
+
+.input-post:focus, .input-post:active {
+    box-shadow: none;
+    outline: none
+}
+
+
+.summoner-icon {
+    display: inline-block;
+    height: 5rem;
+    width: 5rem;
+    margin-right: 3rem;
+}
+
+.summoner-icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+
+}
+
+.summoner-name {
+    position: absolute;
+    left: 5rem;
+    top: 2rem;
+    padding: 1rem 2rem;
+}
+
+.summoner-name a  {
+    color: var(--txt-grey);
+}
+
+.post-content {
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 15px;
+    background: var(--white);
+}
+
+.posted-time {
+    color: var(--txt-grey);
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.tag{
+    background-color: var(--bg-grey);
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 25px;
+    margin-bottom: 1rem;
+}
+
+.filter{
+    background-color: var(--light-blue);
+    margin-right: 2rem;
+}
+
+.filter:active, .filter:focus, .filter:hover{
+    background-color: var(--dark-blue);
+}
+
+.dropdown-menu{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.dropdown-menu a:hover{
+    text-decoration: none;
+    color: var(--dark-blue);
+}
+
+.dropdown-menu a.disable{
+    pointer-events: none;
+    color: var(--txt-grey);
+}
+
+.tag-area{
+    margin-bottom: 0.5rem;
+}
+
+.filter-container{
+    position: relative;
+    z-index: 99;
+    float: right;
+}
