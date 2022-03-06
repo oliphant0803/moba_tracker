@@ -1,4 +1,4 @@
-<!-- user dashboard page -->
+<!-- champion analysis page -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +7,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Todo: change title name -->
-  <title>User dashboard</title>
+  <title>Champion Analysis</title>
   <link rel="icon" href="../assets/images/login3.png" />
 
   <!-- Styles -->
@@ -15,7 +15,7 @@
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-  <link rel="stylesheet" href="../assets/styles/userDash.css"/>
+  <link rel="stylesheet" href="../assets/styles/champAnalysis.css"/>
   <link rel="stylesheet" href="../assets/styles/common.css"/>
 
   <!-- Bootstrap js -->
@@ -30,7 +30,7 @@
   </script>
 
   <!-- Custom js -->
-  <script src="../assets/js/userDash.js">
+  <script src="../assets/js/championAnalysis.js">
   </script>
 </head>
 
@@ -46,56 +46,31 @@
           <li class="nav-item">
             <a class="nav-link" href="userPost.html">Timeline</a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Dashboard</a>
+          <li class="nav-item">
+            <a class="nav-link" href="userDashboard.html">Dashboard</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="userProfile.html">My Profile</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Champion Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="userAnalysis.html">My Analysis</a>
           </li>
       </div>
     </nav>
     <!--Navbar -->
 
-    <!--Search bar -->
-    <div id="search-section">
-      <div class="container text-center text-white">
-        <!-- search -->
-        <div class="input-group search-container w-100 p-3">
-          <input type="search" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
-          <button type="button" class="btn btn-search">Search</button>
-        </div>
-        <!-- search -->
+    <!--body section -->
+    <!-- champion pick rate
+    champion win rate
+    champion discuss rate
+    champion average kda
+    champion ranking -->
+    
+    <!--body section -->
 
-        <div class="row">
-          <!-- recent -->
-          <div class="col recent-container justify-content-center active-button" id="recentCon">
-            <button type="button" class="btn btn-recent" onclick="showRecent()">Recent Search</button>
-          </div>
-          <!-- recent -->
-
-          <!-- fav -->
-          <div class="col fav-container justify-content-center" id="favCon">
-            <button type="button" class="btn btn-fav" onclick="showFav()">Favorite</button>
-          </div>
-
-          <!-- fav -->
-        </div>
-
-        <div id="recentS" class="row search-body">
-            <!-- recent users searches divs -->
-        </div>
-
-        <div id="favS" class="row search-body">
-            <!-- fav users searches divs -->
-        </div>
-      </div>
-    </div>
-    <!--Search bar -->
-
-    <!-- decor -->
-    <img src="/team47/assets/images/login1.png" class="img-fluid img-bag" alt="">
-    <div class="float-right"><img src="/team47/assets/images/tiger1.png" class="img-fluid img-tiger" alt=""></div>
-    <!-- decor -->
 
     <!-- Footer -->
     <footer class="page-footer mt-auto bg-blue">
