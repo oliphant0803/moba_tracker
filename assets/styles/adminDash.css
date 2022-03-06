@@ -8,6 +8,12 @@
     height: 30rem;
 }
 
+#report-section {
+    background-color: var(--bg-grey);
+    margin: 0rem 10rem 0rem 10rem;
+    height: 30rem;
+}
+
 .search-container {
     padding-top: 0.8rem;
     padding-bottom: 0.8rem;
@@ -29,6 +35,8 @@
     color: var(--txt-grey);
 }
 
+
+
 .user-img-container{
     float: left;
     width: 50px;
@@ -48,10 +56,20 @@
 .user-champ-container{
     border-top: 1px solid var(--txt-grey);
     display:flex;
-    flex-grow: 2;
+    flex-grow: 1;
     background-color: var(--white);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    text-align: left;
+    color: var(--txt-grey);
+}
+
+.flex-2{
+    flex-grow: 2;
+}
+
+.flex-3{
+    flex-grow: 3;
 }
 
 .user-champ-link-container{
