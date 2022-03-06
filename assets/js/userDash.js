@@ -35,17 +35,27 @@ function showRecent() {
     }
 }
 
+function searchOther(){
+    var userId = document.getElementById("search-id-input");
+    console.log(userId.value);
+    //redirect to the users name
+    if(userId.value != ""){
+        //hard coded to otherprofile.html before calling api since we only have 2 users.
+        if(userId.value == "User 1"){
+            document.getElementById("search-id").href = "userProfile.html";
+        }else if(userId.value == "User 2"){
+            document.getElementById("search-id").href = "otherProfile.html";
+        }else{
+            alert("Given User does not exist");
+        }
+    }
+}
+
 
 // hard coded value for recent search 
 const recent_searches = [
     ["../assets/images/login3.png", "User 1"],
-    ["../assets/images/login3.png", "User 2"],
-    ["../assets/images/login3.png", "User 3"],
-    ["../assets/images/login3.png", "User 4"],
-    ["../assets/images/login3.png", "User 5"],
-    ["../assets/images/login3.png", "User 6"],
-    ["../assets/images/login3.png", "User 7"],
-    ["../assets/images/login3.png", "User 8"]
+    ["../assets/images/login3.png", "User 2"]
 ];
 
 // hard coded value for fav 
@@ -60,6 +70,15 @@ const fav_searches = [
     ["../assets/images/login3.png", "Fav 8"]
 ];
 
+current_user = "User 1";
+
+function redirect(userName){
+    if(userName == current_user){
+        return "userProfile.html"
+    }
+    return "otherProfile.html";
+}
+
 function displayOneRecent(t, divName){
     var colDiv = document.createElement("div");
     colDiv.classList.add("col-xl-3");
@@ -67,6 +86,8 @@ function displayOneRecent(t, divName){
     colDiv.classList.add("d-flex");
     colDiv.classList.add("justify-content-center");
 
+    var aDiv = document.createElement("a");
+    aDiv.href = redirect(t[1]); //hard coded other profile now, can direct to more after calling api
     var recentCard = document.createElement("div");
     recentCard.classList.add("recent-search-card");
     recentCard.classList.add("rounded");
@@ -86,8 +107,9 @@ function displayOneRecent(t, divName){
 
     recentCard.appendChild(profilePic);
     recentCard.appendChild(name);
-    colDiv.appendChild(recentCard);
-
+    aDiv.appendChild(recentCard);
+    colDiv.appendChild(aDiv);
+    
     document.getElementById(divName).appendChild(colDiv);
 }
 
