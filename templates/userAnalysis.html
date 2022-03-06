@@ -95,33 +95,18 @@
                   Total Game Played: <span id="t-games"></span>
               </div>
             </div>
+            <select id="select-input-n" onchange="updateN()" class="selectpicker">
+              <option value="all" disabled selected>Recent n games</option>
+
+            </select>
 
           </div>
             <div class="col-md-6 py-1">
                 <div class="card">
-                    <div class="card-body">
-                      Champion Average KDA
+                    <div class="card-body" id="champBarContainer">
+                      
                       <canvas id="champBar"></canvas>
 
-                      <script>
-                      new Chart("champBar", {
-                        type: "bar",
-                        data: {
-                          labels: xValues,
-                          datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                          }]
-                        },
-                        options: {
-                          legend: {display: false},
-                          title: {
-                            display: true,
-                            text: "World Wine Production 2018"
-                          }
-                        }
-                      });
-                      </script>
                     </div>
                 </div>
             </div>
@@ -129,79 +114,22 @@
         <div class="row py-2">
             <div class="col-md-4 py-1">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" id="cpieContainer">
                       <canvas id="champPie"></canvas>
-
-                      <script>
-                      new Chart("champPie", {
-                        type: "doughnut",
-                        data: {
-                          labels: xValues,
-                          datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                          }]
-                        },
-                        options: {
-                          title: {
-                            display: true,
-                            text: "recent n games champion pie chart (input n) with champion winrate list"
-                          }
-                        }
-                      });
-                      </script>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 py-1">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" id="rpieContainer">
                       <canvas id="runePie"></canvas>
-
-                      <script>
-                      new Chart("runePie", {
-                        type: "doughnut",
-                        data: {
-                          labels: xValues,
-                          datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                          }]
-                        },
-                        options: {
-                          title: {
-                            display: true,
-                            text: "recent n games champion pie chart (input n) with champion winrate list"
-                          }
-                        }
-                      });
-                      </script>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 py-1">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body" id="spieContainer">
                       <canvas id="summonerPie"></canvas>
-
-                      <script>
-                      new Chart("summonerPie", {
-                        type: "doughnut",
-                        data: {
-                          labels: xValues,
-                          datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                          }]
-                        },
-                        options: {
-                          title: {
-                            display: true,
-                            text: "recent n games champion pie chart (input n) with champion winrate list"
-                          }
-                        }
-                      });
-                      </script>
                     </div>
                 </div>
             </div>
