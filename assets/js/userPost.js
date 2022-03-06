@@ -46,6 +46,7 @@ function enablePtr(id){
 }
 
 function showUser(filter){
+    filter_users= [];
     console.log(filter);
     var p = document.getElementById("posts"); 
 
@@ -62,7 +63,7 @@ function showUser(filter){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = 0; i< posts.length; i++){
+        for(let i = posts.length-1; i>=0; i--){
             displayPost(posts[i]);
         }
         enablePtr("dropdownUser");
@@ -79,14 +80,14 @@ function showUser(filter){
             } 
         }
     }
-    disablePtr("dropdownUser");
     console.log(filter_users);
-    if(filter_users.length == posts.length || p.children.length == posts.length - filter_users.length){
+    if(filter_users.length == posts.length || p.children.length == filter_users.length){
         alert("Selected user has not posted");
         return;
     }
+    disablePtr("dropdownUser");
 
-    for(let i = 0; i<filter_users.length; i++){
+    for(let i = filter_users.length-1; i>=0; i--){
         console.log(filter_users[i]);
         p.removeChild(p.children[filter_users[i]-i]);
     }
@@ -94,14 +95,14 @@ function showUser(filter){
 }
 
 function removePost(filter){
-    
+    filter_posts = [];
     var p = document.getElementById("posts"); 
     
     if(filter=="all"){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = 0; i< posts.length; i++){
+        for(let i = posts.length-1; i>=0; i--){
             displayPost(posts[i]);
         }
         enablePtr("dropdownUser");
@@ -117,14 +118,14 @@ function removePost(filter){
         } 
     }
     console.log(filter_posts);
-    disablePtr("dropdownChamp");
-    disablePtr("dropdownGame");
     if(filter_posts.length == posts.length){
         alert("Selected filter is not available");
         return;
     }
+    disablePtr("dropdownChamp");
+    disablePtr("dropdownGame");
 
-    for(let i = 0; i<filter_posts.length; i++){
+    for(let i = filter_posts.length-1; i>=0; i--){
         console.log(filter_posts[i]);
         p.removeChild(p.children[filter_posts[i]-i]);
     }
