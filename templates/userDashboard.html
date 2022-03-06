@@ -52,6 +52,12 @@
           <li class="nav-item">
             <a class="nav-link" href="userProfile.html">My Profile</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="championAnalysis.html">Champion Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="userAnalysis.html">My Analysis</a>
+          </li>
       </div>
     </nav>
     <!--Navbar -->
@@ -61,8 +67,8 @@
       <div class="container text-center text-white">
         <!-- search -->
         <div class="input-group search-container w-100 p-3">
-          <input type="search" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
-          <button type="button" class="btn btn-search">Search</button>
+          <input type="search" id="search-id-input" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
+          <a id="search-id"><button type="button" class="btn btn-search" onclick="searchOther()">Search</button></a>
         </div>
         <!-- search -->
 

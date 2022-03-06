@@ -13,7 +13,7 @@ window.onload = init;
         displayAllFilter("dropdownGame", gameIds);
         displayAllFilter("dropdownChamp", champions);
 
-        for(let i = 0; i< posts.length; i++){
+        for(let i = posts.length-1; i>=0; i--){
             displayPost(posts[i]);
             console.log(posts[i]);
         }
@@ -151,7 +151,13 @@ function saveSelection(){
         content: document.getElementById("input-post").value
     };
     posts.push(post);
-    displayPost(post);
+    var p = document.getElementById("posts");
+    while (p.firstChild) {
+        p.removeChild(p.lastChild);
+    }
+    for(let i = posts.length-1; i>=0; i--){
+        displayPost(posts[i]);
+    }
 }
 
 function showFilter(instance){
@@ -177,7 +183,7 @@ const post1={
     userProfile: "../assets/images/login3.png",
     gameTag: 1,
     champTag: "Champion 1",
-    content: "Content"
+    content: "Great Game!"
 }
 
 const post2={
@@ -187,7 +193,7 @@ const post2={
     userProfile: "../assets/images/login3.png",
     gameTag: 3,
     champTag: "Champion 2",
-    content: "Content"
+    content: "Check out my performance on champion 2 on this game!"
 }
 
 const post3={
@@ -197,7 +203,7 @@ const post3={
     userProfile: "../assets/images/login3.png",
     gameTag: 4,
     champTag: "Champion 1",
-    content: "Content"
+    content: "Had fun on champion 1!"
 }
 
 const posts=[post1, post2, post3];
@@ -265,13 +271,22 @@ function displayFilter(id, instance){
     uldiv.appendChild(li);
 }
 
+current_user = "User 1";
+
+function redirect(userName){
+    if(userName == current_user){
+        return "userProfile.html"
+    }
+    return "otherProfile.html";
+}
+
 //display timeline post
 function displayPost(post_i){
     var mainDiv = document.createElement("div");
     mainDiv.classList.add("posted-timeline");
     var userDiv = document.createElement("div");
     var link = document.createElement("a");
-    link.href = "#"; //will added after have api
+    link.href = redirect(post_i.userName); //will added after have api
     var icon = document.createElement("img");
     icon.src = post_i.userProfile;
     link.classList.add("summoner-icon");
@@ -280,7 +295,7 @@ function displayPost(post_i){
     var nameHeading = document.createElement("h6");
     nameHeading.classList.add("summoner-name");
     var nameLink = document.createElement("a");
-    nameLink.href = "#"; //will added after have api
+    nameLink.href = redirect(post_i.userName); //will added after have api
     nameLink.innerHTML = post_i.userName;
     nameHeading.appendChild(nameLink);
     userDiv.appendChild(nameHeading);
@@ -304,6 +319,10 @@ function displayPost(post_i){
     tag2.setAttribute("id", post_i.champTag);
     tag2.innerHTML = post_i.champTag;
     tagDiv.appendChild(tag2);
+    var tag3 = document.createElement("div");
+    tag3.classList.add("tag");
+    tag3.innerHTML = "Post #" + post_i.postId;
+    tagDiv.appendChild(tag3);
     contentDiv.appendChild(tagDiv);
     var cp = document.createElement("p");
     cp.classList.add("mb-0");
