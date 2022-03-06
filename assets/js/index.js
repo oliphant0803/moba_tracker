@@ -144,7 +144,7 @@ function canLogin(type){
     if (type == "admin") {
         window.location.href="AdminDashboard.html";
     } else {
-        window.location.href="userDashboard.html";
+        window.location.href="userPost.html";
     }
     
 }
