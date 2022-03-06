@@ -5,11 +5,6 @@ window.onload = init;
         computeAverageKDA();
   }
 
-
-var xValues = ["Champion 1", "Champion 2", "Champion 3", "Champion 4", "Champion 5"];
-var yValues = [55, 49, 44, 24, 15];
-var barColors = ["red", "green","blue","orange","brown"];
-
 //hard coded games (same as in match history from userProfile.js)
 //hard coded match data
 const match1 = 
@@ -90,6 +85,14 @@ const matchHis = [
     match5
 ];
 
+//computed values for chart
+var xValues = ["Champion 1", "Champion 2", "Champion 3", "Champion 4", "Champion 5"];
+var yValues = [55, 49, 44, 24, 15];
+var barColors = ["red", "green","blue","orange","brown"];
+var championsBar = computeChampionKDA();
+console.log(championsBar.championsX);
+console.log(championsBar.championsY);
+
 function computeTotalWinrate(){
     const wins = matchHis.filter(match => match.winLoss == "win");
     document.getElementById("t-winrate").innerHTML = (wins.length)/(matchHis.length);
@@ -112,8 +115,31 @@ function computeAverageKDA(){
     document.getElementById("t-kda").innerHTML = Math.round(kda * 100) / 100;
 }
 
-var championsX = [];
-var championsY = [];
 function computeChampionKDA(){
-    
+    var championsX = [];
+    var championsY = [];
+    var championsKill = [];
+    var championsDeath = [];
+    var championsAssists = [];
+    for (let i=0; i<matchHis.length; i++){
+        const curr_champ = matchHis[i].champ;
+        if (!championsX.includes(curr_champ)){
+            championsX.push(curr_champ);
+            championsKill.push(0);
+            championsDeath.push(0);
+            championsAssists.push(0);
+        }
+        const j = championsX.indexOf(curr_champ);
+        championsKill[j] += parseInt(matchHis[i].kill);
+        championsDeath[j] += parseInt(matchHis[i].death);
+        championsAssists[j] += parseInt(matchHis[i].assists);
+    }
+    console.log(championsKill);
+    console.log(championsDeath);
+    console.log(championsAssists);
+    for (let i=0; i<championsKill.length; i++){
+        const kda = (championsKill[i] + championsAssists[i])/championsDeath[i];
+        championsY.push(Math.round(kda * 100) / 100);
+    }
+    return {championsX, championsY}
 }

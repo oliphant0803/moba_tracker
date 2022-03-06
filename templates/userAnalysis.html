@@ -100,24 +100,24 @@
             <div class="col-md-6 py-1">
                 <div class="card">
                     <div class="card-body">
-                      Champion Average KDA
+                      
                       <canvas id="champBar"></canvas>
 
                       <script>
                       new Chart("champBar", {
                         type: "bar",
                         data: {
-                          labels: xValues,
+                          labels: championsBar.championsX,
                           datasets: [{
                             backgroundColor: barColors,
-                            data: yValues
+                            data: championsBar.championsY
                           }]
                         },
                         options: {
                           legend: {display: false},
                           title: {
                             display: true,
-                            text: "World Wine Production 2018"
+                            text: "Champion Average KDA"
                           }
                         }
                       });
