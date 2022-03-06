@@ -3,11 +3,10 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Todo: change title name -->
-  <title>Post Management</title>
+  <title>Admin User Management</title>
   <link rel="icon" href="../assets/images/login3.png" />
 
   <!-- Styles -->
@@ -15,8 +14,8 @@
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-  <link rel="stylesheet" href="../assets/styles/userPost.css"/>
   <link rel="stylesheet" href="../assets/styles/common.css"/>
+  <link rel="stylesheet" href="../assets/styles/adminDash.css"/>
 
   <!-- Bootstrap js -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -30,7 +29,7 @@
   </script>
 
   <!-- Custom js -->
-  <script src="../assets/js/adminPost.js">
+  <script src="../assets/js/adminBanUser.js">
   </script>
 </head>
 
@@ -50,7 +49,7 @@
       </div>
     </div>
     <!--Header bar -->
-    <!--Navbar -->
+<!--Navbar -->
     <nav class="navbar navbar-expand-xl">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false">
         <span class="navbar-toggler-icon"></span>
@@ -58,59 +57,59 @@
     
       <div class="collapse navbar-collapse" id="navbarToggler">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="adminPostManage.html">Posts Management</a>
+            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="#">Posts Management</a>
+                <a class="nav-link" href="#">Users Management</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="adminBanUser.html">Users Management</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="userProfile.html">Add New Games</a>
+                <a class="nav-link" href="#">Add New Games</a>
             </li>
       </div>
     </nav>
     <!--Navbar -->
-    <div class="timeline">
 
-        <div class="tab-content">
-            <div class="tab-pane active">
-                
-                <div class="d-flex filter-container">
-                  <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle filter" type="button" data-toggle="dropdown">Filter User
-                    <span class="caret"></span></button>
-                    <ul class="dropdown-menu" id="dropdownUser">
-                      <input class="form-control" id="userSelect" type="text" placeholder="Search User.." onkeyup="filterUser()">
-
-                    </ul>
-                  </div>
-                  <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle filter" type="button" data-toggle="dropdown">Filter Game
-                    <span class="caret"></span></button>
-                    <ul class="dropdown-menu" id="dropdownGame">
-                      <input class="form-control" id="gameSelect" type="text" placeholder="Search Game.." onkeyup="filterGame()">
-
-                    </ul>
-                  </div>
-                  <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle filter" type="button" data-toggle="dropdown">Filter Champion
-                    <span class="caret"></span></button>
-                    <ul class="dropdown-menu" id="dropdownChamp">
-                      <input class="form-control" id="champSelect" type="text" placeholder="Search Champion.." onkeyup="filterChamp()">
-                    </ul>
-                  </div>
-                </div>
-
-                <div id="posts">
-                    
-                </div>
-            </div>
+    <!--Search bar -->
+    <section id="search-section">
+      <div class="container text-center text-white">
+        <!-- search -->
+        <div class="input-group search-container">
+          <input id="search" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
+          <button type="button" class="btn btn-action searchBut">Search</button>
         </div>
-    </div>
-    
+        <!-- search -->
+        <div id="result-container">
+
+        </div>
+        <!-- <div class="row">
+          <div class="col user-info-container justify-content-center">
+            <button type="button" class="btn btn-recent">Show more</button>
+          </div>
+        </div> -->
+        
+      </div>
+    </section>
+    <!--Search bar -->
+
+    <!--Report bar -->
+    <section id="report-section">
+      <div class="container text-center text-white">
+        <div id="report-container">
+
+        <!-- </div>
+        <div class="row">
+          <div class="col user-info-container justify-content-center">
+            <button type="button" class="btn btn-recent">Show more</button>
+          </div>
+        </div> -->
+        
+      </div>
+    </section>
+    <!--Report bar -->
 
     <!-- Footer -->
-    <footer class="page-footer mt-auto bg-blue">
+    <footer class="page-footer mt-auto">
       <div class="text-center py-3 footer-text">© 2022 CSC309 Winter:
         <a href="https://github.com/csc309-winter-2022/team47"> Team 47</a>
       </div>
