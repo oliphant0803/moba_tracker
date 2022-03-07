@@ -65,12 +65,27 @@
     * View posts and delete posts by clicking "delete this post"
     * Can filter posts base on user, champion, and game id
 
-*
+*User Management:
+    * Display all users
+        * search button to search for a specific user
+    * "View details" for each user display their report history at the bottom
+    * "Clear reports" button cleans the user's match history
+    * "Ban user" button will remove the user from the app system
+
+*Game Management:
+    * 
 
 ## Third-party libraries/frameworks:
 
 ### bootstrap v4.5
 documentation: https://getbootstrap.com/docs/4.5/getting-started/introduction/
+
+https://code.jquery.com/jquery-3.5.1.slim.min.js
+https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js
+https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js
+
+### chart.js v2.5.0
+https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js
 
 ## Citations: (images used)
 
