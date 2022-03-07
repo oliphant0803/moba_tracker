@@ -125,3 +125,32 @@ body {
     z-index: 99;
     float: right;
 }
+
+.comment-area{
+    margin: 2rem 2rem 2rem 5rem;
+}
+
+.comment-area button{
+    min-width: 4rem;
+}
+
+.comment-post{
+    height: 5rem;
+    border-radius: 15px;
+    padding: 1rem;
+    border-color: transparent;
+    width: 100%;
+}
+
+.comment{
+    background-color: var(--white);
+    margin-bottom: 0.5rem;
+    min-height: 4rem;
+    border-radius: 15px;
+    padding: 1rem;
+    border-color: transparent;
+}
+
+.comment h6{
+    color: var(--txt-grey);
+}
