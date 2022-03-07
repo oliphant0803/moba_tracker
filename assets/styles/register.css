@@ -87,3 +87,40 @@ img.img-tiger{
 .red {
 	color: red;
 }
+
+.social{
+    margin-top: 30px;
+    display: flex;
+}
+
+.submit-button-register
+{
+    width: 30%;
+    border-radius: 3rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    margin-left: 12%;
+}
+.reg-form-1 .submit-button-register{
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--light-blue);
+    text-align: center;
+}
+
+.submit-button-login
+{
+    width: 30%;
+    border-radius: 3rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    margin-left: 12%;
+}
+
+.reg-form-1 .submit-button-login{
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--dark-blue);
+}
