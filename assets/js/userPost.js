@@ -184,7 +184,10 @@ const post1={
     userProfile: "../assets/images/login3.png",
     gameTag: 1,
     champTag: "Champion 1",
-    content: "Great Game!"
+    content: "Great Game!",
+    comments: [{username: "User 1", comments: "Comment 1"}, 
+    {username: "User 2", comments: "Comment 2"}
+    ]
 }
 
 const post2={
@@ -194,7 +197,9 @@ const post2={
     userProfile: "../assets/images/login3.png",
     gameTag: 3,
     champTag: "Champion 2",
-    content: "Check out my performance on champion 2 on this game!"
+    content: "Check out my performance on champion 2 on this game!",
+    comments: [{username: "User 1", comments: "Comment 1"}
+    ]
 }
 
 const post3={
@@ -204,7 +209,8 @@ const post3={
     userProfile: "../assets/images/login3.png",
     gameTag: 4,
     champTag: "Champion 1",
-    content: "Had fun on champion 1!"
+    content: "Had fun on champion 1!",
+    comments: []
 }
 
 const posts=[post1, post2, post3];
@@ -281,6 +287,33 @@ function redirect(userName){
     return "otherProfile.html";
 }
 
+function postComment(pid, id){
+    commentBody = document.getElementById(id).value;
+    if(commentBody == ''){
+        alert("Can not comment empty contents");
+        return;
+    }else{
+        new_comment={username: current_user, comments: commentBody}
+        for(let i=0; i<posts.length; i++){
+            if(posts[i].postId == pid){
+                posts[i].comments.push(new_comment);
+                console.log(new_comment);
+
+            }
+        }
+        var p = document.getElementById("posts");
+        while (p.firstChild) {
+            p.removeChild(p.lastChild);
+        }
+        for(let i = posts.length-1; i>=0; i--){
+            displayPost(posts[i]);
+        }
+        enablePtr("dropdownUser");
+        enablePtr("dropdownChamp");
+        enablePtr("dropdownGame");
+    }
+}
+
 //display timeline post
 function displayPost(post_i){
     var mainDiv = document.createElement("div");
@@ -331,7 +364,45 @@ function displayPost(post_i){
     contentDiv.appendChild(cp);
     mainDiv.appendChild(contentDiv);
 
+    var commentArea = document.createElement("div");
+    commentArea.classList.add("comment-area");
+    var comments = document.createElement("div");
+    comments.classList.add("comments");
+    comments.setAttribute("id", "comments"+post_i.postId);
+    for(let i=post_i.comments.length-1; i>=0; i--){
+        comments.appendChild(displayComment(post_i.comments[i]));
+    }
+    commentArea.appendChild(comments);
+    var pComment = document.createElement("div");
+    pComment.classList.add("d-flex");
+    textArea = document.createElement("textarea");
+    textArea.setAttribute("id", "comment-post"+post_i.postId);
+    textArea.setAttribute("placeholder", "Comment here");
+    textArea.classList.add("comment-post");
+
+    pComment.appendChild(textArea);
+    commentButton = document.createElement("button");
+    commentButton.classList.add("btn");
+    commentButton.classList.add("btn-post");
+    commentButton.classList.add("px-4");
+    commentButton.classList.add("py-1");
+    commentButton.onclick = function(){postComment(post_i.postId, "comment-post"+post_i.postId)};
+    commentButton.innerHTML = "Comment";
+    pComment.appendChild(commentButton);
+    commentArea.appendChild(pComment);
+    mainDiv.appendChild(commentArea);
     document.getElementById("posts").appendChild(mainDiv);
+}
+
+function displayComment(comment){
+    // <div class="comment"><h6>User name</h6>Comment 1</div>
+    commentDiv = document.createElement("div");
+    commentDiv.classList.add("comment");
+    commentUser = document.createElement("h6");
+    commentUser.innerHTML = comment.username;
+    commentDiv.appendChild(commentUser);
+    commentDiv.innerHTML = comment.comments;
+    return commentDiv;
 }
 
 function timeDiff(curr_date){
