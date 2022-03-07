@@ -309,24 +309,26 @@ function displayGame(game){
 
     const user1 = document.createElement('div');
     user1.classList.add('col');
-    //user1.classList.add('flex-2');
+    user1.classList.add('flex-3');
     user1.classList.add('user-info-container');
     user1.innerHTML = "Group A Player<br>" + game.user1a.username;
     row.appendChild(user1);
 
     const runes1 = document.createElement('div');
-    runes1.classList.add('col');
+    //runes1.classList.add('col');
     //user1.classList.add('flex-2');
     runes1.classList.add('user-info-container');
     for (var i = 0; i < 2; i++) {
         var img = document.createElement('img');
         img.classList.add('img-profile');
         var imgId = game.user1a.runes[i]+1;
+        console.log(imgId)
         img.src = "../assets/images/runes/r" + imgId + ".png"
+        console.log(img)
         //user1.classList.add('flex-2');
         runes1.appendChild(img);
     }
-    row.appendChild(runes1);
+    user1.appendChild(runes1);
 
     const summoner1 = document.createElement('div');
     summoner1.classList.add('col');
@@ -351,35 +353,36 @@ function displayGame(game){
         //user1.classList.add('flex-2');
         summoner1.appendChild(img);
     }
-    row.appendChild(summoner1);
+    user1.appendChild(summoner1);
 
     const kda1 = document.createElement('div');
     kda1.classList.add('col');
-    //user1.classList.add('flex-2');
+    
     kda1.classList.add('user-info-container');
     kda1.innerHTML = "KDA<br>" + game.user1a.kill + "/"+ game.user1a.death + "/"+ game.user1a.assist;
-    row.appendChild(kda1);
+    user1.appendChild(kda1);
 
     const user2 = document.createElement('div');
     user2.classList.add('col');
-    //user2.classList.add('flex-2');
+    user2.classList.add('flex-3');
     user2.classList.add('user-champ-container');
     user2.innerHTML = "Group B Player<br>" + game.user1b.username;
     row.appendChild(user2);
     
 
     const runes2 = document.createElement('div');
-    runes2.classList.add('col');
+    //runes2.classList.add('col');
     //user1.classList.add('flex-2');
     runes2.classList.add('user-info-container');
     for (var i = 0; i < 2; i++) {
         var img = document.createElement('img');
         img.classList.add('img-profile');
-        img.src = "../assets/images/runes/r" + game.user1b.runes[i] + ".png"
+        var imgId = game.user1a.runes[i]+1;
+        img.src = "../assets/images/runes/r" + imgId + ".png"
         //user1.classList.add('flex-2');
         runes2.appendChild(img);
     }
-    row.appendChild(runes2);
+    user2.appendChild(runes2);
 
 
     const summoner2 = document.createElement('div');
@@ -405,7 +408,7 @@ function displayGame(game){
         //user1.classList.add('flex-2');
         summoner2.appendChild(img);
     }
-    row.appendChild(summoner2);
+    user2.appendChild(summoner2);
 
 
 
@@ -414,7 +417,7 @@ function displayGame(game){
     //user1.classList.add('flex-2');
     kda2.classList.add('user-info-container');
     kda2.innerHTML = "KDA<br>" + game.user1b.kill + "/"+ game.user1b.death + "/"+ game.user1b.assist;
-    row.appendChild(kda2);
+    user2.appendChild(kda2);
 
     resultSection.appendChild(row);
 }
