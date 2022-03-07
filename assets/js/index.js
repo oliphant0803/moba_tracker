@@ -142,7 +142,7 @@ function noError(section){
 
 function canLogin(type){
     if (type == "admin") {
-        window.location.href="adminPostManage.html";
+        window.location.href="adminPostManagement.html";
     } else {
         window.location.href="userPost.html";
     }
