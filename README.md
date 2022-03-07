@@ -73,7 +73,10 @@
     * "Ban user" button will remove the user from the app system
 
 *Game Management:
-    * 
+    * Add users from two teams, their runes, summoners, items and performance in the game.
+      * Use "Submit" to upload the new game
+    * Will update the new game in the game list below
+    * Can search for specific games below using game id
 
 ## Third-party libraries/frameworks:
 
