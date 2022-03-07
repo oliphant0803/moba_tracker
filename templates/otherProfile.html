@@ -30,7 +30,7 @@
   </script>
 
   <!-- Custom js -->
-  <script src="../assets/js/userProfile.js">
+  <script src="../assets/js/otherProfile.js">
   </script>
 </head>
 
@@ -49,8 +49,8 @@
           <li class="nav-item">
             <a class="nav-link" href="userDashboard.html">Dashboard</a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="#">My Profile</a>
+          <li class="nav-item">
+            <a class="nav-link" href="userProfile.html">My Profile</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="championAnalysis.html">Champion Analysis</a>
@@ -71,18 +71,14 @@
           <div class="col-6 col-md-4">
             <div class="profile-container d-block text-center">
                 <div class="profilePic-container">
-                    <a href="#"><img src="../assets/images/login3.png" id="iconPic" class="img-fluid img-tiger" alt=""></a>
+                    <a href="#"><img src="/team47/assets/images/login3.png" id="iconPic" class="img-fluid img-tiger" alt=""></a>
                 </div>
                 <div class="fav-container">
                     <button onclick="saveAsFav()" class="fav-btn"><i id="star" class="fa fa-star" aria-hidden="true"></i></button>
                 </div>
 
-                <div class="edit-container">
-                  <button onclick="editProfile()" class="mod-btn" id="edit">Edit Profile</button>
-                </div>
-
                 <div class="change-container">
-                  <button data-toggle="modal" data-target="#changeIcon" class="mod-btn">Change Icon</button>
+                  <button data-toggle="modal" data-target="#report" class="mod-btn">Report</button>
                 </div>
 
             </div>
@@ -120,22 +116,32 @@
     </section>
     <!--body section -->
 
-    <div class="modal fade" id="changeIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Change User Icon</h5>
+            <h5 class="modal-title">Report</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <label class="form-label">Upload Your Icon</label>
-            <input onchange="changeIcon(this)" class="form-control form-control-lg" accept="image/*" type="file"/>
+            <div class="form-group">
+                <label for="report-reason">Select Report Reasons</label>
+                <select class="form-control" id="report-reason" onchange="selectReport()">
+                  <option value="reason1">Inappropriate Name</option>
+                  <option value="reason2">Offensive Post</option>
+                </select>
+
+                <label id="details" for="report-detail-post">Which Post</label>
+                <select class="form-control" id="report-detail-post" onchange="selectPost()">
+                    
+                </select>
+              </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onclick="dismissChange()" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="confirmChange()" data-dismiss="modal">Update</button>
+            <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="reportSend()" data-dismiss="modal">Report</button>
           </div>
         </div>
       </div>

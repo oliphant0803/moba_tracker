@@ -134,6 +134,10 @@ h5{
     outline: none;
 }
 
+.fav-btn, .mod-btn{
+    width: 10rem;
+}
+
 .collapse{
     margin-top: 1rem;
 }
@@ -168,4 +172,8 @@ h5{
     background-color: transparent;
     outline: none;
     box-shadow: none;
+}
+
+#details, #report-detail-post{
+    display: none;
 }

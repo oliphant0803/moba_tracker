@@ -1,9 +1,10 @@
 window.onload = init;
     function init(){
         //hard coded current user
-        document.getElementById("usernameInput").value = "User 1";
-        document.getElementById("quoteInput").value = "Hi";
+        document.getElementById("usernameInput").value = "User 2";
+        document.getElementById("quoteInput").value = "Quote random";
         displayGames();
+        displayPosts();
   }
 
 
@@ -15,80 +16,49 @@ function saveAsFav(){
     }
 }
 
-function editProfile(){
-    if(document.getElementById("edit").innerHTML == "Edit Profile"){
-        document.getElementById("usernameInput").removeAttribute("readonly");
-        document.getElementById("quoteInput").removeAttribute("readonly");
-        document.getElementById("edit").innerHTML = "Save";
-    }else if(document.getElementById("edit").innerHTML == "Save"){
-        document.getElementById("usernameInput").readOnly = true;
-        document.getElementById("quoteInput").readOnly = true;
-        document.getElementById("edit").innerHTML = "Edit Profile";
+function selectReport(){
+    if(document.getElementById("report-reason").value=="reason2"){
+        document.getElementById("details").style.display = "block";
+        document.getElementById("report-detail-post").style.display = "block";
+    }else{
+        document.getElementById("details").style.display = "none";
+        document.getElementById("report-detail-post").style.display = "none";
     }
 }
 
-function startCapture(){
-    if(document.getElementById("cap").innerHTML != "Discard"){
-        document.getElementById("analysis").style.display = "block";
-        document.getElementById("cap").innerHTML = "Discard";
-        const caps = document.getElementsByClassName("cap-fav");
-        for(var i = 0; i<caps.length; i++){
-            caps[i].style.display = "block";
-        }
-    } else if(document.getElementById("cap").innerHTML == "Discard"){
-        document.getElementById("analysis").style.display = "none";
-        document.getElementById("cap").innerHTML = "Capture";
-        const caps = document.getElementsByClassName("cap-fav");
-        for(var i = 0; i<caps.length; i++){
-            caps[i].style.display = "none";
-        }
+function displayPosts(){
+    var selectCon = document.getElementById("report-detail-post");
+    for(let i=0; i<posts.length; i++){
+        var selectOption = document.createElement("option");
+        selectOption.textContent = "post #"+posts[i];
+        selectOption.value = posts[i];
+        selectCon.add(selectOption);
     }
 }
 
-function addToCap(id){
-    const gameid = "favgame".concat(id);
-    document.getElementById(gameid).firstChild.classList.add("saved");
-    console.log(id);
-}
-
-function changeIcon(image){
-    if (image.files && image.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function(e){
-            var profielPic = document.getElementById("iconPic");
-            profielPic.src = e.target.result;
-            console.log(profielPic.src);
-        };
-
-        reader.readAsDataURL(image.files[0]);
+function reportSend(){
+    var reason = document.getElementById("report-reason").value;
+    var detail = '';
+    if(document.getElementById("report-reason").value=="reason2"){
+        detail = document.getElementById("report-detail-post").value;
     }
+    console.log(reason + ", " + detail);
+    //send to api in phase 2
 }
-
-function dismissChange(){
-    var profielPic = document.getElementById("iconPic");
-    profielPic.src = icon_path;
-}
-
-function confirmChange(){
-    icon_path = document.getElementById("iconPic").src;
-}
-
-//hard coded value for user profile
-icon_path = "../assets/images/login3.png";
-
+//hardcoded posts id by current user
+posts = [2];
 //hard coded match data
 const match1 = 
     {   
-        gameId: "1",
-        winLoss: "win",
+        gameId: "6",
+        winLoss: "loss",
         champ: "../assets/images/login3.png",
-        r1url: "../assets/images/runes/r1.png",
+        r1url: "../assets/images/runes/r3.png",
         r2url: "../assets/images/runes/r2.png",
         s1url: "../assets/images/summoners/flash.png",
         s2url: "../assets/images/summoners/heal.png",
         items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-        kill: "5",
+        kill: "1",
         death: "2",
         assists: "9",
         teammateIds: []
@@ -96,65 +66,33 @@ const match1 =
 
 const match2 = 
 {   
-    gameId: "2",
-    winLoss: "loss",
+    gameId: "7",
+    winLoss: "win",
     champ: "../assets/images/login3.png",
-    r1url: "../assets/images/runes/r1.png",
+    r1url: "../assets/images/runes/r5.png",
     r2url: "../assets/images/runes/r3.png",
     s1url: "../assets/images/summoners/flash.png",
-    s2url: "../assets/images/summoners/smite.png",
+    s2url: "../assets/images/summoners/heal.png",
     items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-    kill: "1",
-    death: "5",
-    assists: "3",
+    kill: "7",
+    death: "6",
+    assists: "2",
     teammateIds: []
 };
 
 const match3 = 
 {   
-    gameId: "3",
-    winLoss: "win",
-    champ: "../assets/images/login3.png",
-    r1url: "../assets/images/runes/r5.png",
-    r2url: "../assets/images/runes/r4.png",
-    s1url: "../assets/images/summoners/flash.png",
-    s2url: "../assets/images/summoners/smite.png",
-    items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-    kill: "4",
-    death: "5",
-    assists: "3",
-    teammateIds: []
-};
-
-const match4 = 
-{   
-    gameId: "4",
+    gameId: "8",
     winLoss: "loss",
     champ: "../assets/images/login3.png",
-    r1url: "../assets/images/runes/r2.png",
-    r2url: "../assets/images/runes/r4.png",
-    s1url: "../assets/images/summoners/flash.png",
-    s2url: "../assets/images/summoners/ghost.png",
-    items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-    kill: "0",
-    death: "5",
-    assists: "4",
-    teammateIds: []
-};
-
-const match5 = 
-{   
-    gameId: "5",
-    winLoss: "win",
-    champ: "../assets/images/login3.png",
     r1url: "../assets/images/runes/r5.png",
     r2url: "../assets/images/runes/r4.png",
-    s1url: "../assets/images/summoners/flash.png",
-    s2url: "../assets/images/summoners/exhaust.png",
+    s1url: "../assets/images/summoners/ghost.png",
+    s2url: "../assets/images/summoners/smite.png",
     items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-    kill: "9",
-    death: "2",
-    assists: "6",
+    kill: "3",
+    death: "4",
+    assists: "1",
     teammateIds: []
 };
 
@@ -162,9 +100,7 @@ const match5 =
 const matchHis = [
     match1,
     match2,
-    match3,
-    match4,
-    match5
+    match3
 ];
 
 function displayGames(){

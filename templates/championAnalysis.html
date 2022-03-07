@@ -15,7 +15,7 @@
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-  <link rel="stylesheet" href="../assets/styles/userAnalysis.css"/>
+  <link rel="stylesheet" href="../assets/styles/championAnalysis.css"/>
   <link rel="stylesheet" href="../assets/styles/common.css"/>
 
   <!-- Bootstrap js -->
@@ -30,11 +30,8 @@
   </script>
 
   <!-- Custom js -->
-  <script src="../assets/js/userAnalysis.js">
+  <script src="../assets/js/championAnalysis.js">
   </script>
-  <!-- chart.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
-
 </head>
 
   <body class="d-flex flex-column min-vh-100 bg-blue">
@@ -55,11 +52,11 @@
           <li class="nav-item">
             <a class="nav-link" href="userProfile.html">My Profile</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="championAnalysis.html">Champion Analysis</a>
-          </li>
           <li class="nav-item active">
-            <a class="nav-link" href="#">My Analysis</a>
+            <a class="nav-link" href="#">Champion Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="userAnalysis.html">My Analysis</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="index.html">Logout</a>
@@ -69,75 +66,64 @@
     <!--Navbar -->
 
     <!--body section -->
-    <!-- 
-    total win rate
+    <!-- champion pick rate
+    champion win rate
+    champion discuss rate
     champion average kda
-    recent n games champion pie chart (input n) with champion winrate list
-    recent n game rune pie chart(input n) with rune win rate list
-    recent n game summoner pie chart (input n) with summoner win rate list
-     -->
-    <div class="container">
-        <div class="row my-3">
-        </div>
-        <div class="row my-2 my-analysis">
-          <div class="col-md-6 py-1">
-            <div class="card">
-              <div class="card-body">
-                  Total Winrate: <span id="t-winrate"></span>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-body">
-                  Total Average Kill Death Assists Ratio: <span id="t-kda"></span>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-body">
-                  Total Game Played: <span id="t-games"></span>
-              </div>
-            </div>
-            <select id="select-input-n" onchange="updateN()" class="selectpicker">
-              <option value="all" disabled selected>Recent n games</option>
-
-            </select>
-
-          </div>
-            <div class="col-md-6 py-1">
-                <div class="card">
-                    <div class="card-body" id="champBarContainer">
-                      
-                      <canvas id="champBar"></canvas>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row py-2">
-            <div class="col-md-4 py-1">
-                <div class="card">
-                    <div class="card-body" id="cpieContainer">
-                      <canvas id="champPie"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 py-1">
-                <div class="card">
-                    <div class="card-body" id="rpieContainer">
-                      <canvas id="runePie"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 py-1">
-                <div class="card">
-                    <div class="card-body" id="spieContainer">
-                      <canvas id="summonerPie"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+    champion ranking -->
+    <div class="container reg-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">
+              <select id="champion1" class="design-type">
+                <option value="Select">Select a champion</option>
+              </select>
+            </th>
+            <th scope="col">
+              <!-- <select id="user" class="design-type">
+                <option value="Select">Select a user</option>
+                <option value="self">Self</option>
+                <option value="all">All users</option>
+                <option value="fav">Favourite users</option>
+              </select> -->
+            </th>
+            <th scope="col">
+              <select id="champion2" class="design-type">
+                <option value="Select">Select a champion</option>
+              </select>
+            </th>
+            <th scope="col">
+              <button class="design-type" onclick="getChamp()"> Check</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="red"></td>
+            <td>Pick Rate</td>
+            <td class="blue"></td>
+          </tr>
+          <tr>
+            <td class="red"></td>
+            <td>Win Rate</td>
+            <td class="red"></td>
+          </tr>
+          <tr>
+            <td class="red"></td>
+            <td>Discuss Rate</td>
+            <td class="red"></td>
+          </tr>
+          <tr>
+            <td class="red"></td>
+            <td>Average KDA</td>
+            <td class="red"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    
     <!--body section -->
 
 

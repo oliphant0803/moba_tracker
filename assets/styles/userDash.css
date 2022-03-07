@@ -36,6 +36,15 @@
     padding-bottom: 0.5rem;
 }
 
+a{  
+    color: var(--white);
+    text-decoration: none;
+}
+
+a:hover{  
+    text-decoration: none;
+}
+
 .btn-recent, .btn-fav{
     border: none;
     box-shadow: none;
