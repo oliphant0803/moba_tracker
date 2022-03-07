@@ -16,14 +16,14 @@ function saveAsFav(){
 }
 
 function editProfile(){
-    if(document.getElementById("edit").innerHTML == "Edit"){
+    if(document.getElementById("edit").innerHTML == "Edit Profile"){
         document.getElementById("usernameInput").removeAttribute("readonly");
         document.getElementById("quoteInput").removeAttribute("readonly");
         document.getElementById("edit").innerHTML = "Save";
     }else if(document.getElementById("edit").innerHTML == "Save"){
         document.getElementById("usernameInput").readOnly = true;
         document.getElementById("quoteInput").readOnly = true;
-        document.getElementById("edit").innerHTML = "Edit";
+        document.getElementById("edit").innerHTML = "Edit Profile";
     }
 }
 

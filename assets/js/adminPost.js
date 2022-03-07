@@ -42,19 +42,11 @@ function enablePtr(id){
 }
 
 function showUser(filter){
+    filter_users = [];
     console.log(filter);
     var p = document.getElementById("posts"); 
 
-    if(filter == "favourite"){
-        //display only posts from favourite users
-        for(let i = 0; i<p.children.length; i++){
-            var curr_child = p.children[i];
-            if (!favs.includes(curr_child.children[0].children[1].children[0].innerHTML)){
-                filter_users.push(i);
-            } 
-        }
-    }
-    else if(filter=="all"){
+    if(filter=="all"){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
@@ -75,12 +67,13 @@ function showUser(filter){
             } 
         }
     }
-    disablePtr("dropdownUser");
+    
     console.log(filter_users);
     if(filter_users.length == posts.length || p.children.length == posts.length - filter_users.length){
         alert("Selected user has not posted");
         return;
     }
+    disablePtr("dropdownUser");
 
     for(let i = 0; i<filter_users.length; i++){
         console.log(filter_users[i]);
@@ -90,7 +83,7 @@ function showUser(filter){
 }
 
 function removePost(filter){
-    
+    filter_posts = [];
     var p = document.getElementById("posts"); 
     
     if(filter=="all"){
@@ -113,12 +106,13 @@ function removePost(filter){
         } 
     }
     console.log(filter_posts);
-    disablePtr("dropdownChamp");
-    disablePtr("dropdownGame");
+    
     if(filter_posts.length == posts.length){
         alert("Selected filter is not available");
         return;
     }
+    disablePtr("dropdownChamp");
+    disablePtr("dropdownGame");
 
     for(let i = 0; i<filter_posts.length; i++){
         console.log(filter_posts[i]);
@@ -156,7 +150,6 @@ const champions=["Champion 1", "Champion 2", "Champion 3"];
 
 const users=["User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9"];
 
-const favs=["User 2"];
 
 const currentAdmin = {
     username: "BestAdmin",
@@ -203,13 +196,6 @@ function displayUser(){
     var link = document.createElement("a");
     link.innerHTML = "all";
     li.onclick = function(){showUser("all")};
-    li.appendChild(link);
-    uldiv.appendChild(li);
-    uldiv = document.getElementById("dropdownUser");
-    li = document.createElement("li");
-    link = document.createElement("a");
-    link.innerHTML = "favourite";
-    li.onclick = function(){showUser("favourite")};
     li.appendChild(link);
     uldiv.appendChild(li);
     for(let i = 0; i< users.length; i++){
