@@ -14,11 +14,8 @@ const { mongoose } = require('../src/db/mongoose.js')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
 // import the mongoose models
-const { users } = require('../src/models/users.js')
-const { admins } = require('../src/models/admins.js')
-const { posts } = require('../src/models/posts.js')
-const { reports } = require('../src/models/reports.js')
-const { matches } = require('../src/models/matches.js')
+const { gameSquad } = require('../src/models/gameSquad.js')
+
 
 // to validate object IDs
 const { ObjectID } = require('mongodb')
