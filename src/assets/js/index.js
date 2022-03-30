@@ -10,8 +10,8 @@ window.onload=function(){
     userInfo.addEventListener('submit', loginCheck);
 }
 // Global arrays
-const userLibrary = [];
-let numUsers = 0;
+// const userLibrary = [];
+// let numUsers = 0;
 
 // User class
 class User{
@@ -20,8 +20,8 @@ class User{
         this.username = username;
         this.password = password;
         this.type = type;
-        this.userId = numUsers;
-        numUsers++;
+        // this.userId = numUsers;
+        // numUsers++;
     }
 }
 
@@ -29,9 +29,9 @@ class User{
 kath = new User("katherinema0905@gmail.com", "MasLayerKaka", "Katherine0905", "Admin");
 oli = new User("oliver.h0803@gmail.com", "Hide on Bush", "0803", "User");
 rachel = new User("rachelzeng1231@gmail.com", "Distruction10000", "Rachel1231", "User");
-userLibrary.push(kath);
-userLibrary.push(oli);
-userLibrary.push(rachel);
+// userLibrary.push(kath);
+// userLibrary.push(oli);
+// userLibrary.push(rachel);
 
 function loginCheck(e){
     e.preventDefault();

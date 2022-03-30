@@ -8,10 +8,12 @@ window.onload=function(){
     const userInfo = document.querySelector('#userInfo');
     // Event Listerners
     userInfo.addEventListener('submit', addNewUser);
+    getUsers();
+    getAdmins();
 }
 // Global arrays
 const userLibrary = [];
-let numUsers = 0;
+// let numUsers = 0;
 
 // User class
 class User{
@@ -20,18 +22,18 @@ class User{
         this.username = username;
         this.password = password;
         this.type = type;
-        this.userId = numUsers;
-        numUsers++;
+        // this.userId = numUsers;
+        // numUsers++;
     }
 }
 
 // Some initial users
-kath = new User("katherinema0905@gmail.com", "MasLayerKaka", "Katherine0905", "Admin");
-oli = new User("oliver.h0803@gmail.com", "Hide on Bush", "0803", "User");
-rachel = new User("rachelzeng1231@gmail.com", "Distruction10000", "Rachel1231", "User");
-userLibrary.push(kath);
-userLibrary.push(oli);
-userLibrary.push(rachel);
+// kath = new User("katherinema0905@gmail.com", "MasLayerKaka", "Katherine0905", "Admin");
+// oli = new User("oliver.h0803@gmail.com", "Hide on Bush", "0803", "User");
+// rachel = new User("rachelzeng1231@gmail.com", "Distruction10000", "Rachel1231", "User");
+// userLibrary.push(kath);
+// userLibrary.push(oli);
+// userLibrary.push(rachel);
 
 // Function
 function addNewUser(e){
@@ -72,7 +74,6 @@ function addNewUser(e){
     }
     var invalid = 0;
     if (email == '') {
-        console.log("no email");
         addErrorMsg("email");
         canJumpEmail = 0;
         invalid = 1;
@@ -157,4 +158,52 @@ function noError(section){
 
 function backToIndex(){
     window.location.href="index.html";
+}
+
+
+// Database related function
+function getUsers(){
+    const urlUser = 'api/users';
+    
+    fetch(urlUser).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        json.users.forEach(element => {
+            const username = element.username;
+            const email = element.email;
+            const password = element.password;
+            const user = new User(email, username, password, "User");
+            userLibrary.push(user);
+        });
+    }).catch((error) => {
+        console.log(error)
+    })
+}
+
+function getAdmins(){
+    const urlUser = 'api/admins';
+    
+    fetch(urlUser).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        json.admins.forEach(element => {
+            const username = element.username;
+            const email = element.email;
+            const password = element.password;
+            const user = new User(email, username, password, "Admin");
+            userLibrary.push(user);
+        });
+    }).catch((error) => {
+        console.log(error)
+    })
 }

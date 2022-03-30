@@ -45,6 +45,14 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
 })
 
+app.get('/index.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/index.html'))
+})
+
+app.get('/register.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/register.html'))
+})
+
 app.get('/userPost.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/userPost.html'))
 })
@@ -114,6 +122,60 @@ app.post('/api/users', async(req, res) => {
 
 	try {
 		const result = await user.save()	
+		res.send(result)
+	} catch(error) {
+		log(error) 
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+
+});
+
+//get all admins
+app.get('/api/admins', async(req, res) => {
+
+	log(req.body)
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	try {
+		const admins = await Admin.find()
+		res.send({ admins }) 
+	} catch(error) {
+		log(error)
+		res.status(500).send("Internal Server Error")
+	}
+
+});
+
+//add admins post request
+app.post('/api/admins', async(req, res) => {
+
+	log(req.body)
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	const admin = new Admin({
+		username: req.body.username,
+		email: req.body.email,
+		password: req.body.password,
+	})
+
+	try {
+		const result = await admin.save()	
 		res.send(result)
 	} catch(error) {
 		log(error) 
