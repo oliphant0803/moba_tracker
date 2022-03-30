@@ -4,6 +4,7 @@ window.onload = init;
         loadCurrentUser()
         // document.getElementById("usernameInput").value = "User 1";
         // document.getElementById("quoteInput").value = "Hi";
+        displaySaved();
         displayGames();
   }
 
@@ -27,19 +28,149 @@ function loadCurrentUser(){
         document.getElementById("usernameInput").value = json.username;
         document.getElementById("quoteInput").value = json.bio;
         document.getElementById("iconPic").src = icon_path;
-        
     }).catch((error) => {
         console.log(error)
     })
 }
 
+function displaySaved(){
+    const currentUser = "62436866d4cc88a03be4de21"
+
+    const url = '/api/users/' + currentUser;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get user')
+       }                
+    })
+    .then((json) => { 
+        
+        const favList = json.favs;
+        if (favList.includes(currentUser)){
+            document.getElementById("star").classList.add("saved");
+        }else{
+            document.getElementById("star").classList.remove("saved");
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
+    
+}
 
 function saveAsFav(){
     if (document.getElementById("star").classList.contains("saved")){
         document.getElementById("star").classList.remove("saved");
         
+        //update in db. remove current user as fav list
+        const currentUser = "62436866d4cc88a03be4de21"
+
+        const url = '/api/users/' + currentUser;
+
+        fetch(url)
+        .then((res) => { 
+            if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get user')
+            }                
+        })
+        .then((json) => {
+            var favList = json.favs;
+            favList.splice(favList.indexOf(currentUser), 1); 
+            let data = {
+                username: json.username,
+                email: json.email,
+                password: json.password,
+                bio: json.bio,
+                favs: favList,
+                recents: json.recents,
+                match_history: json.match_history,
+                icon: json.icon
+            }
+            const request = new Request(url, {
+                method: 'put', 
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+            });
+        
+            fetch(request)
+            .then(function(res) {
+        
+                if (res.status === 200) {
+                    console.log('Profile Changes')
+                    
+                } else {    
+                    console.log('Profile Unchanged')
+                
+                }
+                
+            }).catch((error) => {
+                console.log(error)
+            })
+            
+        }).catch((error) => {
+            console.log(error)
+        })
     }else{
         document.getElementById("star").classList.add("saved");
+        //update in db. add current user as fav list
+        const currentUser = "62436866d4cc88a03be4de21"
+
+        const url = '/api/users/' + currentUser;
+
+        fetch(url)
+        .then((res) => { 
+            if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get user')
+            }                
+        })
+        .then((json) => {
+            var favList = json.favs;
+            favList.push(currentUser); 
+            let data = {
+                username: json.username,
+                email: json.email,
+                password: json.password,
+                bio: json.bio,
+                favs: favList,
+                recents: json.recents,
+                match_history: json.match_history,
+                icon: json.icon
+            }
+            const request = new Request(url, {
+                method: 'put', 
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+            });
+        
+            fetch(request)
+            .then(function(res) {
+        
+                if (res.status === 200) {
+                    console.log('Profile Changes')
+                    
+                } else {    
+                    console.log('Profile Unchanged')
+                
+                }
+                
+            }).catch((error) => {
+                console.log(error)
+            })
+            
+        }).catch((error) => {
+            console.log(error)
+        })
     }
 }
 
@@ -48,10 +179,66 @@ function editProfile(){
         document.getElementById("usernameInput").removeAttribute("readonly");
         document.getElementById("quoteInput").removeAttribute("readonly");
         document.getElementById("edit").innerHTML = "Save";
+
     }else if(document.getElementById("edit").innerHTML == "Save"){
         document.getElementById("usernameInput").readOnly = true;
         document.getElementById("quoteInput").readOnly = true;
         document.getElementById("edit").innerHTML = "Edit Profile";
+        //check for user name constraint
+
+
+        //save current changes to db
+        const currentUser = "62436866d4cc88a03be4de21"
+
+        const url = '/api/users/' + currentUser;
+
+        fetch(url)
+            .then((res) => { 
+                if (res.status === 200) {
+                return res.json() 
+            } else {
+                console.log('Could not get user')
+                }                
+            })
+            .then((json) => { 
+                let data = {
+                    username: document.getElementById("usernameInput").value,
+                    email: json.email,
+                    password: json.password,
+                    bio: document.getElementById("quoteInput").value,
+                    favs: json.favs,
+                    recents: json.recents,
+                    match_history: json.match_history,
+                    icon: json.icon
+                }
+                const request = new Request(url, {
+                    method: 'put', 
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                });
+            
+                fetch(request)
+                .then(function(res) {
+            
+                    if (res.status === 200) {
+                        console.log('Profile Changes')
+                       
+                    } else {    
+                        console.log('Profile Unchanged')
+                 
+                    }
+                    
+                }).catch((error) => {
+                    console.log(error)
+                })
+               
+            }).catch((error) => {
+                console.log(error)
+            })
+        
     }
 }
 
@@ -104,7 +291,6 @@ function confirmChange(){
 
     console.log(icon_path)
     //update to the db
-    //hard coded for now for logged in user
     const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/users/' + currentUser;
