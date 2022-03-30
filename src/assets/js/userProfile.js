@@ -33,6 +33,13 @@ function loadCurrentUser(){
     })
 }
 
+let matchHis = [];
+
+function getAllMatches(){
+    
+}
+
+
 function displaySaved(){
     const currentUser = "62436866d4cc88a03be4de21"
 
@@ -429,15 +436,6 @@ const match5 =
     assists: "6",
     teammateIds: []
 };
-
-//hard coded match history
-const matchHis = [
-    match1,
-    match2,
-    match3,
-    match4,
-    match5
-];
 
 function displayGames(){
     for(let i = 0; i<matchHis.length; i++){

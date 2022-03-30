@@ -45,6 +45,10 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
 })
 
+app.get('/index.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/index.html'))
+})
+
 app.get('/userPost.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/userPost.html'))
 })
@@ -65,8 +69,14 @@ app.get('/championAnalysis.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/championAnalysis.html'))
 })
 
+app.get('/otherProfile.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
+})
+
+
 /*** GameSquad API Routes below ************************************/
 
+/*** user API ************************************/
 //get all users
 app.get('/api/users', async(req, res) => {
 
@@ -187,6 +197,26 @@ app.put('/api/users/:id', async (req, res) => {
 	}
 })
 
+app.get('/api/userByName/:username', async (req, res) => {
+
+	const user = req.params.username
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	User.findOne({username:user}, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
+
 //get all post in mongoose
 app.get('/api/posts', async(req, res) => {
 
@@ -244,6 +274,72 @@ app.post('/api/posts', async(req, res) => {
 });
 
 
+/*** match API ************************************/
+//get all matches
+app.get('/api/matches', async(req, res) => {
+
+	log(req.body)
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	try {
+		const matches = await Match.find()
+		res.send({ matches }) 
+	} catch(error) {
+		log(error)
+		res.status(500).send("Internal Server Error")
+	}
+
+});
+
+//add match post request
+app.post('/api/matches', async(req, res) => {
+
+	log(req.body)
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	const match = new Match({
+		match_name: req.body.match_name,
+		add_time: req.body.add_time,
+		userA: req.body.userA,
+		userB: req.body.userB,
+		championA: req.body.championA,
+		championB: req.body.championB,
+		win: req.body.win,
+		kdaA: req.body.kdaA,
+		kdaB: req.body.kdaB,
+		runeA: req.body.runeA,
+		runeB: req.body.runeB,
+		summonerA: req.body.summonerA,
+		summonerB: req.body.summonerB,
+		buildA: req.body.buildA,
+		buildB: req.body.buildB
+	})
+
+	try {
+		const result = await match.save()	
+		res.send(result)
+	} catch(error) {
+		log(error) 
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+
+});
 
 /*********************************************************/
 
