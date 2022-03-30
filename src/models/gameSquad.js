@@ -1,8 +1,5 @@
 const mongoose = require('mongoose')
 
-const MatchSchema  = mongoose.Schema({
-
-});
 
 const UserSchema  = new mongoose.Schema({
     username: {
@@ -34,10 +31,73 @@ const UserSchema  = new mongoose.Schema({
         default: "assets/images/login3.png"
     },
     match_history: {
-        type: [MatchSchema]
+        type: [String] //match schema ids
     }
 });
 
+const MatchSchema  = mongoose.Schema({
+    match_name: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    add_time: {
+        type: Date,
+        default: Date.now
+    },
+    userA: {
+        type: String,
+        required: true,
+    },
+    userB: {
+        type: String,
+        required: true,
+    },
+    championA:{
+        type: String,
+        required: true,
+    },
+    championB:{
+        type: String,
+        required: true,
+    },
+    win: {
+        type: String, //user Schema
+        required: true,
+    },
+    kdaA: {
+        type: [Number],
+        required: true,
+    },
+    kdaB: {
+        type: [Number],
+        required: true,
+    },
+    runeA: {
+        type: [String],
+        required: true,
+    },
+    runeB: {
+        type: [String],
+        required: true,
+    },
+    summonerA:{
+        type: [String],
+        required: true,
+    },
+    summonerB:{
+        type: [String],
+        required: true,
+    },
+    buildA:{
+        type: [String],
+        required: true,
+    },
+    buildB:{
+        type: [String],
+        required: true,
+    }
+});
 
 
 const AdminSchema  = new mongoose.Schema({
@@ -59,7 +119,7 @@ const AdminSchema  = new mongoose.Schema({
 
 const PostSchema  = new mongoose.Schema({
     username: {
-        type: UserSchema,
+        type: String, //user schema
         required: true
     },
     post_time: {
@@ -71,7 +131,7 @@ const PostSchema  = new mongoose.Schema({
         required: true
     },
     tag_gameName: {
-        type: MatchSchema,
+        type: String, //match schema id
         required: true
     },
     content:{
@@ -87,11 +147,11 @@ const PostSchema  = new mongoose.Schema({
 
 const ReportSchema = new mongoose.Schema({
     reported_username: {
-        type: UserSchema,
+        type: String, //user Schema
         required: true
     },
     reporter: {
-        type: UserSchema,
+        type: String, //user Schema
         required: true
     },
     report_time: {
