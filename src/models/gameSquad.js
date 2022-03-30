@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
-const User = mongoose.model('User',{
+const MatchSchema  = mongoose.Schema({
+
+});
+
+const UserSchema  = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
@@ -19,18 +23,24 @@ const User = mongoose.model('User',{
         type: String,
         default: "No Bio Yet"
     },
+    favs : {
+        type: [String]
+    },
+    recents : {
+        type: [String]
+    },
     icon: {
         type: String,
         default: "assets/images/login3.png"
     },
-    match_history: [Match]
+    match_history: {
+        type: [MatchSchema]
+    }
 });
 
-const Match = mongoose.model('Match', {
 
-});
 
-const Admin = mongoose.model('Admin', {
+const AdminSchema  = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
@@ -47,9 +57,9 @@ const Admin = mongoose.model('Admin', {
     }
 });
 
-const Post = mongoose.model('Post', {
+const PostSchema  = new mongoose.Schema({
     username: {
-        type: User,
+        type: UserSchema,
         required: true
     },
     post_time: {
@@ -61,7 +71,7 @@ const Post = mongoose.model('Post', {
         required: true
     },
     tag_gameName: {
-        type: Match,
+        type: MatchSchema,
         required: true
     },
     content:{
@@ -75,13 +85,13 @@ const Post = mongoose.model('Post', {
     }
 });
 
-const Report = mongoose.model('Report', {
+const ReportSchema = new mongoose.Schema({
     reported_username: {
-        type: User,
+        type: UserSchema,
         required: true
     },
     reporter: {
-        type: User,
+        type: UserSchema,
         required: true
     },
     report_time: {
@@ -94,10 +104,16 @@ const Report = mongoose.model('Report', {
     }
 });
 
-module.exports = { 
-    Admin, 
-    Report,
-    Post,
-    User,
-    Match
-};
+const Admin = mongoose.model('Admin', AdminSchema);
+const Report = mongoose.model('Report', ReportSchema);
+const Post = mongoose.model('Post', PostSchema);
+const User = mongoose.model('User', UserSchema);
+const Match = mongoose.model('Match', MatchSchema);
+
+module.exports = Object.freeze({ 
+    Admin:Admin, 
+    Report:Report,
+    Post:Post,
+    User:User,
+    Match:Match
+});

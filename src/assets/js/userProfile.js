@@ -1,15 +1,43 @@
 window.onload = init;
     function init(){
         //hard coded current user
-        document.getElementById("usernameInput").value = "User 1";
-        document.getElementById("quoteInput").value = "Hi";
+        loadCurrentUser()
+        // document.getElementById("usernameInput").value = "User 1";
+        // document.getElementById("quoteInput").value = "Hi";
         displayGames();
   }
+
+function loadCurrentUser(){
+
+    //hard coded for now for logged in user
+    const currentUser = "62436866d4cc88a03be4de21"
+
+    const url = '/api/users/' + currentUser;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get user')
+       }                
+    })
+    .then((json) => { 
+        
+        icon_path = json.icon;
+        document.getElementById("usernameInput").value = json.username;
+        document.getElementById("quoteInput").value = json.bio;
+        document.getElementById("iconPic").src = icon_path;
+        
+    }).catch((error) => {
+        console.log(error)
+    })
+}
 
 
 function saveAsFav(){
     if (document.getElementById("star").classList.contains("saved")){
         document.getElementById("star").classList.remove("saved");
+        
     }else{
         document.getElementById("star").classList.add("saved");
     }
@@ -71,11 +99,69 @@ function dismissChange(){
 }
 
 function confirmChange(){
+
     icon_path = document.getElementById("iconPic").src;
+
+    console.log(icon_path)
+    //update to the db
+    //hard coded for now for logged in user
+    const currentUser = "62436866d4cc88a03be4de21"
+
+    const url = '/api/users/' + currentUser;
+
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get user')
+       }                
+    })
+    .then((json) => { 
+        
+        let data = {
+            username: json.username,
+            email: json.email,
+            password: json.password,
+            bio: json.bio,
+            favs: json.favs,
+            recents: json.recents,
+            match_history: json.match_history,
+            icon: icon_path
+        }
+        const request = new Request(url, {
+            method: 'put', 
+            body: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+        });
+    
+        fetch(request)
+        .then(function(res) {
+    
+            if (res.status === 200) {
+                // If student was added successfully, tell the user.
+                console.log('Change Icon')
+               
+            } else {    
+                console.log('Icon Unchanged')
+         
+            }
+            
+        }).catch((error) => {
+            console.log(error)
+        })
+        
+    }).catch((error) => {
+        console.log(error)
+    })
+
 }
 
 //hard coded value for user profile
-icon_path = "../assets/images/login3.png";
+// icon_path = "../assets/images/login3.png";
 
 //hard coded match data
 const match1 = 
