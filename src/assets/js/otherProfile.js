@@ -1,20 +1,196 @@
 window.onload = init;
-    function init(){
-        //hard coded current user
-        document.getElementById("usernameInput").value = "User 2";
-        document.getElementById("quoteInput").value = "Quote random";
-        displayGames();
-        displayPosts();
-  }
 
+let searchedUser;
+
+    function init(){
+        searchedUser= getParams();
+
+
+        loadSearchedUser()
+        displayGames();
+        displaySaved()
+        displayPosts();
+}
+
+function getParams() {
+    var idx = document.URL.indexOf('?');
+    var params = new Array();
+    if (idx != -1) {
+    var pairs = document.URL.substring(idx+1, document.URL.length).split('&');
+    for (var i=0; i<pairs.length; i++) {
+        nameVal = pairs[i].split('=');
+        params[nameVal[0]] = nameVal[1];
+       }
+    }
+    return unescape(params["id"]);
+}
+
+
+
+function loadSearchedUser(){
+    
+
+    const url = '/api/users/'+searchedUser;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get user')
+       }                
+    })
+    .then((json) => { 
+        
+        document.getElementById("usernameInput").value = json.username;
+        document.getElementById("quoteInput").value = json.bio;
+        document.getElementById("iconPic").src = json.icon;
+    }).catch((error) => {
+        console.log(error)
+    })
+}
+
+
+function displaySaved(){
+    const currentUser = "62436866d4cc88a03be4de21"
+
+    const url = '/api/users/' + currentUser;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get user')
+       }                
+    })
+    .then((json) => { 
+        
+        const favList = json.favs;
+        if (favList.includes(searchedUser)){
+            document.getElementById("star").classList.add("saved");
+        }else{
+            document.getElementById("star").classList.remove("saved");
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
+    
+}
 
 function saveAsFav(){
     if (document.getElementById("star").classList.contains("saved")){
         document.getElementById("star").classList.remove("saved");
+        
+        //update in db. remove current user as fav list
+        const currentUser = "62436866d4cc88a03be4de21"
+
+        const url = '/api/users/' + currentUser;
+
+        fetch(url)
+        .then((res) => { 
+            if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get user')
+            }                
+        })
+        .then((json) => {
+            var favList = json.favs;
+            favList.splice(favList.indexOf(searchedUser), 1); 
+            let data = {
+                username: json.username,
+                email: json.email,
+                password: json.password,
+                bio: json.bio,
+                favs: favList,
+                recents: json.recents,
+                match_history: json.match_history,
+                icon: json.icon
+            }
+            const request = new Request(url, {
+                method: 'put', 
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+            });
+        
+            fetch(request)
+            .then(function(res) {
+        
+                if (res.status === 200) {
+                    console.log('Save Changes')
+                    
+                } else {    
+                    console.log('Save Unchanged')
+                
+                }
+                
+            }).catch((error) => {
+                console.log(error)
+            })
+            
+        }).catch((error) => {
+            console.log(error)
+        })
     }else{
         document.getElementById("star").classList.add("saved");
+        //update in db. add current user as fav list
+        const currentUser = "62436866d4cc88a03be4de21"
+
+        const url = '/api/users/' + currentUser;
+
+        fetch(url)
+        .then((res) => { 
+            if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get user')
+            }                
+        })
+        .then((json) => {
+            var favList = json.favs;
+            favList.push(searchedUser); 
+            let data = {
+                username: json.username,
+                email: json.email,
+                password: json.password,
+                bio: json.bio,
+                favs: favList,
+                recents: json.recents,
+                match_history: json.match_history,
+                icon: json.icon
+            }
+            const request = new Request(url, {
+                method: 'put', 
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+            });
+        
+            fetch(request)
+            .then(function(res) {
+        
+                if (res.status === 200) {
+                    console.log('Profile Changes')
+                    
+                } else {    
+                    console.log('Profile Unchanged')
+                
+                }
+                
+            }).catch((error) => {
+                console.log(error)
+            })
+            
+        }).catch((error) => {
+            console.log(error)
+        })
     }
 }
+
 
 function selectReport(){
     if(document.getElementById("report-reason").value=="reason2"){

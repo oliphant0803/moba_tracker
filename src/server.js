@@ -45,6 +45,10 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
 })
 
+app.get('/index.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/index.html'))
+})
+
 app.get('/userPost.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/userPost.html'))
 })
@@ -64,6 +68,11 @@ app.get('/userAnalysis.html', (req, res) => {
 app.get('/championAnalysis.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/championAnalysis.html'))
 })
+
+app.get('/otherProfile.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
+})
+
 
 /*** GameSquad API Routes below ************************************/
 
@@ -185,6 +194,26 @@ app.put('/api/users/:id', async (req, res) => {
 			res.status(400).send('Bad Request')
 		}
 	}
+})
+
+app.get('/api/userByName/:username', async (req, res) => {
+
+	const user = req.params.username
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	User.findOne({username:user}, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
 })
 
 //get all post in mongoose
