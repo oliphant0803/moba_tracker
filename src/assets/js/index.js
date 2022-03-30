@@ -8,10 +8,11 @@ window.onload=function(){
     const userInfo = document.querySelector('#userInfo');
     // Event Listerners
     userInfo.addEventListener('submit', loginCheck);
+    getUsers();
+    getAdmins();
 }
 // Global arrays
 const userLibrary = [];
-let numUsers = 0;
 
 // User class
 class User{
@@ -20,18 +21,8 @@ class User{
         this.username = username;
         this.password = password;
         this.type = type;
-        this.userId = numUsers;
-        numUsers++;
     }
 }
-
-// Some initial users
-kath = new User("katherinema0905@gmail.com", "MasLayerKaka", "Katherine0905", "Admin");
-oli = new User("oliver.h0803@gmail.com", "Hide on Bush", "0803", "User");
-rachel = new User("rachelzeng1231@gmail.com", "Distruction10000", "Rachel1231", "User");
-userLibrary.push(kath);
-userLibrary.push(oli);
-userLibrary.push(rachel);
 
 function loginCheck(e){
     e.preventDefault();
@@ -165,4 +156,51 @@ function wrongInput(section){
         const warning = emailsec.children[0].children[0];
         warning.innerText = "No username found, please register";
     }
+}
+
+// Database related function
+function getUsers(){
+    const urlUser = 'api/users';
+    
+    fetch(urlUser).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        json.users.forEach(element => {
+            const username = element.username;
+            const email = element.email;
+            const password = element.password;
+            const user = new User(email, username, password, "User");
+            userLibrary.push(user);
+        });
+    }).catch((error) => {
+        console.log(error)
+    })
+}
+
+function getAdmins(){
+    const urlUser = 'api/admins';
+    
+    fetch(urlUser).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        json.admins.forEach(element => {
+            const username = element.username;
+            const email = element.email;
+            const password = element.password;
+            const user = new User(email, username, password, "Admin");
+            userLibrary.push(user);
+        });
+    }).catch((error) => {
+        console.log(error)
+    })
 }
