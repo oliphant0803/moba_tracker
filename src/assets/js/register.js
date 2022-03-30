@@ -13,7 +13,6 @@ window.onload=function(){
 }
 // Global arrays
 const userLibrary = [];
-// let numUsers = 0;
 
 // User class
 class User{
@@ -22,18 +21,8 @@ class User{
         this.username = username;
         this.password = password;
         this.type = type;
-        // this.userId = numUsers;
-        // numUsers++;
     }
 }
-
-// Some initial users
-// kath = new User("katherinema0905@gmail.com", "MasLayerKaka", "Katherine0905", "Admin");
-// oli = new User("oliver.h0803@gmail.com", "Hide on Bush", "0803", "User");
-// rachel = new User("rachelzeng1231@gmail.com", "Distruction10000", "Rachel1231", "User");
-// userLibrary.push(kath);
-// userLibrary.push(oli);
-// userLibrary.push(rachel);
 
 // Function
 function addNewUser(e){
@@ -98,11 +87,16 @@ function addNewUser(e){
         if (invalid == 0 && canJumpName == 1) {
             const newUser = new User(email, username, password, type);
             userLibrary.push(newUser);
+            if (type === "Admin") {
+                addAdmin(username, email, password);
+            }
+            else{
+                addUser(username, email, password);
+            }
             noError(1);
             canJumpEmail = 1;
         }
         else{
-            // registeredEmail();
             canJumpEmail = 0;
         }
     }
@@ -110,7 +104,6 @@ function addNewUser(e){
     if (canJumpAdmin && canJumpEmail && canJumpName && canJumpPassword) {
         backToIndex();
     }
-    // addNewUserToLibraray(newUser);
 }
 
 // DOM function
@@ -205,5 +198,56 @@ function getAdmins(){
         });
     }).catch((error) => {
         console.log(error)
+    })
+}
+
+function addUser(username, email, password){
+    const url = '/api/users';
+
+    let data = {
+        recents: [],
+        username: username,
+        email: email,
+        password: password,
+        bio: "No Bio Yet",
+        favs: [],
+        icon: "assets/images/login3.png",
+        match_history: []
+    }
+
+    const request = new Request(url, {
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+
+    fetch(request).catch((error) =>{
+        log(error)
+    })
+}
+
+function addAdmin(username, email, password){
+    const url = '/api/admins';
+
+    let data = {
+        username: username,
+        email: email,
+        password: password,
+    }
+
+    const request = new Request(url, {
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+
+    fetch(request).catch((error) =>{
+        log(error)
     })
 }
