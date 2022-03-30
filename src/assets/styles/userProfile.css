@@ -113,11 +113,17 @@ h5{
 }
 
 .img-item{
-    width: 10%;
+    /* width: 10%; */
     margin: 0.2rem 0.5rem 0.2rem 0.5rem;
     border-radius: 15px;
     border: 1px var(--txt-grey) solid;
 }
+
+.vl-container{
+    margin-left: auto;
+    order: 2;
+}
+
 .btn-victory{
     color:var(--expand-blue);
     font-size: xx-large;
