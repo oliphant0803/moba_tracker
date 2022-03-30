@@ -399,6 +399,27 @@ app.post('/api/matches', async(req, res) => {
 
 });
 
+//find matches for a specific player 
+app.get('/api/matches/player/:id', (req, res) => {
+	// Add code here
+	const playerid = req.params.id;
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Match.find( { $or:[{useA: playerid}, {useB: playerid}] }, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
+
 /*********************************************************/
 
 
