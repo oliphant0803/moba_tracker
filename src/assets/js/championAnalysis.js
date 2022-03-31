@@ -1,28 +1,8 @@
 window.onload=function(){
     getMatches();
+    getPosts();
     addChamp();
 }
-
-// //the way we expect to get from json
-// const post1={
-//     postId: 1,
-//     time: new Date("2020-9-16 13:30:58"),
-//     userName: "User 1",
-//     userProfile: "../assets/images/login3.png",
-//     gameTag: 1,
-//     champTag: "Champion1",
-//     content: "Content"
-// }
-
-// const post2={
-//     postId: 2,
-//     time: new Date("2021-9-16 12:00:00"),
-//     userName: "User 2",
-//     userProfile: "../assets/images/login3.png",
-//     gameTag: 3,
-//     champTag: "Champion2",
-//     content: "Content"
-// }
 
 const posts = []
 const matches = []
@@ -37,6 +17,13 @@ class Match{
         this.userB = userB;
         this.championB = champB;
         this.kdaB = kdaB;
+    }
+}
+
+class UserPost{
+    constructor(user, champ){
+        this.username = user;
+        this.champTag = champ;
     }
 }
 
@@ -74,9 +61,8 @@ function winRate(champ) {
 function discussRate(champ){
     var count = 0;
     const numPost = posts.length;
-    for (let index = 0; index < numPost; index++) {
-        const post = posts[index];
-        if (post.champTag == champ) {
+    for (const post of posts) {
+        if (post.champTag === champ) {
             count++;
         }
     }
@@ -108,10 +94,10 @@ function averageKDA(champ){
 function getChamp(){
     const champ1 = document.querySelector("#champion1").value;
     const champ2 = document.querySelector("#champion2").value;
-    if (champ1 != "Select" && champ2 != "select") {
+    if (champ1 != "Select" && champ2 != "Select") {
         displayPickRate(champ1, champ2);
         displayWinRate(champ1, champ2);
-        // displayDiscussRate(champ1, champ2);
+        displayDiscussRate(champ1, champ2);
         displayKDA(champ1, champ2);
     }
 }
@@ -206,8 +192,8 @@ function getMatches(){
             const wl = element.win;
             const uA = element.userA;
             const uB = element.userB;
-            const cA = element.championA;
-            const cB = element.championB;
+            const cA = "champion".concat(element.championA);
+            const cB = "champion".concat(element.championB);
             const kA = element.kdaA;
             const kB = element.kdaB;
             const match = new Match(wl, uA, cA, kA, uB, cB, kB);
@@ -224,25 +210,24 @@ function getMatches(){
     })
 }
 
-// function getAdmins(){
-//     const urlUser = 'api/admins';
+function getPosts(){
+    const url = 'api/posts';
     
-//     fetch(urlUser).then((res) => {
-//         if (res.status === 200) {
-//             return res.json();
-//         }
-//         else{
-//             alert('Could not get users');
-//         }
-//     }).then((json) => {
-//         json.admins.forEach(element => {
-//             const username = element.username;
-//             const email = element.email;
-//             const password = element.password;
-//             const user = new User(email, username, password, "Admin");
-//             userLibrary.push(user);
-//         });
-//     }).catch((error) => {
-//         console.log(error)
-//     })
-// }
+    fetch(url).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        json.posts.forEach(element => {
+            const username = element.username;
+            const champ = element.tag_champion;
+            const post = new UserPost(username, champ);
+            posts.push(post);
+        });
+    }).catch((error) => {
+        console.log(error)
+    })
+}
