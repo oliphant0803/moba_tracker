@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Todo: change title name -->
-  <title>Admin User Management</title>
+  <title>Admin Manage Game</title>
   <link rel="icon" href="../assets/images/login3.png" />
 
   <!-- Styles -->
@@ -15,7 +15,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
   <link rel="stylesheet" href="../assets/styles/common.css"/>
-  <link rel="stylesheet" href="../assets/styles/adminDash.css"/>
+  <link rel="stylesheet" href="../assets/styles/adminCommon.css"/>
+  <link rel="stylesheet" href="../assets/styles/adminManageGame.css"/>
 
   <!-- Bootstrap js -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -29,7 +30,7 @@
   </script>
 
   <!-- Custom js -->
-  <script src="../assets/js/adminBanUser.js">
+  <script src="../assets/js/adminGameManagement.js">
   </script>
 </head>
 
@@ -49,7 +50,7 @@
       </div>
     </div>
     <!--Header bar -->
-<!--Navbar -->
+    <!--Navbar -->
     <nav class="navbar navbar-expand-xl">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false">
         <span class="navbar-toggler-icon"></span>
@@ -60,7 +61,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="adminPostManagement.html">Posts Management</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="adminUserManagement.html">Users Management</a>
             </li>
             <li class="nav-item">
@@ -78,41 +79,21 @@
 
     <!--Search bar -->
     <section id="search-section">
+      <h1>Game Management<h1>
       <div class="container text-center text-white">
         <!-- search -->
         <div class="input-group search-container">
-          <input id="search" class="form-control" placeholder="Search Username ..." aria-label="Search" aria-describedby="search-addon" />
+          <input id="search" class="form-control" placeholder="Search Current Game ..." aria-label="Search" aria-describedby="search-addon" />
           <button type="button" class="btn btn-action searchBut">Search</button>
         </div>
         <!-- search -->
         <div id="result-container">
 
         </div>
-        <!-- <div class="row">
-          <div class="col user-info-container justify-content-center">
-            <button type="button" class="btn btn-recent">Show more</button>
-          </div>
-        </div> -->
         
       </div>
     </section>
     <!--Search bar -->
-
-    <!--Report bar -->
-    <section id="report-section">
-      <div class="container text-center text-white">
-        <div id="report-container">
-
-        <!-- </div>
-        <div class="row">
-          <div class="col user-info-container justify-content-center">
-            <button type="button" class="btn btn-recent">Show more</button>
-          </div>
-        </div> -->
-        
-      </div>
-    </section>
-    <!--Report bar -->
 
     <!-- Footer -->
     <footer class="page-footer mt-auto">

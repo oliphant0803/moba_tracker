@@ -77,6 +77,22 @@ app.get('/otherProfile.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
 })
 
+app.get('/adminUserManagement.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminUserManagement.html'))
+})
+
+app.get('/adminPostManagement.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminPostManagement.html'))
+})
+
+app.get('/adminAddGame.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminAddGame.html'))
+})
+
+app.get('/adminManageGame.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminManageGame.html'))
+})
+
 
 /*** GameSquad API Routes below ************************************/
 
@@ -100,7 +116,6 @@ app.get('/api/users', async(req, res) => {
 		log(error)
 		res.status(500).send("Internal Server Error")
 	}
-
 });
 
 //add users post request
@@ -398,6 +413,27 @@ app.post('/api/matches', async(req, res) => {
 	}
 
 });
+
+//find matches for a specific player 
+app.get('/api/matches/player/:id', (req, res) => {
+	// Add code here
+	const playerid = req.params.id;
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Match.find( { $or:[{userA: playerid}, {userB: playerid}] }, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
 
 /*********************************************************/
 
