@@ -30,10 +30,10 @@ window.onload = init;
                         }else{
                             match_i.winLoss = "loss"
                         }
-                        match_i.r1url = match.runeA[0]
-                        match_i.r2url = match.runeA[1]
-                        match_i.s1url = match.summonerA[0]
-                        match_i.s2url =  match.summonerA[1]
+                        match_i.r1url = "assets/images/runes/r"+match.runeA[0]+".png"
+                        match_i.r2url = "assets/images/runes/r"+match.runeA[1]+".png"
+                        match_i.s1url = "assets/images/summoners/summoner"+match.summonerA[0]+".png"
+                        match_i.s2url =  "assets/images/summoners/summoner"+match.summonerA[1]+".png"
                         match_i.items = match.buildA
                         match_i.kill = match.kdaA[0].toString();
                         match_i.death = match.kdaA[1].toString();
@@ -49,10 +49,10 @@ window.onload = init;
                         }else{
                             match_i.winLoss = "loss"
                         }
-                        match_i.r1url = match.runeB[0]
-                        match_i.r2url = match.runeB[1]
-                        match_i.s1url = match.summonerB[0]
-                        match_i.s2url =  match.summonerB[1]
+                        match_i.r1url = "assets/images/runes/r"+match.runeB[0]+".png"
+                        match_i.r2url = "assets/images/runes/r"+match.runeB[1]+".png"
+                        match_i.s1url = "assets/images/summoners/summoner"+match.summonerB[0]+".png"
+                        match_i.s2url =  "assets/images/summoners/summoner"+match.summonerB[1]+".png"
                         match_i.items = match.buildB
                         match_i.kill = match.kdaB[0].toString();
                         match_i.death = match.kdaB[1].toString();

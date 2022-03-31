@@ -28,10 +28,10 @@ let matchHis=[];
                         }else{
                             match_i.winLoss = "loss"
                         }
-                        match_i.rune1 = match.runeA[0]
-                        match_i.rune2 = match.runeA[1]
-                        match_i.sum1 = match.summonerA[0]
-                        match_i.sum2 =  match.summonerA[1]
+                        match_i.rune1 = "rune"+match.runeA[0]
+                        match_i.rune2 = "rune"+match.runeA[1]
+                        match_i.sum1 = "summoner"+match.summonerA[0]
+                        match_i.sum2 =  "summoner"+match.summonerA[1]
                         match_i.kill = match.kdaA[0].toString();
                         match_i.death = match.kdaA[1].toString();
                         match_i.assists = match.kdaA[2].toString();
@@ -46,10 +46,10 @@ let matchHis=[];
                         }else{
                             match_i.winLoss = "loss"
                         }
-                        match_i.rune1 = match.runeB[0]
-                        match_i.rune2 = match.runeB[1]
-                        match_i.sum1 = match.summonerB[0]
-                        match_i.sum2 =  match.summonerB[1]
+                        match_i.rune1 = "rune"+match.runeB[0]
+                        match_i.rune2 = "rune"+match.runeB[1]
+                        match_i.sum1 = "summoner"+match.summonerB[0]
+                        match_i.sum2 =  "summoner"+match.summonerB[1]
                         match_i.items = match.buildB
                         match_i.kill = match.kdaB[0].toString();
                         match_i.death = match.kdaB[1].toString();
@@ -121,10 +121,10 @@ function updateN(matchHis){
                 }else{
                     match_i.winLoss = "loss"
                 }
-                match_i.rune1 = match.runeA[0]
-                match_i.rune2 = match.runeA[1]
-                match_i.sum1 = match.summonerA[0]
-                match_i.sum2 =  match.summonerA[1]
+                match_i.rune1 = "rune"+match.runeA[0]
+                match_i.rune2 = "rune"+match.runeA[1]
+                match_i.sum1 = "summoner"+match.summonerA[0]
+                match_i.sum2 =  "summoner"+match.summonerA[1]
                 match_i.kill = match.kdaA[0].toString();
                 match_i.death = match.kdaA[1].toString();
                 match_i.assists = match.kdaA[2].toString();
@@ -139,10 +139,10 @@ function updateN(matchHis){
                 }else{
                     match_i.winLoss = "loss"
                 }
-                match_i.rune1 = match.runeB[0]
-                match_i.rune2 = match.runeB[1]
-                match_i.sum1 = match.summonerB[0]
-                match_i.sum2 =  match.summonerB[1]
+                match_i.rune1 = "rune"+match.runeB[0]
+                match_i.rune2 = "rune"+match.runeB[1]
+                match_i.sum1 = "summoner"+match.summonerB[0]
+                match_i.sum2 =  "summoner"+match.summonerB[1]
                 match_i.items = match.buildB
                 match_i.kill = match.kdaB[0].toString();
                 match_i.death = match.kdaB[1].toString();
