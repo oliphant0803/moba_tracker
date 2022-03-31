@@ -453,12 +453,12 @@ function displayOneGame(match_i){
     rowCol4.appendChild(displayCap( match_i.gameId));
 
     matchContainer.appendChild(rowCol4);
-    matchContainer.appendChild(appendCollapse([], match_i.gameId));
+    matchContainer.appendChild(appendCollapse(match_i.gameId));
     // matchContainer.appendChild(displayCap( match_i.gameId));
     document.getElementById("history").appendChild(matchContainer);
 }
 
-function appendCollapse(teammates, gid){
+function appendCollapse(gid){
     const gameid = "collapseGame".concat(gid);
     var collapseDiv = document.createElement("div");
     collapseDiv.classList.add("collapse");

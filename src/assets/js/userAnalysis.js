@@ -1,16 +1,81 @@
 window.onload = init;
+
+let matchHis=[];
     function init(){
-        computeTotalWinrate();
-        computeGamePlayer();
-        computeAverageKDA();
-        displaySelect();
-        updateN();
+        document.getElementById("select-input-n").onchange = function(){updateN(matchHis)}
+        function getAllMatches(){
+            const currentUser = "62436866d4cc88a03be4de21"
+
+            const url = '/api/matches/player/' + currentUser;
+
+            fetch(url)
+            .then((res) => { 
+                if (res.status === 200) {
+                    return res.json() 
+                } else {
+                    console.log('Could not get user match history')
+                }                
+            })
+            .then((json) => { 
+                
+                json.forEach((match) => {
+                    if(match.userA == currentUser){
+                        let match_i = {   };
+                        match_i.gameId = match.match_name;
+                        match_i.champ = match.championA;
+                        if(match.win == currentUser){
+                            match_i.winLoss = "win"
+                        }else{
+                            match_i.winLoss = "loss"
+                        }
+                        match_i.rune1 = match.runeA[0]
+                        match_i.rune2 = match.runeA[1]
+                        match_i.sum1 = match.summonerA[0]
+                        match_i.sum2 =  match.summonerA[1]
+                        match_i.kill = match.kdaA[0].toString();
+                        match_i.death = match.kdaA[1].toString();
+                        match_i.assists = match.kdaA[2].toString();
+
+                        matchHis.push(match_i);
+                    }else{
+                        let match_i = {   };
+                        match_i.gameId = match.match_name;
+                        match_i.champ = match.championB;
+                        if(match.win == currentUser){
+                            match_i.winLoss = "win"
+                        }else{
+                            match_i.winLoss = "loss"
+                        }
+                        match_i.rune1 = match.runeB[0]
+                        match_i.rune2 = match.runeB[1]
+                        match_i.sum1 = match.summonerB[0]
+                        match_i.sum2 =  match.summonerB[1]
+                        match_i.items = match.buildB
+                        match_i.kill = match.kdaB[0].toString();
+                        match_i.death = match.kdaB[1].toString();
+                        match_i.assists = match.kdaB[2].toString();
+                        matchHis.push(match_i);
+                        
+                    }
+
+                });
+                console.log(matchHis);
+                computeTotalWinrate(matchHis);
+                computeGamePlayer(matchHis);
+                computeAverageKDA(matchHis);
+                displaySelect(matchHis);
+                updateN(matchHis);
+            });
+
+        }
+        getAllMatches();
+
   }
 
 //current n
 var n = "all";
 //display on select
-function displaySelect(){
+function displaySelect(matchHis){
     var selectCon = document.getElementById("select-input-n");
     var selectOption = document.createElement("option");
     selectOption.textContent = "all";
@@ -31,173 +96,150 @@ function resetCanvas(idcontainer, id){
     document.getElementById(idcontainer).append(canvas);
 }
 
-function updateN(){
-    resetCanvas("champBarContainer", "champBar");
-    resetCanvas("cpieContainer", "champPie");
-    resetCanvas("rpieContainer", "runePie");
-    resetCanvas("spieContainer", "summonerPie");
-    var barColors = randomizeColors();
-    new Chart("champBar", {
-        type: "bar",
-        data: {
-          labels: championsBar.championsX,
-          datasets: [{
-            backgroundColor: barColors,
-            data: championsBar.championsY
-          }]
-        },
-        options: {
-          legend: {display: false},
-          title: {
-            display: true,
-            text: "Champion Average KDA"
-          }
+function updateN(matchHis){
+    const currentUser = "62436866d4cc88a03be4de21"
+
+    const url = '/api/matches/player/' + currentUser;
+
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get user match history')
+        }                
+    })
+    .then((json) => { 
+        
+        json.forEach((match) => {
+            if(match.userA == currentUser){
+                let match_i = {   };
+                match_i.gameId = match.match_name;
+                match_i.champ = match.championA;
+                if(match.win == currentUser){
+                    match_i.winLoss = "win"
+                }else{
+                    match_i.winLoss = "loss"
+                }
+                match_i.rune1 = match.runeA[0]
+                match_i.rune2 = match.runeA[1]
+                match_i.sum1 = match.summonerA[0]
+                match_i.sum2 =  match.summonerA[1]
+                match_i.kill = match.kdaA[0].toString();
+                match_i.death = match.kdaA[1].toString();
+                match_i.assists = match.kdaA[2].toString();
+
+                matchHis.push(match_i);
+            }else{
+                let match_i = {   };
+                match_i.gameId = match.match_name;
+                match_i.champ = match.championB;
+                if(match.win == currentUser){
+                    match_i.winLoss = "win"
+                }else{
+                    match_i.winLoss = "loss"
+                }
+                match_i.rune1 = match.runeB[0]
+                match_i.rune2 = match.runeB[1]
+                match_i.sum1 = match.summonerB[0]
+                match_i.sum2 =  match.summonerB[1]
+                match_i.items = match.buildB
+                match_i.kill = match.kdaB[0].toString();
+                match_i.death = match.kdaB[1].toString();
+                match_i.assists = match.kdaB[2].toString();
+                matchHis.push(match_i);
+                
+            }
+
+        });
+        resetCanvas("champBarContainer", "champBar");
+        resetCanvas("cpieContainer", "champPie");
+        resetCanvas("rpieContainer", "runePie");
+        resetCanvas("spieContainer", "summonerPie");
+        var barColors = randomizeColors(matchHis);
+        var championsBar = computeChampionKDA(matchHis);
+        //computed values for chart
+        console.log(championsBar.championsX);
+        console.log(championsBar.championsY);
+        new Chart("champBar", {
+            type: "bar",
+            data: {
+            labels: championsBar.championsX,
+            datasets: [{
+                backgroundColor: barColors,
+                data: championsBar.championsY
+            }]
+            },
+            options: {
+            legend: {display: false},
+            title: {
+                display: true,
+                text: "Champion Average KDA"
+            }
+            }
+        });
+        console.log(document.getElementById("select-input-n").value);
+        n = document.getElementById("select-input-n").value;
+        if(n == "all"){
+            n = matchHis.length;
         }
-      });
-    console.log(document.getElementById("select-input-n").value);
-    n = document.getElementById("select-input-n").value;
-    if(n == "all"){
-        n = matchHis.length;
-    }
-    let champPie = updateChampPie(n);
-    let runePie = updateRunePie(n);
-    let sumPie = updateSummonerPie(n);
-    new Chart("champPie", {
-        type: "doughnut",
-        data: {
-          labels: champPie.recentChampionX,
-          datasets: [{
-            backgroundColor: barColors,
-            data: champPie.recentChampionY
-          }]
-        },
-        options: {
-          title: {
-            display: true,
-            text: "Champion Respective Winrate on recent " + n + " games"
-          }
-        }
-      });
-      new Chart("runePie", {
-        type: "doughnut",
-        data: {
-          labels: runePie.recentRuneX,
-          datasets: [{
-            backgroundColor: barColors,
-            data: runePie.recentRuneY
-          }]
-        },
-        options: {
-          title: {
-            display: true,
-            text: "Rune Respective Winrate on recent " + n + " games"
-          }
-        }
-      });
-      new Chart("summonerPie", {
-        type: "doughnut",
-        data: {
-          labels: sumPie.recentSumX,
-          datasets: [{
-            backgroundColor: barColors,
-            data: sumPie.recentSumY
-          }]
-        },
-        options: {
-          title: {
-            display: true,
-            text: "Spell Respective Winrate on recent " + n + " games"
-          }
-        }
-      });
+        let champPie = updateChampPie(n, matchHis);
+        let runePie = updateRunePie(n, matchHis);
+        let sumPie = updateSummonerPie(n, matchHis);
+        new Chart("champPie", {
+            type: "doughnut",
+            data: {
+            labels: champPie.recentChampionX,
+            datasets: [{
+                backgroundColor: barColors,
+                data: champPie.recentChampionY
+            }]
+            },
+            options: {
+            title: {
+                display: true,
+                text: "Champion Respective Winrate on recent " + n + " games"
+            }
+            }
+        });
+        new Chart("runePie", {
+            type: "doughnut",
+            data: {
+            labels: runePie.recentRuneX,
+            datasets: [{
+                backgroundColor: barColors,
+                data: runePie.recentRuneY
+            }]
+            },
+            options: {
+            title: {
+                display: true,
+                text: "Rune Respective Winrate on recent " + n + " games"
+            }
+            }
+        });
+        new Chart("summonerPie", {
+            type: "doughnut",
+            data: {
+            labels: sumPie.recentSumX,
+            datasets: [{
+                backgroundColor: barColors,
+                data: sumPie.recentSumY
+            }]
+            },
+            options: {
+            title: {
+                display: true,
+                text: "Spell Respective Winrate on recent " + n + " games"
+            }
+            }
+        });
+    });
+
+    
 }
 
-//hard coded games (same as in match history from userProfile.js)
-//hard coded match data
-const match1 = 
-    {   
-        gameId: "1",
-        winLoss: "win",
-        champ: "champ 1",
-        rune1: "rune 1",
-        rune2: "rune 2",
-        sum1: "flash",
-        sum2: "heal",
-        kill: "5",
-        death: "2",
-        assists: "9"
-    };
-
-const match2 = 
-{   
-    gameId: "2",
-    winLoss: "loss",
-    champ: "champ 2",
-    rune1: "rune 4",
-    rune2: "rune 2",
-    sum1: "flash",
-    sum2: "smite",
-    kill: "1",
-    death: "5",
-    assists: "3"
-};
-
-const match3 = 
-{   
-    gameId: "3",
-    winLoss: "win",
-    champ: "champ 4",
-    rune1: "rune 1",
-    rune2: "rune 3",
-    sum1: "flash",
-    sum2: "smite",
-    kill: "4",
-    death: "5",
-    assists: "3"
-};
-
-const match4 = 
-{   
-    gameId: "4",
-    winLoss: "loss",
-    champ: "champ 1",
-    rune1: "rune 1",
-    rune2: "rune 2",
-    sum1: "flash",
-    sum2: "ghost",
-    kill: "0",
-    death: "5",
-    assists: "4"
-};
-
-const match5 = 
-{   
-    gameId: "5",
-    winLoss: "win",
-    champ: "champ 3",
-    rune1: "rune 5",
-    rune2: "rune 2",
-    sum1: "flash",
-    sum2: "exhaust",
-    kill: "9",
-    death: "2",
-    assists: "6"
-};
-
-const matchHis = [
-    match1,
-    match2,
-    match3,
-    match4,
-    match5
-];
-
-//computed values for chart
-var championsBar = computeChampionKDA();
-console.log(championsBar.championsX);
-console.log(championsBar.championsY);
-
-function randomizeColors(){
+function randomizeColors(matchHis){
     var barColors = [];
     for(let i = 0; i<matchHis.length*2; i++){
         var r = Math.floor(Math.random() * 255);
@@ -210,16 +252,16 @@ function randomizeColors(){
     return barColors;
 }
 
-function computeTotalWinrate(){
+function computeTotalWinrate(matchHis){
     const wins = matchHis.filter(match => match.winLoss == "win");
     document.getElementById("t-winrate").innerHTML = (wins.length)/(matchHis.length);
 }
 
-function computeGamePlayer(){
+function computeGamePlayer(matchHis){
     document.getElementById("t-games").innerHTML = matchHis.length;
 }
 
-function computeAverageKDA(){
+function computeAverageKDA(matchHis){
     var tkills = 0;
     var tdeaths = 0;
     var tassists = 0;
@@ -232,7 +274,7 @@ function computeAverageKDA(){
     document.getElementById("t-kda").innerHTML = Math.round(kda * 100) / 100;
 }
 
-function computeChampionKDA(){
+function computeChampionKDA(matchHis){
     var championsX = [];
     var championsY = [];
     var championsKill = [];
@@ -261,7 +303,7 @@ function computeChampionKDA(){
     return {championsX, championsY}
 }
 
-function updateChampPie(n){
+function updateChampPie(n, matchHis){
     var recentChampionX = [];
     var recentChampionGames = [];
     var recentChampionWins = [];
@@ -286,7 +328,7 @@ function updateChampPie(n){
     return {recentChampionX, recentChampionY};
 }
 
-function updateHelper(arr1, arr2, arr3){
+function updateHelper(arr1, arr2, arr3, matchHis){
     for(let i=0; i<n; i++){
         const r1 = matchHis[i].rune1;
         const r2 = matchHis[i].rune2;
@@ -314,8 +356,8 @@ function updateHelper(arr1, arr2, arr3){
     return {arr1, arr2, arr3};
 }
 
-function updateRunePie(n){
-    const runes = updateHelper([], [], []);
+function updateRunePie(n, matchHis){
+    const runes = updateHelper([], [], [], matchHis);
     var recentRuneX = runes.arr1;
     var recentRuneGames = runes.arr2;
     var recentRuneWins = runes.arr3;
@@ -327,7 +369,7 @@ function updateRunePie(n){
     return {recentRuneX, recentRuneY};
 }
 
-function updateSummonerPie(n){
+function updateSummonerPie(n, matchHis){
     var recentSumX = [];
     var recentSumGames = [];
     var recentSumWins = [];

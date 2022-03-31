@@ -352,7 +352,7 @@ app.get('/api/matches/player/:id', (req, res) => {
 		return;
 	}
 
-	Match.find( { $or:[{useA: playerid}, {useB: playerid}] }, function(err,obj){ 
+	Match.find( { $or:[{userA: playerid}, {userB: playerid}] }, function(err,obj){ 
 		if (err){
 			res.status(404).send(error);
 		}

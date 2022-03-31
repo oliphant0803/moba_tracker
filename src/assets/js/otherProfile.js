@@ -1,13 +1,78 @@
 window.onload = init;
 
 let searchedUser;
-
+let matchHis = [];
     function init(){
         searchedUser= getParams();
 
-
         loadSearchedUser()
-        displayGames();
+
+        function getAllMatches(){
+
+            const url = '/api/matches/player/' + searchedUser;
+
+            fetch(url)
+            .then((res) => { 
+                if (res.status === 200) {
+                    return res.json() 
+                } else {
+                    console.log('Could not get user match history')
+                }                
+            })
+            .then((json) => { 
+                
+                json.forEach((match) => {
+                    if(match.userA == searchedUser){
+                        let match_i = {   };
+                        match_i.gameId = match.match_name;
+                        match_i.champ = match.championA;
+                        if(match.win == searchedUser){
+                            match_i.winLoss = "win"
+                        }else{
+                            match_i.winLoss = "loss"
+                        }
+                        match_i.r1url = match.runeA[0]
+                        match_i.r2url = match.runeA[1]
+                        match_i.s1url = match.summonerA[0]
+                        match_i.s2url =  match.summonerA[1]
+                        match_i.items = match.buildA
+                        match_i.kill = match.kdaA[0].toString();
+                        match_i.death = match.kdaA[1].toString();
+                        match_i.assists = match.kdaA[2].toString();
+
+                        matchHis.push(match_i);
+                    }else{
+                        let match_i = {   };
+                        match_i.gameId = match.match_name;
+                        match_i.champ = match.championB;
+                        if(match.win == searchedUser){
+                            match_i.winLoss = "win"
+                        }else{
+                            match_i.winLoss = "loss"
+                        }
+                        match_i.r1url = match.runeB[0]
+                        match_i.r2url = match.runeB[1]
+                        match_i.s1url = match.summonerB[0]
+                        match_i.s2url =  match.summonerB[1]
+                        match_i.items = match.buildB
+                        match_i.kill = match.kdaB[0].toString();
+                        match_i.death = match.kdaB[1].toString();
+                        match_i.assists = match.kdaB[2].toString();
+                        matchHis.push(match_i);
+                        
+                    }
+
+                });
+                console.log(matchHis);
+                matchHis.forEach((match) => {
+                    console.log(match);
+                    displayOneGame(match);
+                })
+            });
+
+        }
+        getAllMatches();
+
         displaySaved()
         displayPosts();
 }
@@ -150,7 +215,12 @@ function saveAsFav(){
         })
         .then((json) => {
             var favList = json.favs;
-            favList.push(searchedUser); 
+            if(favList.length < 8){
+                favList.push(searchedUser);
+            } else {
+                alert("Fav at limit");
+                return
+            }
             let data = {
                 username: json.username,
                 email: json.email,
@@ -223,67 +293,7 @@ function reportSend(){
 }
 //hardcoded posts id by current user
 posts = [2];
-//hard coded match data
-const match1 = 
-    {   
-        gameId: "6",
-        winLoss: "loss",
-        champ: "../assets/images/login3.png",
-        r1url: "../assets/images/runes/r3.png",
-        r2url: "../assets/images/runes/r2.png",
-        s1url: "../assets/images/summoners/flash.png",
-        s2url: "../assets/images/summoners/heal.png",
-        items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-        kill: "1",
-        death: "2",
-        assists: "9",
-        teammateIds: []
-    };
 
-const match2 = 
-{   
-    gameId: "7",
-    winLoss: "win",
-    champ: "../assets/images/login3.png",
-    r1url: "../assets/images/runes/r5.png",
-    r2url: "../assets/images/runes/r3.png",
-    s1url: "../assets/images/summoners/flash.png",
-    s2url: "../assets/images/summoners/heal.png",
-    items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-    kill: "7",
-    death: "6",
-    assists: "2",
-    teammateIds: []
-};
-
-const match3 = 
-{   
-    gameId: "8",
-    winLoss: "loss",
-    champ: "../assets/images/login3.png",
-    r1url: "../assets/images/runes/r5.png",
-    r2url: "../assets/images/runes/r4.png",
-    s1url: "../assets/images/summoners/ghost.png",
-    s2url: "../assets/images/summoners/smite.png",
-    items:["../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png", "../assets/images/items/i1.png"],
-    kill: "3",
-    death: "4",
-    assists: "1",
-    teammateIds: []
-};
-
-//hard coded match history
-const matchHis = [
-    match1,
-    match2,
-    match3
-];
-
-function displayGames(){
-    for(let i = 0; i<matchHis.length; i++){
-        displayOneGame(matchHis[i]);
-    }
-}
 
 function displayCap(id){
     const gameid = "favgame".concat(id);
@@ -317,12 +327,12 @@ function displayOneGame(match_i){
     rowCol4.appendChild(displayCap( match_i.gameId));
 
     matchContainer.appendChild(rowCol4);
-    matchContainer.appendChild(appendCollapse(match1.teammateIds, match_i.gameId));
+    matchContainer.appendChild(appendCollapse(match_i.gameId));
     // matchContainer.appendChild(displayCap( match_i.gameId));
     document.getElementById("history").appendChild(matchContainer);
 }
 
-function appendCollapse(teammates, gid){
+function appendCollapse(gid){
     const gameid = "collapseGame".concat(gid);
     var collapseDiv = document.createElement("div");
     collapseDiv.classList.add("collapse");
@@ -377,7 +387,7 @@ function appendItems(items, wl, id){
     expandBtn.setAttribute("data-toggle", "collapse");
     expandBtn.setAttribute("data-target", gid);
     expandBtn.innerHTML = "+";
-
+    expandRow.classList.add("vl-container");
     expandRow.appendChild(expandBtn);
     itemsCon.appendChild(expandRow);
     return itemsCon;
@@ -463,8 +473,9 @@ function appendKDA(kill, death, assists){
     kdaa.classList.add("d-flex");
     kdaa.classList.add("justify-content-center");
     var ratioText = document.createElement("h5");
-    const ratio = ((parseInt(kill) + parseInt(assists))/parseInt(death)).toString();
-    ratioText.innerHTML = ratio.concat(":1");
+    var ratio = ((parseInt(kill) + parseInt(assists))/parseInt(death));
+    ratio = Math.round(ratio * 100) / 100;
+    ratioText.innerHTML = ratio.toString().concat(":1");
     var greyText = document.createElement("h5");
     greyText.classList.add("grey-text");
     greyText.innerHTML = "&nbsp KDA";
