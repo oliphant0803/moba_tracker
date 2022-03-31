@@ -25,7 +25,7 @@ let matchHis = [];
                     if(match.userA == searchedUser){
                         let match_i = {   };
                         match_i.gameId = match.match_name;
-                        match_i.champ = match.championA;
+                        match_i.champ = "assets/images/champions/c"+match.championA+".webp";
                         if(match.win == searchedUser){
                             match_i.winLoss = "win"
                         }else{
@@ -44,7 +44,7 @@ let matchHis = [];
                     }else{
                         let match_i = {   };
                         match_i.gameId = match.match_name;
-                        match_i.champ = match.championB;
+                        match_i.champ = "assets/images/champions/c"+match.championB+".webp";
                         if(match.win == searchedUser){
                             match_i.winLoss = "win"
                         }else{
@@ -362,16 +362,16 @@ function appendItems(items, wl, id){
     var firstRow = document.createElement("div");
     var rowOne = document.createElement("div");
     rowOne.classList.add("d-flex");
-    rowOne.appendChild(appendItem(items[0]));
-    rowOne.appendChild(appendItem(items[1]));
-    rowOne.appendChild(appendItem(items[2]));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[0]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[1]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[2]+".png"));
     firstRow.appendChild(rowOne);
 
     var rowTwo = document.createElement("div");
     rowTwo.classList.add("d-flex");
-    rowTwo.appendChild(appendItem(items[3]));
-    rowTwo.appendChild(appendItem(items[4]));
-    rowTwo.appendChild(appendItem(items[5]));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[3]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[4]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[5]+".png"));
     firstRow.appendChild(rowTwo);
     itemsCon.appendChild(firstRow);
 
