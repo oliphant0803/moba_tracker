@@ -9,7 +9,7 @@ function init(){
     resultSection = document.querySelector('#result-container');
     resultSection.addEventListener('click', userReport);
 
-    //displaySearchSection();
+    setUpForm();
     loadHeader();
 }
 
@@ -23,6 +23,67 @@ function loadHeader(){
     headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
 }
 
+function setUpForm(){
+    const runesQ = document.querySelector('.runes').children;
+    const summonersQ = document.querySelector('.summoners').children;
+    const itemsQ = document.querySelector('.items').children;
+    for (var i = 0; i <= 1; i++) {
+        for (var j = 11; j >= 1; j--) {
+            if (j==5) {
+                runesQ[i].appendChild(document.createElement("br"))
+            }
+            let input = document.createElement("input");
+            input.type = "checkbox"
+            input.id = "rune" + j.toString() + "-" + i.toString()
+            runesQ[i].appendChild(input)
+
+            let label = document.createElement("label");
+
+            let img = document.createElement("img");
+            img.src = "../assets/images/runes/r" + j.toString() + ".png"
+            img.classList.add("img-profile")
+            label.appendChild(img)
+
+            runesQ[i].appendChild(label)
+        }
+        for (var j = 8; j >= 1; j--) {
+            if (j==4) {
+                summonersQ[i].appendChild(document.createElement("br"))
+            }
+            let input = document.createElement("input");
+            input.type = "checkbox"
+            input.id = "summoner" + j.toString() + "-" + i.toString()
+            summonersQ[i].appendChild(input)
+
+            let label = document.createElement("label");
+
+            let img = document.createElement("img");
+            img.src = "../assets/images/summoners/summoner" + j.toString() + ".png"
+            img.classList.add("img-profile")
+            label.appendChild(img)
+            summonersQ[i].appendChild(label)
+        }
+        for (var j = 35; j >= 1; j--) {
+            if (j%5==0) {
+                itemsQ[i].appendChild(document.createElement("br"))
+            }
+            let input = document.createElement("input");
+            input.type = "checkbox"
+            input.id = "summoner" + j.toString() + "-" + i.toString()
+            itemsQ[i].appendChild(input)
+
+            let label = document.createElement("label");
+
+            let img = document.createElement("img");
+            img.src = "../assets/images/items/i" + j.toString() + ".png"
+            img.classList.add("img-profile")
+            label.appendChild(img)
+            itemsQ[i].appendChild(label)
+        }
+    }
+    console.log(runesQ[0])
+}
+
 //hard coded value for tag game id, champion, and posts
 const currentAdmin = {
     username: "BestAdmin",
@@ -32,87 +93,6 @@ const currentAdmin = {
 
 //the way we expect to get from json
 var games = []
-
-const post1={
-    postId: 1,
-    time: new Date("2020-9-16 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 1,
-    champTag: "Champion 1",
-    content: "Bad Things"
-}
-
-const post2={
-    postId: 2,
-    time: new Date("2021-9-16 12:00:00"),
-    userName: "User 2",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 3,
-    champTag: "Champion 2",
-    content: "Content Content Content Content Content Content Content"
-}
-
-const post3={
-    postId: 3,
-    time: new Date("2022-1-1 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 4,
-    champTag: "Champion 1",
-    content: "Bad Things Bad Things Bad Things Bad Things Bad Things "
-}
-
-posts = [post1, post2, post3]
-
-const users = [
-    {
-        username: 'User 1',
-        userId: 1,
-        profilePic:'../assets/images/tiger1.png'
-    },
-    {
-        username: 'User 2',
-        userId: 2,
-        profilePic:'../assets/images/tiger1.png'
-    },
-    {
-        username: 'User 3',
-        userId: 3,
-        profilePic:'../assets/images/tiger1.png'
-    }
-];
-
-var reports = [
-    {
-        reporterId:2,
-        reportTime: new Date("2022-1-5 13:30:58"),
-        userId: 1,
-        reportCause: 'Offensive Post',
-        reportPost: post3
-    },
-    {
-        reporterId:1,
-        reportTime: new Date("2022-1-3 13:30:58"),
-        userId: 2,
-        reportCause: 'Inappropriate Name',
-        reportPost: null
-    },
-    {
-        reporterId:3,
-        reportTime: new Date("2022-1-4 13:30:58"),
-        userId: 1,
-        reportCause: 'Offensive Post',
-        reportPost: post1
-    },
-    {
-        reporterId:3,
-        reportTime: new Date("2022-1-5 13:30:58"),
-        userId: 1,
-        reportCause: 'Offensive Post',
-        reportPost: post3
-    }
-];
 
 function addGame(e){
     e.preventDefault();
