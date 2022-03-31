@@ -128,11 +128,9 @@ const PostSchema  = new mongoose.Schema({
     },
     tag_champion: {
         type: String,
-        required: true
     },
     tag_gameName: {
-        type: String, //match schema id
-        required: true
+        type: String,
     },
     content:{
         type: String,
@@ -140,8 +138,7 @@ const PostSchema  = new mongoose.Schema({
     },
     parent_post:{
         type: String,
-        enum : ['Comment', 'Post'],
-        required: 'Post'
+        default: "parent"
     }
 });
 

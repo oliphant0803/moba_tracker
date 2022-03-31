@@ -100,7 +100,6 @@ app.get('/adminManageGame.html', (req, res) => {
 //get all users
 app.get('/api/users', async(req, res) => {
 
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -121,7 +120,6 @@ app.get('/api/users', async(req, res) => {
 //add users post request
 app.post('/api/users', async(req, res) => {
 
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -158,7 +156,6 @@ app.post('/api/users', async(req, res) => {
 //get all admins
 app.get('/api/admins', async(req, res) => {
 
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -179,8 +176,6 @@ app.get('/api/admins', async(req, res) => {
 
 //add admins post request
 app.post('/api/admins', async(req, res) => {
-
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -290,68 +285,11 @@ app.get('/api/userByName/:username', async (req, res) => {
 	})
 })
 
-//get all post in mongoose
-app.get('/api/posts', async(req, res) => {
-
-	log(req.body)
-
-	// check mongoose connection established.
-	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-	}  
-
-	try {
-		const posts = await Post.find()
-		res.send({ posts }) 
-	} catch(error) {
-		log(error)
-		res.status(500).send("Internal Server Error")
-	}
-
-});
-
-app.post('/api/posts', async(req, res) => {
-
-	log(req.body)
-
-	// check mongoose connection established.
-	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-	}  
-
-	const post = new Post({
-		username: req.body.username,
-		post_time: req.body.post_time,
-		tag_champion: req.body.tag_champion,
-		tag_gameName: req.body.tag_gameName,
-		content: req.body.content,
-		parent_post: req.body.parent_post
-	})
-
-	try {
-		const result = await post.save()	
-		res.send(result)
-	} catch(error) {
-		log(error) 
-		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-			res.status(500).send('Internal server error')
-		} else {
-			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
-		}
-	}
-
-});
-
 
 /*** match API ************************************/
 //get all matches
 app.get('/api/matches', async(req, res) => {
 
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -372,8 +310,6 @@ app.get('/api/matches', async(req, res) => {
 
 //add match post request
 app.post('/api/matches', async(req, res) => {
-
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -434,6 +370,62 @@ app.get('/api/matches/player/:id', (req, res) => {
 		}
 	})
 })
+
+/*** post API ************************************/
+
+//get all post in mongoose
+app.get('/api/posts', async(req, res) => {
+
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	try {
+		const posts = await Post.find()
+		res.send({ posts }) 
+	} catch(error) {
+		log(error)
+		res.status(500).send("Internal Server Error")
+	}
+
+});
+
+app.post('/api/posts', async(req, res) => {
+
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	const post = new Post({
+		username: req.body.username,
+		post_time: req.body.post_time,
+		tag_champion: req.body.tag_champion,
+		tag_gameName: req.body.tag_gameName,
+		content: req.body.content,
+		parent_post: req.body.parent_post
+	})
+
+	try {
+		const result = await post.save()	
+		res.send(result)
+	} catch(error) {
+		log(error) 
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+
+});
 
 /*********************************************************/
 

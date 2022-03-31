@@ -1,22 +1,114 @@
-window.onload = init;
-    function init(){
-        
+window.onload = getFavs;
+
+//the way we expect to get from json
+const post1={
+    postId: 1,
+    time: new Date("2020-9-16 13:30:58"),
+    userName: "user1",
+    userProfile: "../assets/images/login3.png",
+    gameTag: 1,
+    champTag: "Champion 1",
+    content: "Great Game!",
+    comments: [{username: "User 1", comments: "Comment 1"}, 
+    {username: "User 2", comments: "Comment 2"}
+    ]
+}
+
+const post2={
+    postId: 2,
+    time: new Date("2021-9-16 12:00:00"),
+    userName: "user2",
+    userProfile: "../assets/images/login3.png",
+    gameTag: 3,
+    champTag: "Champion 2",
+    content: "Check out my performance on champion 2 on this game!",
+    comments: [{username: "User 1", comments: "Comment 1"}
+    ]
+}
+
+const post3={
+    postId: 3,
+    time: new Date("2022-1-1 13:30:58"),
+    userName: "user1",
+    userProfile: "../assets/images/login3.png",
+    gameTag: 4,
+    champTag: "Champion 1",
+    content: "Had fun on champion 1!",
+    comments: []
+}
+
+const posts=[post1, post2, post3];
+
+function init(){
+    
+    //get gameids, champions, users, and favs from db
+
+    const game_url = "/api/matches"
+
+    fetch(game_url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get matches')
+       }                
+    })
+    .then((json) => { 
+        let gameIds=[];
+        let champions=[];
+        json.matches.forEach((match) => {
+            if(!gameIds.includes(match.match_name)){
+                gameIds.push(match.match_name)
+            }
+            if(!champions.includes(match.championA)){
+                champions.push("champion"+match.championA)
+            }
+            if(!champions.includes(match.championB)){
+                champions.push("champion"+match.championB)
+            }
+    
+        })
+        console.log(gameIds)
+        console.log(champions)
         for(let i = 0; i< gameIds.length; i++){
             displaySelect("select-input-gameid", gameIds[i]);
-            console.log(gameIds[i]);
+
         }
         for(let i = 0; i< champions.length; i++){
             displaySelect("select-input-champion", champions[i]);
-            console.log(champions[i]);
+
         }
-        displayUser();
         displayAllFilter("dropdownGame", gameIds);
         displayAllFilter("dropdownChamp", champions);
+    }).catch((error) => {
+        console.log(error)
+    })
 
-        for(let i = posts.length-1; i>=0; i--){
-            displayPost(posts[i]);
-            console.log(posts[i]);
-        }
+    const user_url = "/api/users"
+    fetch(user_url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get matches')
+       }                
+    })
+    .then((json) => { 
+        let users= [];
+        json.users.forEach((user)=>{
+            users.push(user.username)
+        })
+        console.log(users)
+        displayUser(users);
+    }).catch((error) => {
+        console.log(error)
+    })
+    
+
+    for(let i = posts.length-1; i>=0; i--){
+        displayPost(posts[i]);
+        console.log(posts[i]);
+    }
         
   }
 
@@ -45,16 +137,63 @@ function enablePtr(id){
     }
 }
 
+
+function getFavs(){
+    if(document.getElementById("invisFav") == null){
+        let div = document.createElement("p");
+        div.setAttribute("id", "invisFav");
+        div.style.visibility = "hidden";
+        document.body.appendChild(div);
+    }
+
+    // document.getElementById("invisFav").className="";
+
+    const currentUser = "62436866d4cc88a03be4de21"
+
+    const url = '/api/users/' + currentUser;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+        } else {
+                console.log('Could not get user')
+        }                
+    })
+    .then((json) => { 
+        json.favs.forEach((id) => {
+            const fav_url = '/api/users/' + id;
+            fetch(fav_url)
+            .then((res) => { 
+                if (res.status === 200) {
+                    return res.json() 
+                } else {
+                    console.log('Could not get user')
+                }                
+            })
+            .then((json2) => { 
+                document.getElementById("invisFav").classList.add(json2.username);
+                
+            })
+        })
+    }).catch((error) => {
+        console.log(error)
+    })
+    init();
+}
+
 function showUser(filter){
     filter_users= [];
     console.log(filter);
     var p = document.getElementById("posts"); 
 
     if(filter == "favourite"){
+        
+        const favs = document.getElementById("invisFav").classList;
+        console.log(favs);
         //display only posts from favourite users
         for(let i = 0; i<p.children.length; i++){
             var curr_child = p.children[i];
-            if (!favs.includes(curr_child.children[0].children[1].children[0].innerHTML)){
+            if (!favs.contains(curr_child.children[0].children[1].children[0].innerHTML)){
                 filter_users.push(i);
             } 
         }
@@ -91,7 +230,44 @@ function showUser(filter){
         console.log(filter_users[i]);
         p.removeChild(p.children[filter_users[i]-i]);
     }
+}
 
+function saveSelection(){
+    //check constraint and save to database for phase 2
+    //right now just add to hard coded array for js
+    if(document.getElementById("select-input-gameid").selectedIndex == 0 || document.getElementById("select-input-champion").selectedIndex == 0){
+        alert("Can not add if not select tag");
+        return;
+    } else if(document.getElementById("input-post").value == ""){
+        alert("Can not be empty content");
+        return;
+    }
+    //create a new post instance
+    const post = {
+        postId: post1.length, //just a tempory way for id
+        time: new Date(),
+        userName: "User 1", //current user , hard coded here
+        userProfile: "../assets/images/login3.png",
+        gameTag: document.getElementById("select-input-gameid").value,
+        champTag: document.getElementById("select-input-champion").value,
+        content: document.getElementById("input-post").value,
+        comments: []
+    };
+    posts.push(post);
+    var p = document.getElementById("posts");
+    while (p.firstChild) {
+        p.removeChild(p.lastChild);
+    }
+    for(let i = posts.length-1; i>=0; i--){
+        displayPost(posts[i]);
+    }
+    //reset input field
+    clearSelection()
+}
+
+function showFilter(instance){
+    console.log(instance);
+    removePost(instance.toString());
 }
 
 function removePost(filter){
@@ -131,89 +307,6 @@ function removePost(filter){
     }
 }
 
-function saveSelection(){
-    //check constraint and save to database for phase 2
-    //right now just add to hard coded array for js
-    if(document.getElementById("select-input-gameid").selectedIndex == 0 || document.getElementById("select-input-champion").selectedIndex == 0){
-        alert("Can not add if not select tag");
-        return;
-    } else if(document.getElementById("input-post").value == ""){
-        alert("Can not be empty content");
-        return;
-    }
-    //create a new post instance
-    const post = {
-        postId: post1.length, //just a tempory way for id
-        time: new Date(),
-        userName: "User 1", //current user , hard coded here
-        userProfile: "../assets/images/login3.png",
-        gameTag: document.getElementById("select-input-gameid").value,
-        champTag: document.getElementById("select-input-champion").value,
-        content: document.getElementById("input-post").value
-    };
-    posts.push(post);
-    var p = document.getElementById("posts");
-    while (p.firstChild) {
-        p.removeChild(p.lastChild);
-    }
-    for(let i = posts.length-1; i>=0; i--){
-        displayPost(posts[i]);
-    }
-}
-
-function showFilter(instance){
-    console.log(instance);
-    removePost(instance.toString());
-}
-
-
-//hard coded value for tag game id, champion, and posts
-const gameIds=[1, 2, 3, 4, 5, 6];
-
-const champions=["Champion 1", "Champion 2", "Champion 3"];
-
-const users=["User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9"];
-
-const favs=["User 2"];
-
-//the way we expect to get from json
-const post1={
-    postId: 1,
-    time: new Date("2020-9-16 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 1,
-    champTag: "Champion 1",
-    content: "Great Game!",
-    comments: [{username: "User 1", comments: "Comment 1"}, 
-    {username: "User 2", comments: "Comment 2"}
-    ]
-}
-
-const post2={
-    postId: 2,
-    time: new Date("2021-9-16 12:00:00"),
-    userName: "User 2",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 3,
-    champTag: "Champion 2",
-    content: "Check out my performance on champion 2 on this game!",
-    comments: [{username: "User 1", comments: "Comment 1"}
-    ]
-}
-
-const post3={
-    postId: 3,
-    time: new Date("2022-1-1 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 4,
-    champTag: "Champion 1",
-    content: "Had fun on champion 1!",
-    comments: []
-}
-
-const posts=[post1, post2, post3];
 
 //display on select
 function displaySelect(id, instance){
@@ -224,7 +317,7 @@ function displaySelect(id, instance){
     selectCon.add(selectOption);
 }
 
-function displayUser(){
+function displayUser(users){
     var uldiv = document.getElementById("dropdownUser");
     var li = document.createElement("li");
     var link = document.createElement("a");
