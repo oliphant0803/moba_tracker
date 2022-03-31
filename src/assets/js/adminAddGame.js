@@ -130,130 +130,128 @@ var games = []
 function addNewGame(e){
     e.preventDefault();
     let valid = document.getElementById('newGameForm').checkValidity();
-    // if(!valid) {
-    //     alert('Please fill up all field');
-    // } else{
-    const matchName = document.getElementById('gameName').value
+    if(!valid) {
+        alert('Invalid input. Please double check every field.');
+    } else{
+        const matchName = document.getElementById('gameName').value
 
-    const username0 = document.getElementById('username0').value
-    const username1 = document.getElementById('username1').value
-    if (userLibrary.filter((user) => user.username === username0).length === 0) {
-        alert("User A does not exist!")
-        return;
-    }
-    if (userLibrary.filter((user) => user.username === username1).length === 0) {
-        alert("User B does not exist!")
-        return;
-    }
-    if (username0 === username1) {
-        alert("Users cannot be the same!")
-        return;
-    }
-    const user0 = userLibrary.filter((user) => user.username === username0)[0]._id
-    const user1 = userLibrary.filter((user) => user.username === username1)[0]._id
-    console.log(user0)
-    champions = []
-    runes = []
-    runes.push([])
-    runes.push([])
-    summoners = []
-    summoners.push([])
-    summoners.push([])
-    items = []
-    items.push([])
-    items.push([])
-    for (let i = 0; i <=1; i++) {
-        // champions
-        let count = 0
-        for (let j = 20; j >= 1; j--) {
-            let name = "champion" + j.toString() + "-" + i.toString()
-            if (document.getElementById(name).checked) {
-                count++
-                champions.push(j.toString())
-            }
-        }
-        if (count != 1) {
-            alert("There must be 1 champion for each user!")
+        const username0 = document.getElementById('username0').value
+        const username1 = document.getElementById('username1').value
+        if (userLibrary.filter((user) => user.username === username0).length === 0) {
+            alert("User A does not exist!")
             return;
         }
-        // runes
-        count = 0
-        for (let j = 11; j >= 1; j--) {
-            let name = "rune" + j.toString() + "-" + i.toString()
-            if (document.getElementById(name).checked) {
-                count++
-                runes[i].push(j.toString())
-            }
-        }
-        if (count != 2) {
-            alert("There must be 2 runes for each user!")
+        if (userLibrary.filter((user) => user.username === username1).length === 0) {
+            alert("User B does not exist!")
             return;
         }
-        // summoner
-        count = 0
-        for (let j = 8; j >= 1; j--) {
-            let name = "summoner" + j.toString() + "-" + i.toString()
-            if (document.getElementById(name).checked) {
-                count++
-                summoners[i].push(j.toString())
-            }
-        }
-        if (count != 2) {
-            alert("There must be 2 summoners for each user!")
+        if (username0 === username1) {
+            alert("Users cannot be the same!")
             return;
         }
-        // items
-        count = 0
-        for (let j = 35; j >= 1; j--) {
-            let name = "item" + j.toString() + "-" + i.toString()
-            if (document.getElementById(name).checked) {
-                count++
-                items[i].push(j.toString())
+        const user0 = userLibrary.filter((user) => user.username === username0)[0]._id
+        const user1 = userLibrary.filter((user) => user.username === username1)[0]._id
+        champions = []
+        runes = []
+        runes.push([])
+        runes.push([])
+        summoners = []
+        summoners.push([])
+        summoners.push([])
+        items = []
+        items.push([])
+        items.push([])
+        for (let i = 0; i <=1; i++) {
+            // champions
+            let count = 0
+            for (let j = 20; j >= 1; j--) {
+                let name = "champion" + j.toString() + "-" + i.toString()
+                if (document.getElementById(name).checked) {
+                    count++
+                    champions.push(j.toString())
+                }
+            }
+            if (count != 1) {
+                alert("There must be 1 champion for each user!")
+                return;
+            }
+            // runes
+            count = 0
+            for (let j = 11; j >= 1; j--) {
+                let name = "rune" + j.toString() + "-" + i.toString()
+                if (document.getElementById(name).checked) {
+                    count++
+                    runes[i].push(j.toString())
+                }
+            }
+            if (count != 2) {
+                alert("There must be 2 runes for each user!")
+                return;
+            }
+            // summoner
+            count = 0
+            for (let j = 8; j >= 1; j--) {
+                let name = "summoner" + j.toString() + "-" + i.toString()
+                if (document.getElementById(name).checked) {
+                    count++
+                    summoners[i].push(j.toString())
+                }
+            }
+            if (count != 2) {
+                alert("There must be 2 summoners for each user!")
+                return;
+            }
+            // items
+            count = 0
+            for (let j = 35; j >= 1; j--) {
+                let name = "item" + j.toString() + "-" + i.toString()
+                if (document.getElementById(name).checked) {
+                    count++
+                    items[i].push(j.toString())
+                }
+            }
+            if (count != 6) {
+                alert("There must be 6 items for each user!")
+                return;
             }
         }
-        if (count != 6) {
-            alert("There must be 6 items for each user!")
-            return;
-        }
-    }
-    kdaA = []
-    kdaB = []
-    kdaA.push(parseInt(document.querySelector('#kill0').value))
-    kdaB.push(parseInt(document.querySelector('#kill1').value))
-    kdaA.push(parseInt(document.querySelector('#assist0').value))
-    kdaB.push(parseInt(document.querySelector('#assist1').value))
-    kdaA.push(parseInt(document.querySelector('#death0').value))
-    kdaB.push(parseInt(document.querySelector('#death1').value))
-    win = user0
-    if (document.getElementById("win0").checked) {
+        kdaA = []
+        kdaB = []
+        kdaA.push(parseInt(document.querySelector('#kill0').value))
+        kdaB.push(parseInt(document.querySelector('#kill1').value))
+        kdaA.push(parseInt(document.querySelector('#assist0').value))
+        kdaB.push(parseInt(document.querySelector('#assist1').value))
+        kdaA.push(parseInt(document.querySelector('#death0').value))
+        kdaB.push(parseInt(document.querySelector('#death1').value))
         win = user0
-    } else if (document.getElementById("win1").checked) {
-        win = user1
-    } else {
-        alert("There must be a winner!")
-        return;
-    }
-    const match = {
-        match_name: matchName,
-        add_time: new Date(),
-        userA:user0,
-        userB:user1,
-        championA: champions[0],
-        championB: champions[1],
-        win: win,
-        kdaA: kdaA,
-        kdaB: kdaB,
-        runeA: runes[0],
-        runeB: runes[1],
-        summonerA: summoners[0],
-        summonerB: summoners[1],
-        buildA: items[0],
-        buildB: items[1]
-    }
-
-
-    if (window.confirm('Is the form filled out correctly? Press OK to proceed.')) {
-        addMatch(match)
+        if (document.getElementById("win0").checked) {
+            win = user0
+        } else if (document.getElementById("win1").checked) {
+            win = user1
+        } else {
+            alert("There must be a winner!")
+            return;
+        }
+        const match = {
+            match_name: matchName,
+            add_time: new Date(),
+            userA:user0,
+            userB:user1,
+            championA: champions[0],
+            championB: champions[1],
+            win: win,
+            kdaA: kdaA,
+            kdaB: kdaB,
+            runeA: runes[0],
+            runeB: runes[1],
+            summonerA: summoners[0],
+            summonerB: summoners[1],
+            buildA: items[0],
+            buildB: items[1]
+        }
+        if (window.confirm('Is the form filled out correctly? Press OK to proceed.')) {
+            addMatch(match)
+        }
     }
 }
 
