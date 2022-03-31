@@ -87,6 +87,12 @@
         <form id='newGameForm'>
           <div class="row text-center">
             <div class="col">
+              <h3>Game Name</h3>
+              <input class="form-control" id="gameName" placeholder="Give this game a title" required/>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="col">
               <h3>User A</h3>
             </div>
             <div class="col">
@@ -97,11 +103,36 @@
           <div class="row">
             <div class="col sec text-left rounded-top bg-white mr-1 ml-1 pt-2">
               <label>Username</label>
-              <input class="form-control" id="username0" placeholder="Enter Player 1 Username" required/>
+              <input class="form-control" id="username0" placeholder="Enter Player A Username" required/>
             </div>
             <div class="col sec text-left rounded-top bg-white mr-1 ml-1 pt-2">
               <label>Username</label>
-              <input class="form-control" id="username1" placeholder="Enter Player 1 Username" required/>
+              <input class="form-control" id="username1" placeholder="Enter Player B Username" required/>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col bg-white mr-1 ml-1 pt-2">
+              <label>Champion</label>
+            </div>
+            <div class="col bg-white mr-1 ml-1 pt-2">
+              <label>Champion</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col bg-white mr-1 ml-1 ">
+              <label class="text-muted">Choose the champion user played</label>
+            </div>
+            <div class="col bg-white mr-1 ml-1 ">
+              <label class="text-muted">Choose the champion user played</label>
+            </div>
+          </div>
+
+          <div class="row champions">
+            <div class="col bg-white mr-1 ml-1">
+            </div>
+            <div class="col bg-white mr-1 ml-1">
             </div>
           </div>
 
@@ -187,28 +218,45 @@
 
           <div class="row">
             <div class="col text-left bg-white ml-1 ">
-              <label for="username">Kill</label>
+              <label>Kill</label>
               <input type="number" min="0" step="1" class="form-control" id="kill0" required/>
             </div>
             <div class="col text-left bg-white">
-              <label for="username">Death</label>
+              <label>Death</label>
               <input type="number" min="0" step="1" class="form-control" id="death0" required/>
             </div>
             <div class="col text-left bg-white mr-1">
-              <label for="username">Assist</label>
+              <label>Assist</label>
               <input type="number" min="0" step="1" class="form-control" id="assist0" required/>
             </div>
             <div class="col text-left bg-white ml-1">
-              <label for="username">Kill</label>
+              <label">Kill</label>
               <input type="number" min="0" step="1" class="form-control" id="kill1" required/>
             </div>
             <div class="col text-left bg-white">
-              <label for="username">Death</label>
+              <label>Death</label>
               <input type="number" min="0" step="1" class="form-control" id="death1" required/>
             </div>
             <div class="col text-left bg-white mr-1 pb-2">
-              <label for="username">Assist</label>
+              <label>Assist</label>
               <input type="number" min="0" step="1" class="form-control" id="assist1" required/>
+            </div>
+          </div>
+
+          <div class="row text-center">
+            <div class="col bg-white ml-1  mr-1 pt-2">
+              <h4>Who won the game?</h4>
+            </div>
+          </div>
+
+          <div class="row text-center">
+            <div class="col  bg-white ml-1 ">
+              <input type="radio" id="win0" name="win" value="0">
+              <label>User A</label>
+            </div>
+            <div class="col bg-white mr-1 ">
+              <input type="radio" id="win1" name="win" value="1">
+              <label>User B</label>
             </div>
           </div>
 
