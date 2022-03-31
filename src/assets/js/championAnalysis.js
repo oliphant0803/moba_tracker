@@ -21,18 +21,74 @@ class Match{
 }
 
 class UserPost{
-    constructor(user, champ){
-        this.username = user;
+    constructor(userid, champ){
+        this.userid = userid
         this.champTag = champ;
     }
 }
 
+class GameUser{
+    constructor(id, fav){
+        this.id = id;
+        this.fav = fav;
+    }
+}
 
-function pickRate(champ) {
+const curr_user = new GameUser("62436866d4cc88a03be4de21", ["62436914d4cc88a03be4de24"])
+
+function checkUser(){
+    const userType = document.querySelector('#user').value;
+    if (userType != "Select") {
+        getChamp(userType);
+    }
+}
+
+function getChamp(type){
+    const champ1 = document.querySelector("#champion1").value;
+    const champ2 = document.querySelector("#champion2").value;
+    if (champ1 != "Select" && champ2 != "Select") {
+        displayPickRate(champ1, champ2, type);
+        displayWinRate(champ1, champ2, type);
+        displayDiscussRate(champ1, champ2, type);
+        displayKDA(champ1, champ2, type);
+    }
+}
+
+
+function pickRate(champ, type) {
     var count = 0;
-    const numMatch = matches.length;
+    var lst = [];
+    if (type === "all") {
+        lst = matches;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const match of matches) {
+            if (match.userA == user) {
+                lst.push(match);
+            }
+            else if (match.userB == user) {
+                lst.push(match);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const match of matches) {
+                if (match.userA == favUser) {
+                    lst.push(match);
+                }
+                else if (match.userB == favUser) {
+                    lst.push(match);
+                }
+            }
+        }
+    }
+    const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
-        const match = matches[index];
+        const match = lst[index];
         if (match.championA === champ) {
             count++;
         }
@@ -43,9 +99,38 @@ function pickRate(champ) {
     return Math.round(count/(numMatch*2)*100);
 }
 
-function winRate(champ) {
+function winRate(champ, type) {
     var count = 0;
-    const numMatch = matches.length;
+    var lst = [];
+    if (type === "all") {
+        lst = matches;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const match of matches) {
+            if (match.userA == user) {
+                lst.push(match);
+            }
+            else if (match.userB == user) {
+                lst.push(match);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const match of matches) {
+                if (match.userA == favUser) {
+                    lst.push(match);
+                }
+                else if (match.userB == favUser) {
+                    lst.push(match);
+                }
+            }
+        }
+    }
+    const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
         const match = matches[index];
         if (match.winLoss== match.userA && match.championA === champ) {
@@ -58,10 +143,34 @@ function winRate(champ) {
     return Math.round(count/numMatch*100);
 }
 
-function discussRate(champ){
+function discussRate(champ, type){
     var count = 0;
-    const numPost = posts.length;
-    for (const post of posts) {
+    var lst = [];
+    if (type === "all") {
+        lst = posts;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const post of posts) {
+            if (post.userid == user) {
+                lst.push(post);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const post of posts) {
+                if (post.userid == favUser) {
+                    lst.push(post);
+                }
+            }
+        }
+    }
+    const numPost = lst.length;
+    console.log(lst)
+    for (const post of lst) {
         if (post.champTag === champ) {
             count++;
         }
@@ -69,10 +178,39 @@ function discussRate(champ){
     return Math.round(count/numPost*100);
 }
 
-function averageKDA(champ){
+function averageKDA(champ, type){
     var sum = 0;
     var count = 0;
-    const numMatch = matches.length;
+    var lst = [];
+    if (type === "all") {
+        lst = matches;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const match of matches) {
+            if (match.userA == user) {
+                lst.push(match);
+            }
+            else if (match.userB == user) {
+                lst.push(match);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const match of matches) {
+                if (match.userA == favUser) {
+                    lst.push(match);
+                }
+                else if (match.userB == favUser) {
+                    lst.push(match);
+                }
+            }
+        }
+    }
+    const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
         const match = matches[index];
         if (match.championA === champ) {
@@ -88,18 +226,10 @@ function averageKDA(champ){
             sum += calc
         }
     }
-    return Math.round(sum/count*100)/100;
-}
-
-function getChamp(){
-    const champ1 = document.querySelector("#champion1").value;
-    const champ2 = document.querySelector("#champion2").value;
-    if (champ1 != "Select" && champ2 != "Select") {
-        displayPickRate(champ1, champ2);
-        displayWinRate(champ1, champ2);
-        displayDiscussRate(champ1, champ2);
-        displayKDA(champ1, champ2);
+    if (count === 0) {
+        return 0;
     }
+    return Math.round(sum/count*100)/100;
 }
 
 //DOM
@@ -123,9 +253,9 @@ async function addChamp() {
 
 }
 
-function displayPickRate(champ1, champ2){
-    const r1 = pickRate(champ1);
-    const r2 = pickRate(champ2);
+function displayPickRate(champ1, champ2, type){
+    const r1 = pickRate(champ1, type);
+    const r2 = pickRate(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[0].children[0];
     const pk2 = document.querySelector('table').children[1].children[0].children[2];
     if (r1>=r2) {
@@ -136,9 +266,9 @@ function displayPickRate(champ1, champ2){
     pk2.innerText=r2+"%";
 }
 
-function displayWinRate(champ1, champ2){
-    const r1 = winRate(champ1);
-    const r2 = winRate(champ2);
+function displayWinRate(champ1, champ2, type){
+    const r1 = winRate(champ1, type);
+    const r2 = winRate(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[1].children[0];
     const pk2 = document.querySelector('table').children[1].children[1].children[2];
     if (r1>=r2) {
@@ -149,9 +279,9 @@ function displayWinRate(champ1, champ2){
     pk2.innerText=r2+"%";
 }
 
-function displayDiscussRate(champ1, champ2){
-    const r1 = discussRate(champ1);
-    const r2 = discussRate(champ2);
+function displayDiscussRate(champ1, champ2, type){
+    const r1 = discussRate(champ1, type);
+    const r2 = discussRate(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[2].children[0];
     const pk2 = document.querySelector('table').children[1].children[2].children[2];
     if (r1>=r2) {
@@ -162,9 +292,9 @@ function displayDiscussRate(champ1, champ2){
     pk2.innerText=r2+"%";
 }
 
-function displayKDA(champ1, champ2){
-    const r1 = averageKDA(champ1);
-    const r2 = averageKDA(champ2);
+function displayKDA(champ1, champ2, type){
+    const r1 = averageKDA(champ1, type);
+    const r2 = averageKDA(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[3].children[0];
     const pk2 = document.querySelector('table').children[1].children[3].children[2];
     if (r1>=r2) {
@@ -222,9 +352,9 @@ function getPosts(){
         }
     }).then((json) => {
         json.posts.forEach(element => {
-            const username = element.username;
+            const id = element.username;
             const champ = element.tag_champion;
-            const post = new UserPost(username, champ);
+            const post = new UserPost(id, champ);
             posts.push(post);
         });
     }).catch((error) => {
