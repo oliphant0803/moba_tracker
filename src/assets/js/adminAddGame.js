@@ -267,8 +267,14 @@ function addMatch(match){
     });
 
     fetch(request).then((res) => {
-        alert("Game added successfully!")
-        displayGame(match)
+        if (res.status === 200) {
+            alert("Game added successfully!")
+            displayGame(match)
+        } else if (res.status === 400){
+            alert("Duplicate game name. Please try again.")
+        } else {
+            alert("Your request cannot be completed. Please try again.")
+        } 
     }).catch((error) => {
         console.log(error)
     })
@@ -285,7 +291,7 @@ function displayOneGame(match_i){
     matchContainer.classList.add("container"); 
     
     let title = document.createElement("h3");
-    title.innerHTML = 'Added successfully at ' + match_i.add_time.toLocaleTimeString()
+    title.innerHTML = 'Added successfully at ' + (new Date(match_i.add_time)).toLocaleString()
     let gameName = document.createElement("h4");
     gameName.innerHTML = 'Game Name: ' + match_i.match_name
     matchContainer.appendChild(title)
