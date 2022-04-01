@@ -188,8 +188,44 @@ function userReport(e){
 }
 
 function deleteGame(gameName){
-    
-    console.log("not implemented")
+    const url = '/api/matches/' + gameName
+    fetch('api/matches').then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            else{
+                alert('Could not get games');
+            }
+        }).then((json) => {
+            gameLibrary = json.matches
+            
+            const request = new Request(url, {
+            method: 'delete', 
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            });
+
+            fetch(request)
+            .then(function(res) {
+                if (res.status === 200) {
+                    currentResult = currentResult.filter((match) => match.match_name !== gameName)
+                    gameLibrary = gameLibrary.filter((match) => match.match_name !== gameName)
+                    alert('Deleted successfully!')
+                    updateResult()
+                } else {    
+                    alert('Deleted cannot be completed. Please try again.')
+             
+                }
+                
+            }).catch((error) => {
+                console.log(error)
+            })
+
+        }).catch((error) => {
+            console.log(error)
+        })
 }
 
 function addDescription(gameId){

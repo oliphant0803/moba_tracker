@@ -386,12 +386,9 @@ app.get('/api/matches/player/:id', (req, res) => {
 })
 
 //delete specific match by match id
-app.delete('/api/matches/:id', async (req, res) => {
-	const id = req.params.id
-	if (!ObjectID.isValid(id)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
+app.delete('/api/matches/:name', async (req, res) => {
+	const name = req.params.name
+
 	if (mongoose.connection.readyState != 1) {
 		log('Issue with mongoose connection')
 		res.status(500).send('Internal server error')
@@ -400,7 +397,8 @@ app.delete('/api/matches/:id', async (req, res) => {
 
 	try {
 		//remove match
-		const match = await Match.findByIdAndDelete(id);
+		const match = await Match.findOneAndDelete({match_name: name});
+		console.log(match)
 		if (!match) {
 			res.status(404).send('Resource not found') 
 			return;
