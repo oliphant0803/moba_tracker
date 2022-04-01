@@ -169,7 +169,6 @@ function discussRate(champ, type){
         }
     }
     const numPost = lst.length;
-    console.log(lst)
     for (const post of lst) {
         if (post.champTag === champ) {
             count++;
@@ -240,14 +239,14 @@ async function addChamp() {
     champions.sort(function(a, b){return a-b});
     for (const element of champions) {
         const option = document.createElement("option");
-        option.value=element;
-        option.innerText=element;
+        option.value="champion".concat(element);
+        option.innerText="champion".concat(element);
         champ1.appendChild(option);
     }
     for (const element of champions) {
         const option = document.createElement("option");
-        option.value=element;
-        option.innerText=element;
+        option.value="champion".concat(element);
+        option.innerText="champion".concat(element);
         champ2.appendChild(option);
     }
 
@@ -322,11 +321,11 @@ function getMatches(){
             const wl = element.win;
             const uA = element.userA;
             const uB = element.userB;
-            const cA = "champion".concat(element.championA);
-            const cB = "champion".concat(element.championB);
+            const cA = element.championA;
+            const cB = element.championB;
             const kA = element.kdaA;
             const kB = element.kdaB;
-            const match = new Match(wl, uA, cA, kA, uB, cB, kB);
+            const match = new Match(wl, uA, "champion".concat(cA), kA, uB, "champion".concat(cB), kB);
             if (!champions.includes(cA)) {
                 champions.push(cA);
             }
