@@ -1,6 +1,8 @@
 'use strict';
 window.onload = init;
-    function init(){
+    async function init(){
+
+        await new Promise(r => setTimeout(r, 1000));
         displayUser();
         displayAllFilter("dropdownGame", gameIds);
         displayAllFilter("dropdownChamp", champions);
@@ -9,9 +11,86 @@ window.onload = init;
             console.log(posts[i]);
         }
         const postSection = document.querySelector('#posts');
+        //get gameids, champions, users, and favs from db
+        
+        //sort by time
+        posts.sort(function (a, b) {
+            return b.time.localeCompare(a.time);
+        });
+
+        console.log(posts);
+
+        posts.forEach((post)=>{
+            displayPost(post)
+        })
+
+        const game_url = "/api/matches"
+
+        fetch(game_url)
+        .then((res) => { 
+            if (res.status === 200) {
+               return res.json() 
+           } else {
+                console.log('Could not get matches')
+           }                
+        })
+        .then((json) => { 
+            let gameIds=[];
+            let champions=[];
+            json.matches.forEach((match) => {
+                if(!gameIds.includes(match.match_name)){
+                    gameIds.push(match.match_name)
+                }
+                if(!champions.includes(match.championA)){
+                    champions.push("champion"+match.championA)
+                }
+                if(!champions.includes(match.championB)){
+                    champions.push("champion"+match.championB)
+                }
+        
+            })
+            console.log(gameIds)
+            console.log(champions)
+            for(let i = 0; i< gameIds.length; i++){
+                displaySelect("select-input-gameid", gameIds[i]);
+
+            }
+            for(let i = 0; i< champions.length; i++){
+                displaySelect("select-input-champion", champions[i]);
+
+            }
+            displayAllFilter("dropdownGame", gameIds);
+            displayAllFilter("dropdownChamp", champions);
+        }).catch((error) => {
+            console.log(error)
+        })
+
+        const user_url = "/api/users"
+        fetch(user_url)
+        .then((res) => { 
+            if (res.status === 200) {
+               return res.json() 
+           } else {
+                console.log('Could not get matches')
+           }                
+        })
+        .then((json) => { 
+            let users= [];
+            json.users.forEach((user)=>{
+                users.push(user.username)
+            })
+            console.log(users)
+            displayUser(users);
+        }).catch((error) => {
+            console.log(error)
+        })
         postSection.addEventListener('click', deletePost);
         loadHeader();
   }
+
+  var filter_posts = [];
+var filter_users = [];
+var curr_posts =[];
 
 function loadHeader(){
     const headerName = document.querySelector('.header-name');
