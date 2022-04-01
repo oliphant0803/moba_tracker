@@ -215,9 +215,9 @@ function showUser(filter){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = posts.length-1; i>=0; i--){
-            displayPost(posts[i]);
-        }
+        posts.forEach((post) => {
+            displayPost(post);
+        })
         enablePtr("dropdownUser");
         enablePtr("dropdownChamp");
         enablePtr("dropdownGame");
@@ -239,7 +239,7 @@ function showUser(filter){
     }
     disablePtr("dropdownUser");
 
-    for(let i = filter_users.length-1; i>=0; i--){
+    for(let i = 0; i<filter_users.length; i++){
         console.log(filter_users[i]);
         p.removeChild(p.children[filter_users[i]-i]);
     }
@@ -298,9 +298,9 @@ function removePost(filter){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = posts.length-1; i>=0; i--){
-            displayPost(posts[i]);
-        }
+        posts.forEach((post) => {
+            displayPost(post);
+        })
         enablePtr("dropdownUser");
         enablePtr("dropdownChamp");
         enablePtr("dropdownGame");
@@ -321,7 +321,7 @@ function removePost(filter){
     disablePtr("dropdownChamp");
     disablePtr("dropdownGame");
 
-    for(let i = filter_posts.length-1; i>=0; i--){
+    for(let i = 0; i<filter_posts.length;i++){
         console.log(filter_posts[i]);
         p.removeChild(p.children[filter_posts[i]-i]);
     }
@@ -588,19 +588,18 @@ function displayComment(comments, post_i){
 function timeDiff(curr_date){
     var post_date = new Date(curr_date)
     var today = new Date();
-    var diffMs = (today-post_date )/1000; 
-    console.log(diffMs);
-    var diffDays = Math.floor(diffMs / 60 /60/24); 
-    var diffHrs = Math.floor((diffMs / 60) / 60);
-    var diffMins = Math.round(((diffMs / 60)));
+    var diffMs = (today-post_date ); 
+    var diffDays = Math.floor(diffMs / 86400000); 
+    var diffHrs = Math.floor((diffMs % 86400000) / 3600000);
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     if(diffDays == 0 && diffHrs == 0 && diffMins == 0){
         return "Posted now";
     } else if(diffDays == 0 && diffHrs == 0){
         return "Posted " + Math.abs(diffMins) + " mins ago";
     } else if (diffDays == 0){
-        return "Posted " + Math.abs(diffHrs) + " hours ago";
+        return "Posted " + Math.abs(diffHrs) + " hours, " + Math.abs(diffMins) + " mins ago";
     }
-    return "Posted " + Math.abs(diffDays) + " days, " + Math.abs(diffHrs) + " hours ago";
+    return "Posted " + Math.abs(diffDays) + " days, " + Math.abs(diffHrs) + " hours, " + Math.abs(diffMins) + " mins ago";
 }
 
 function filterUser(){

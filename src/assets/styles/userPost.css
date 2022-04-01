@@ -123,6 +123,11 @@ body {
     color: var(--txt-grey);
 }
 
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
 .tag-area{
     margin-bottom: 0.5rem;
 }
