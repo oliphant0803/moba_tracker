@@ -1,47 +1,22 @@
-window.onload = getFavs;
+window.onload = getPosts;
 
-//the way we expect to get from json
-const post1={
-    postId: 1,
-    time: new Date("2020-9-16 13:30:58"),
-    userName: "user1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 1,
-    champTag: "Champion 1",
-    content: "Great Game!",
-    comments: [{username: "User 1", comments: "Comment 1"}, 
-    {username: "User 2", comments: "Comment 2"}
-    ]
-}
+let posts = [];
+const currentUser = "62436866d4cc88a03be4de21"
 
-const post2={
-    postId: 2,
-    time: new Date("2021-9-16 12:00:00"),
-    userName: "user2",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 3,
-    champTag: "Champion 2",
-    content: "Check out my performance on champion 2 on this game!",
-    comments: [{username: "User 1", comments: "Comment 1"}
-    ]
-}
-
-const post3={
-    postId: 3,
-    time: new Date("2022-1-1 13:30:58"),
-    userName: "user1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 4,
-    champTag: "Champion 1",
-    content: "Had fun on champion 1!",
-    comments: []
-}
-
-const posts=[post1, post2, post3];
-
-function init(){
-    
+async function init(){
     //get gameids, champions, users, and favs from db
+    await new Promise(r => setTimeout(r, 1000));
+    
+    //sort by time
+    posts.sort(function (a, b) {
+        return b.time.localeCompare(a.time);
+    });
+
+    console.log(posts);
+
+    posts.forEach((post)=>{
+        displayPost(post)
+    })
 
     const game_url = "/api/matches"
 
@@ -103,14 +78,8 @@ function init(){
     }).catch((error) => {
         console.log(error)
     })
-    
-
-    for(let i = posts.length-1; i>=0; i--){
-        displayPost(posts[i]);
-        console.log(posts[i]);
-    }
-        
-  }
+            
+}
 
 function clearSelection(){
     document.getElementById("select-input-champion").selectedIndex = 0;
@@ -148,8 +117,6 @@ function getFavs(){
 
     // document.getElementById("invisFav").className="";
 
-    const currentUser = "62436866d4cc88a03be4de21"
-
     const url = '/api/users/' + currentUser;
     fetch(url)
     .then((res) => { 
@@ -178,7 +145,53 @@ function getFavs(){
     }).catch((error) => {
         console.log(error)
     })
+
     init();
+}
+
+function getPosts(){
+    const url = '/api/posts'
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get posts')
+        }                
+    })
+    .then((json) => { 
+        
+        json.forEach((post)=>{
+
+            if(post.parent_post == "parent"){
+                let post_i = { }
+                post_i.postId = post.postname
+                post_i.gameTag = post.tag_gameName
+                post_i.champTag = post.tag_champion
+                post_i.content = post.content
+                post_i.time = post.post_time
+                post_i.comments = []
+                post_i.id = post._id
+                fetch('./api/users/'+post.username)
+                .then((res) => { 
+                    if (res.status === 200) {
+                        return res.json() 
+                    } else {
+                        console.log('Could not get user')
+                    }                
+                }).then((json2) => { 
+                    post_i.userName = json2.username
+                    post_i.userProfile = json2.icon
+                    posts.push(post_i)
+                });
+
+            }
+            
+        })
+    })
+    getFavs()
+        
+
 }
 
 function showUser(filter){
@@ -238,31 +251,38 @@ function saveSelection(){
     if(document.getElementById("select-input-gameid").selectedIndex == 0 || document.getElementById("select-input-champion").selectedIndex == 0){
         alert("Can not add if not select tag");
         return;
-    } else if(document.getElementById("input-post").value == ""){
-        alert("Can not be empty content");
+    } else if(document.getElementById("input-post").value == "" || document.getElementById("post-name-input").value==""){
+        alert("Can not be empty content or title");
         return;
     }
     //create a new post instance
-    const post = {
-        postId: post1.length, //just a tempory way for id
-        time: new Date(),
-        userName: "User 1", //current user , hard coded here
-        userProfile: "../assets/images/login3.png",
-        gameTag: document.getElementById("select-input-gameid").value,
-        champTag: document.getElementById("select-input-champion").value,
+    
+    const data = {
+        username: currentUser,
+        postname: document.getElementById("post-name-input").value,
+        tag_gameName: document.getElementById("select-input-gameid").value,
+        tag_champion: document.getElementById("select-input-champion").value,
         content: document.getElementById("input-post").value,
-        comments: []
     };
-    posts.push(post);
-    var p = document.getElementById("posts");
-    while (p.firstChild) {
-        p.removeChild(p.lastChild);
-    }
-    for(let i = posts.length-1; i>=0; i--){
-        displayPost(posts[i]);
-    }
-    //reset input field
-    clearSelection()
+
+    console.log(data);
+
+    const request = new Request('/api/posts', {
+        method: 'post', 
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+    fetch(request)
+    .then(function(res) {
+        
+        // location.reload(); 
+    }).catch((error) => {
+        console.log(error)
+    })
+    
 }
 
 function showFilter(instance){
@@ -371,13 +391,27 @@ function displayFilter(id, instance){
     uldiv.appendChild(li);
 }
 
-current_user = "User 1";
 
-function redirect(userName){
-    if(userName == current_user){
-        return "userProfile.html"
-    }
-    return "otherProfile.html";
+
+function redirect(link, userName){
+    const url = '/api/userByName/' + userName;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get user')
+       }                
+    })
+    .then((json) => { 
+        const currentUser = "62436866d4cc88a03be4de21" //hard coded current user for now
+
+        if(json._id == currentUser){
+            link.href= "userProfile.html"
+        }else{
+            link.href = "otherProfile.html?id="+json._id;
+        }
+    });
 }
 
 function postComment(pid, id){
@@ -386,24 +420,41 @@ function postComment(pid, id){
         alert("Can not comment empty contents");
         return;
     }else{
-        new_comment={username: current_user, comments: commentBody}
-        for(let i=0; i<posts.length; i++){
-            if(posts[i].postId == pid){
-                posts[i].comments.push(new_comment);
-                console.log(new_comment);
+        fetch('/api/posts/'+pid)
+        .then(function(res) {
+            if (res.status === 200) {
+               return res.json() 
+           } else {
+                console.log('Could not get posts')
+           }     
+             
+        }).then((json) => {
 
+            var data={
+                username: currentUser, 
+                tag_champion: json.tag_champion,
+                tag_gameName: json.tag_gameName,
+                content: commentBody,
+                parent_post: json._id
             }
-        }
-        var p = document.getElementById("posts");
-        while (p.firstChild) {
-            p.removeChild(p.lastChild);
-        }
-        for(let i = posts.length-1; i>=0; i--){
-            displayPost(posts[i]);
-        }
-        enablePtr("dropdownUser");
-        enablePtr("dropdownChamp");
-        enablePtr("dropdownGame");
+
+            const request = new Request('/api/posts', {
+                method: 'post', 
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+            });
+            fetch(request)
+            .then(function(res) {
+                
+                location.reload(); 
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
+
     }
 }
 
@@ -411,9 +462,10 @@ function postComment(pid, id){
 function displayPost(post_i){
     var mainDiv = document.createElement("div");
     mainDiv.classList.add("posted-timeline");
+    mainDiv.setAttribute("id", post_i.postId);
     var userDiv = document.createElement("div");
     var link = document.createElement("a");
-    link.href = redirect(post_i.userName); //will added after have api
+    redirect(link, post_i.userName);
     var icon = document.createElement("img");
     icon.src = post_i.userProfile;
     link.classList.add("summoner-icon");
@@ -422,7 +474,7 @@ function displayPost(post_i){
     var nameHeading = document.createElement("h6");
     nameHeading.classList.add("summoner-name");
     var nameLink = document.createElement("a");
-    nameLink.href = redirect(post_i.userName); //will added after have api
+    redirect(nameLink, post_i.userName);
     nameLink.innerHTML = post_i.userName;
     nameHeading.appendChild(nameLink);
     userDiv.appendChild(nameHeading);
@@ -448,7 +500,7 @@ function displayPost(post_i){
     tagDiv.appendChild(tag2);
     var tag3 = document.createElement("div");
     tag3.classList.add("tag");
-    tag3.innerHTML = "Post #" + post_i.postId;
+    tag3.innerHTML = post_i.postId;
     tagDiv.appendChild(tag3);
     contentDiv.appendChild(tagDiv);
     var cp = document.createElement("p");
@@ -462,9 +514,9 @@ function displayPost(post_i){
     var comments = document.createElement("div");
     comments.classList.add("comments");
     comments.setAttribute("id", "comments"+post_i.postId);
-    for(let i=post_i.comments.length-1; i>=0; i--){
-        comments.appendChild(displayComment(post_i.comments[i]));
-    }
+    
+    displayComment(comments, post_i);
+
     commentArea.appendChild(comments);
     var pComment = document.createElement("div");
     pComment.classList.add("d-flex");
@@ -485,25 +537,62 @@ function displayPost(post_i){
     commentArea.appendChild(pComment);
     mainDiv.appendChild(commentArea);
     document.getElementById("posts").appendChild(mainDiv);
+    
 }
 
-function displayComment(comment){
-    // <div class="comment"><h6>User name</h6>Comment 1</div>
-    commentDiv = document.createElement("div");
-    commentDiv.classList.add("comment");
-    commentUser = document.createElement("h6");
-    commentUser.innerHTML = comment.username;
-    commentDiv.appendChild(commentUser);
-    commentDiv.innerHTML = comment.comments;
-    return commentDiv;
+function displayComment(comments, post_i){
+    const url = '/api/posts'
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get posts')
+        }                
+    })
+    .then((json) => { 
+        json.forEach((comment)=>{
+            if(comment.parent_post == post_i.id){
+                let c = {}
+                fetch('./api/users/'+comment.username)
+                .then((res) => { 
+                    if (res.status === 200) {
+                        return res.json() 
+                    } else {
+                        console.log('Could not get user')
+                    } 
+                }).then((json3) => {
+                    c.username = json3.username
+                    c.content = comment.content
+                    post_i.comments.push(c);
+
+                    var commentDiv = document.createElement("div");
+                    commentDiv.classList.add("comment");
+                    var nameLink = document.createElement("a");
+                    redirect(nameLink, c.username);
+                    var commentUser = document.createElement("h6");
+                    commentUser.innerHTML = c.username;
+                    nameLink.appendChild(commentUser);
+                    commentDiv.appendChild(nameLink);
+                    var commentContent = document.createElement("p");
+                    commentContent.innerHTML = comment.content;
+                    commentDiv.appendChild(commentContent);
+                    comments.appendChild(commentDiv);
+                })
+            }
+        });
+    });
+
 }
 
 function timeDiff(curr_date){
+    var post_date = new Date(curr_date)
     var today = new Date();
-    var diffMs = (curr_date - today); 
-    var diffDays = Math.floor(diffMs / 86400000); 
-    var diffHrs = Math.floor((diffMs % 86400000) / 3600000);
-    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+    var diffMs = (today-post_date )/1000; 
+    console.log(diffMs);
+    var diffDays = Math.floor(diffMs / 60 /60/24); 
+    var diffHrs = Math.floor((diffMs / 60) / 60);
+    var diffMins = Math.round(((diffMs / 60)));
     if(diffDays == 0 && diffHrs == 0 && diffMins == 0){
         return "Posted now";
     } else if(diffDays == 0 && diffHrs == 0){

@@ -122,15 +122,21 @@ const PostSchema  = new mongoose.Schema({
         type: String, //user schema
         required: true
     },
+    postname: {
+        type: String,
+        unique: true
+    },
     post_time: {
         type: Date,
         default: Date.now
     },
     tag_champion: {
         type: String,
+        required: true
     },
     tag_gameName: {
         type: String,
+        required: true
     },
     content:{
         type: String,

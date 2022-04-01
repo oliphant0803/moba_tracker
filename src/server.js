@@ -384,15 +384,37 @@ app.get('/api/posts', async(req, res) => {
 		return;
 	}  
 
-	try {
-		const posts = await Post.find()
-		res.send({ posts }) 
-	} catch(error) {
-		log(error)
-		res.status(500).send("Internal Server Error")
-	}
+	await Post.find({}).sort({post_time: -1}).exec((err, obj) => { 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	});
 
 });
+
+//find posts of sepecific name
+app.get('/api/posts/:id', (req, res) => {
+	// Add code here
+	const postName = req.params.id;
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Post.findOne({postname : postName}, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
 
 app.post('/api/posts', async(req, res) => {
 
@@ -410,7 +432,8 @@ app.post('/api/posts', async(req, res) => {
 		tag_champion: req.body.tag_champion,
 		tag_gameName: req.body.tag_gameName,
 		content: req.body.content,
-		parent_post: req.body.parent_post
+		parent_post: req.body.parent_post,
+		postname: req.body.postname
 	})
 
 	try {
