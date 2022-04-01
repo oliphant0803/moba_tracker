@@ -588,19 +588,18 @@ function displayComment(comments, post_i){
 function timeDiff(curr_date){
     var post_date = new Date(curr_date)
     var today = new Date();
-    var diffMs = (today-post_date )/1000; 
-    console.log(diffMs);
-    var diffDays = Math.floor(diffMs / 60 /60/24); 
-    var diffHrs = Math.floor((diffMs / 60) / 60);
-    var diffMins = Math.round(((diffMs / 60)));
+    var diffMs = (today-post_date ); 
+    var diffDays = Math.floor(diffMs / 86400000); 
+    var diffHrs = Math.floor((diffMs % 86400000) / 3600000);
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     if(diffDays == 0 && diffHrs == 0 && diffMins == 0){
         return "Posted now";
     } else if(diffDays == 0 && diffHrs == 0){
         return "Posted " + Math.abs(diffMins) + " mins ago";
     } else if (diffDays == 0){
-        return "Posted " + Math.abs(diffHrs) + " hours ago";
+        return "Posted " + Math.abs(diffHrs) + " hours, " + Math.abs(diffMins) + " mins ago";
     }
-    return "Posted " + Math.abs(diffDays) + " days, " + Math.abs(diffHrs) + " hours ago";
+    return "Posted " + Math.abs(diffDays) + " days, " + Math.abs(diffHrs) + " hours, " + Math.abs(diffMins) + " mins ago";
 }
 
 function filterUser(){
