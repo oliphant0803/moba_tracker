@@ -122,6 +122,10 @@ const PostSchema  = new mongoose.Schema({
         type: String, //user schema
         required: true
     },
+    postname: {
+        type: String,
+        unique: true
+    },
     post_time: {
         type: Date,
         default: Date.now
@@ -131,7 +135,7 @@ const PostSchema  = new mongoose.Schema({
         required: true
     },
     tag_gameName: {
-        type: String, //match schema id
+        type: String,
         required: true
     },
     content:{
@@ -140,8 +144,7 @@ const PostSchema  = new mongoose.Schema({
     },
     parent_post:{
         type: String,
-        enum : ['Comment', 'Post'],
-        required: 'Post'
+        default: "parent"
     }
 });
 
