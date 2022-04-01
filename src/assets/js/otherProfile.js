@@ -473,9 +473,15 @@ function appendKDA(kill, death, assists){
     kdaa.classList.add("d-flex");
     kdaa.classList.add("justify-content-center");
     var ratioText = document.createElement("h5");
-    var ratio = ((parseInt(kill) + parseInt(assists))/parseInt(death));
-    ratio = Math.round(ratio * 100) / 100;
-    ratioText.innerHTML = ratio.toString().concat(":1");
+
+    if(parseInt(death) == 0){
+        ratioText.innerHTML = "Perfect".concat(":1");
+    }else{
+        var ratio = ((parseInt(kill) + parseInt(assists))/parseInt(death));
+        ratio = Math.round(ratio * 100) / 100;
+        ratioText.innerHTML = ratio.toString().concat(":1");
+    }
+
     var greyText = document.createElement("h5");
     greyText.classList.add("grey-text");
     greyText.innerHTML = "&nbsp KDA";
