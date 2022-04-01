@@ -215,9 +215,9 @@ function showUser(filter){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = posts.length-1; i>=0; i--){
-            displayPost(posts[i]);
-        }
+        posts.forEach((post) => {
+            displayPost(post);
+        })
         enablePtr("dropdownUser");
         enablePtr("dropdownChamp");
         enablePtr("dropdownGame");
@@ -239,7 +239,7 @@ function showUser(filter){
     }
     disablePtr("dropdownUser");
 
-    for(let i = filter_users.length-1; i>=0; i--){
+    for(let i = 0; i<filter_users.length; i++){
         console.log(filter_users[i]);
         p.removeChild(p.children[filter_users[i]-i]);
     }
@@ -298,9 +298,9 @@ function removePost(filter){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = posts.length-1; i>=0; i--){
-            displayPost(posts[i]);
-        }
+        posts.forEach((post) => {
+            displayPost(post);
+        })
         enablePtr("dropdownUser");
         enablePtr("dropdownChamp");
         enablePtr("dropdownGame");
@@ -321,7 +321,7 @@ function removePost(filter){
     disablePtr("dropdownChamp");
     disablePtr("dropdownGame");
 
-    for(let i = filter_posts.length-1; i>=0; i--){
+    for(let i = 0; i<filter_posts.length;i++){
         console.log(filter_posts[i]);
         p.removeChild(p.children[filter_posts[i]-i]);
     }
