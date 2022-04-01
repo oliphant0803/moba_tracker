@@ -27,6 +27,13 @@ function getUsers(){
     })
 }
 
+//hard coded value for tag game id, champion, and posts
+const currentAdmin = {
+    username: "BestAdmin",
+    password:'password',
+    profilePic:'../assets/images/tiger1.png'
+}
+
 function loadHeader(){
     const headerName = document.querySelector('.header-name');
     headerName.innerHTML = currentAdmin.username;
@@ -117,22 +124,14 @@ function setUpForm(){
     }
 }
 
-//hard coded value for tag game id, champion, and posts
-const currentAdmin = {
-    username: "BestAdmin",
-    password:'password',
-    profilePic:'../assets/images/tiger1.png'
-}
-
-//the way we expect to get from json
-var games = []
-
 function addNewGame(e){
     e.preventDefault();
+    getUsers()
     let valid = document.getElementById('newGameForm').checkValidity();
     if(!valid) {
         alert('Invalid input. Please double check every field.');
-    } else{
+    } else
+    {
         const matchName = document.getElementById('gameName').value
 
         const username0 = document.getElementById('username0').value
@@ -219,10 +218,10 @@ function addNewGame(e){
         kdaB = []
         kdaA.push(parseInt(document.querySelector('#kill0').value))
         kdaB.push(parseInt(document.querySelector('#kill1').value))
-        kdaA.push(parseInt(document.querySelector('#assist0').value))
-        kdaB.push(parseInt(document.querySelector('#assist1').value))
         kdaA.push(parseInt(document.querySelector('#death0').value))
         kdaB.push(parseInt(document.querySelector('#death1').value))
+        kdaA.push(parseInt(document.querySelector('#assist0').value))
+        kdaB.push(parseInt(document.querySelector('#assist1').value))
         win = user0
         if (document.getElementById("win0").checked) {
             win = user0
@@ -257,8 +256,6 @@ function addNewGame(e){
 
 function addMatch(match){
     const url = '/api/matches';
-    console.log("try add match to db")
-    console.log(JSON.stringify(match))
 
     const request = new Request(url, {
         method: 'post',
@@ -269,9 +266,203 @@ function addMatch(match){
         },
     });
 
-    fetch(request).catch((error) =>{
-        log(error)
+    fetch(request).then((res) => {
+        alert("Game added successfully!")
+        displayGame(match)
+    }).catch((error) => {
+        console.log(error)
     })
-
 }
 
+function displayGame(match){
+    let section = document.getElementById("display-section")
+    section.innerHTML = ""
+    displayOneGame(match)
+}
+
+function displayOneGame(match_i){
+    var matchContainer = document.createElement("div");
+    matchContainer.classList.add("container"); 
+    
+    let title = document.createElement("h3");
+    title.innerHTML = 'Added successfully at ' + match_i.add_time.toLocaleTimeString()
+    let gameName = document.createElement("h4");
+    gameName.innerHTML = 'Game Name: ' + match_i.match_name
+    matchContainer.appendChild(title)
+    matchContainer.appendChild(gameName)
+
+    var row1 = document.createElement("div");
+    row1.classList.add("row");
+    row1.classList.add("row-col-4");
+    if (match_i.win === match_i.userA) {
+        row1.classList.add("victory-bg");
+    } else {
+        row1.classList.add("defeat-bg");
+    }
+
+    var username0 = document.createElement("div");
+    username0.classList.add("col");
+    username0.classList.add("d-flex");
+    username0.classList.add("align-items-center");
+    username0.innerHTML = "<h4>" + userLibrary.filter((user) => user._id === match_i.userA)[0].username + "</h4>"
+
+    row1.appendChild(username0)
+    
+    row1.appendChild(appendChamp(match_i.championA, match_i.runeA, match_i.summonerA));
+    row1.appendChild(appendKDA(match_i.kdaA[0].toString(), match_i.kdaA[1].toString(), match_i.kdaA[2].toString()));
+    row1.appendChild(appendItems(match_i.buildA));
+
+    matchContainer.appendChild(row1);
+
+    var row2 = document.createElement("div");
+    row2.classList.add("row");
+    row2.classList.add("row-col-4");
+
+    var username1 = document.createElement("div");
+    username1.classList.add("col");
+    username1.classList.add("d-flex");
+    username1.classList.add("align-items-center");
+    username1.innerHTML = "<h4>" + userLibrary.filter((user) => user._id === match_i.userB)[0].username+ "</h4>"
+    row2.appendChild(username1)
+    
+    row2.appendChild(appendChamp(match_i.championB, match_i.runeB, match_i.summonerB));
+    row2.appendChild(appendKDA(match_i.kdaB[1].toString(), match_i.kdaB[1].toString(), match_i.kdaB[2].toString()));
+    row2.appendChild(appendItems(match_i.buildB));
+
+    if (match_i.win === match_i.userB) {
+        row2.classList.add("victory-bg");
+    } else {
+        row2.classList.add("defeat-bg");
+    }
+    
+    matchContainer.appendChild(row2);
+    document.getElementById("display-section").appendChild(matchContainer);
+}
+
+function appendItem(item){
+    var itemImg = document.createElement("img");
+    itemImg.src = item;
+    itemImg.classList.add("img-fluid");
+    itemImg.classList.add("img-item");
+    return itemImg;
+}
+
+function appendItems(items){
+    var itemsCon = document.createElement("div");
+    itemsCon.classList.add("col");
+    itemsCon.classList.add("d-flex");
+    itemsCon.classList.add("align-items-center");
+    var firstRow = document.createElement("div");
+    var rowOne = document.createElement("div");
+    rowOne.classList.add("d-flex");
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[0]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[1]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[2]+".png"));
+    firstRow.appendChild(rowOne);
+
+    var rowTwo = document.createElement("div");
+    rowTwo.classList.add("d-flex");
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[3]+".png"));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[4]+".png"));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[5]+".png"));
+    firstRow.appendChild(rowTwo);
+    itemsCon.appendChild(firstRow);
+    return itemsCon;
+}
+
+function appendChamp(champion, runes, summoners){
+    var championCon = document.createElement("div");
+    championCon.classList.add("col");
+
+    var championRow = document.createElement("div");
+    championRow.classList.add("row");
+
+    var championImgCon = document.createElement("div");
+    championImgCon.classList.add("col");
+    championImgCon.classList.add("d-flex");
+    championImgCon.classList.add("align-items-center");
+
+    var championImg = document.createElement("img");
+    championImg.src = "assets/images/champions/c"+champion+".webp";
+    championImg.classList.add("img-fluid");
+    championImg.classList.add("img-champ");
+
+    championImgCon.appendChild(championImg);
+    championRow.appendChild(championImgCon);
+
+    var srCon = document.createElement("div");
+    srCon.classList.add("col");
+    srCon.classList.add("d-flex");
+    srCon.classList.add("align-items-center");
+
+    var sCon = document.createElement("div");
+
+    var s1img = document.createElement("img");
+    s1img.src = "assets/images/summoners/summoner"+summoners[0]+".png";
+    s1img.classList.add("img-fluid");
+    s1img.classList.add("img-sumon");
+
+    var s2img = document.createElement("img");
+    s2img.src = "assets/images/summoners/summoner"+summoners[1]+".png";
+    s2img.classList.add("img-fluid");
+    s2img.classList.add("img-sumon");
+
+    sCon.appendChild(s1img);
+    sCon.appendChild(s2img);
+    srCon.appendChild(sCon);
+
+    var rCon = document.createElement("div");
+
+    var r1img = document.createElement("img");
+    r1img.src = "assets/images/runes/r"+runes[0]+".png";
+    r1img.classList.add("img-fluid");
+    r1img.classList.add("img-rune");
+
+    var r2img = document.createElement("img");
+    r2img.src = "assets/images/runes/r"+runes[1]+".png";
+    r2img.classList.add("img-fluid");
+    r2img.classList.add("img-rune");
+
+    rCon.appendChild(r1img);
+    rCon.appendChild(r2img);
+    srCon.appendChild(rCon);
+    championRow.appendChild(srCon);
+    championCon.appendChild(championRow);
+
+    return championCon;
+}
+
+function appendKDA(kill, death, assists){
+    var kdaCon = document.createElement("div");
+    kdaCon.classList.add("col");
+    kdaCon.classList.add("text-center");
+    kdaCon.classList.add("kda-container");
+
+    var kdas = document.createElement("div");
+    kdas.classList.add("id", "kda-s");
+    var kdaText = document.createElement("h5");
+    kdaText.innerHTML = kill.concat("/", death).concat("/", assists);
+    kdas.appendChild(kdaText);
+    kdaCon.appendChild(kdas);
+
+    var kdaa = document.createElement("div");
+    kdaa.setAttribute("id", "kda-a");
+    kdaa.classList.add("d-flex");
+    kdaa.classList.add("justify-content-center");
+    var ratioText = document.createElement("h5");
+    var ratio = ((parseInt(kill) + parseInt(assists))/parseInt(death));
+    ratio = Math.round(ratio * 100) / 100;
+    ratioText.innerHTML = ratio.toString().concat(":1");
+    if (parseInt(death)===0) {
+        ratioText.innerHTML = "Perfect:1"
+    }
+    var greyText = document.createElement("h5");
+    greyText.classList.add("grey-text");
+    greyText.innerHTML = "&nbsp KDA";
+
+    kdaa.appendChild(ratioText);
+    kdaa.appendChild(greyText);
+
+    kdaCon.appendChild(kdaa);
+    return kdaCon;
+}

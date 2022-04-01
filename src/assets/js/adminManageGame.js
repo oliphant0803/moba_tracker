@@ -3,13 +3,9 @@ function init(){
     const search = document.querySelector('.searchBut');
     search.addEventListener('click', searchAction);
 
-    const submitForm = document.querySelector('.submit');
-    submitForm.addEventListener('click', addGame);
-
     resultSection = document.querySelector('#result-container');
     resultSection.addEventListener('click', userReport);
 
-    setUpForm();
     loadHeader();
 }
 
@@ -23,66 +19,6 @@ function loadHeader(){
     headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
 }
 
-function setUpForm(){
-    const runesQ = document.querySelector('.runes').children;
-    const summonersQ = document.querySelector('.summoners').children;
-    const itemsQ = document.querySelector('.items').children;
-    for (var i = 0; i <= 1; i++) {
-        for (var j = 11; j >= 1; j--) {
-            if (j==5) {
-                runesQ[i].appendChild(document.createElement("br"))
-            }
-            let input = document.createElement("input");
-            input.type = "checkbox"
-            input.id = "rune" + j.toString() + "-" + i.toString()
-            runesQ[i].appendChild(input)
-
-            let label = document.createElement("label");
-
-            let img = document.createElement("img");
-            img.src = "../assets/images/runes/r" + j.toString() + ".png"
-            img.classList.add("img-profile")
-            label.appendChild(img)
-
-            runesQ[i].appendChild(label)
-        }
-        for (var j = 8; j >= 1; j--) {
-            if (j==4) {
-                summonersQ[i].appendChild(document.createElement("br"))
-            }
-            let input = document.createElement("input");
-            input.type = "checkbox"
-            input.id = "summoner" + j.toString() + "-" + i.toString()
-            summonersQ[i].appendChild(input)
-
-            let label = document.createElement("label");
-
-            let img = document.createElement("img");
-            img.src = "../assets/images/summoners/summoner" + j.toString() + ".png"
-            img.classList.add("img-profile")
-            label.appendChild(img)
-            summonersQ[i].appendChild(label)
-        }
-        for (var j = 35; j >= 1; j--) {
-            if (j%5==0) {
-                itemsQ[i].appendChild(document.createElement("br"))
-            }
-            let input = document.createElement("input");
-            input.type = "checkbox"
-            input.id = "summoner" + j.toString() + "-" + i.toString()
-            itemsQ[i].appendChild(input)
-
-            let label = document.createElement("label");
-
-            let img = document.createElement("img");
-            img.src = "../assets/images/items/i" + j.toString() + ".png"
-            img.classList.add("img-profile")
-            label.appendChild(img)
-            itemsQ[i].appendChild(label)
-        }
-    }
-    console.log(runesQ[0])
-}
 
 //hard coded value for tag game id, champion, and posts
 const currentAdmin = {
@@ -93,165 +29,6 @@ const currentAdmin = {
 
 //the way we expect to get from json
 var games = []
-
-function addGame(e){
-    e.preventDefault();
-    let valid = document.getElementById('newGameForm').checkValidity();
-    if(!valid) {
-        alert('Please fill up all field');
-    } else{
-    const username1a = document.querySelector('#username1a').value
-    const username1b = document.querySelector('#username1b').value
-    const runes1a1 = document.getElementById('runes1a1')
-    const runes1a2 = document.getElementById('runes1a2')
-    const runes1a3 = document.getElementById('runes1a3')
-    const runes1a4 = document.getElementById('runes1a4')
-    const runes1b1 = document.getElementById('runes1b1')
-    const runes1b2 = document.getElementById('runes1b2')
-    const runes1b3 = document.getElementById('runes1b3')
-    const runes1b4 = document.getElementById('runes1b4')
-    const runes1a = [runes1a1, runes1a2, runes1a3, runes1a4]
-    const runes1b = [runes1b1, runes1b2, runes1b3, runes1b4]
-    const runesChoice1a = []
-    const runesChoice1b = []
-    var count = 0;
-    for (var i = runes1a.length - 1; i >= 0; i--) {
-        if (runes1a[i].checked) {
-            count = count + 1;
-            runesChoice1a.push(i);
-        }
-    }
-    if (count != 2) {
-            alert("There must be 2 runes!")
-            return;
-    }
-    count = 0;
-    for (var i = runes1a.length - 1; i >= 0; i--) {
-        if (runes1b[i].checked) {
-            count = count + 1;
-            runesChoice1b.push(i);
-        }
-    }
-    if (count != 2) {
-           alert("There must be 2 runes!")
-            return;
-    }
-    const summoner1a1 = document.getElementById('summoners1a1')
-    const summoner1a2 = document.getElementById('summoners1a2')
-    const summoner1a3 = document.getElementById('summoners1a3')
-    const summoner1a4 = document.getElementById('summoners1a4')
-    const summoner1b1 = document.getElementById('summoners1b1')
-    const summoner1b2 = document.getElementById('summoners1b2')
-    const summoner1b3 = document.getElementById('summoners1b3')
-    const summoner1b4 = document.getElementById('summoners1b4')
-    const summoner1a = [summoner1a1, summoner1a2, summoner1a3, summoner1a4]
-    const summoner1b = [summoner1b1, summoner1b2, summoner1b3, summoner1b4]
-    const summonerChoice1a = []
-    const summonerChoice1b = []
-    count = 0;
-    for (var i = summoner1a.length - 1; i >= 0; i--) {
-        if (summoner1a[i].checked) {
-            count = count + 1;
-            summonerChoice1a.push(i);
-        }
-    }
-    if (count != 2) {
-            alert("There must be 2 summoners!")
-            return;
-    }
-    count = 0;
-    for (var i = summoner1b.length - 1; i >= 0; i--) {
-        if (summoner1b[i].checked) {
-            count = count + 1;
-            summonerChoice1b.push(i);
-        }
-    }
-    if (count != 2) {
-            alert("There must be 2 summoners!")
-            return;
-    }
-    const item1a1 = document.getElementById('item1a1')
-    const item1a2 = document.getElementById('item1a2')
-    const item1a3 = document.getElementById('item1a3')
-    const item1a4 = document.getElementById('item1a4')
-    const item1a5 = document.getElementById('item1a5')
-    const item1a6 = document.getElementById('item1a6')
-    const item1a7 = document.getElementById('item1a7')
-    const item1a8 = document.getElementById('item1a8')
-    const item1a9 = document.getElementById('item1a9')
-    const item1a10 = document.getElementById('item1a10')
-    const item1a = [item1a1, item1a2, item1a3, item1a4, item1a5, item1a6, item1a7, item1a8, item1a9, item1a10]
-    const itemChoice1a = []
-    count = 0;
-    for (var i = item1a.length - 1; i >= 0; i--) {
-        if (item1a[i].checked) {
-            count = count + 1;
-            itemChoice1a.push(i);
-        }
-    }
-    if (count != 6) {
-            alert("There must be 6 items!")
-            return;
-        }
-    const item1b1 = document.getElementById('item1b1')
-    const item1b2 = document.getElementById('item1b2')
-    const item1b3 = document.getElementById('item1b3')
-    const item1b4 = document.getElementById('item1b4')
-    const item1b5 = document.getElementById('item1b5')
-    const item1b6 = document.getElementById('item1b6')
-    const item1b7 = document.getElementById('item1b7')
-    const item1b8 = document.getElementById('item1b8')
-    const item1b9 = document.getElementById('item1b9')
-    const item1b10 = document.getElementById('item1b10')
-    const item1b = [item1b1, item1b2, item1b3, item1b4, item1b5, item1b6, item1b7, item1b8, item1b9, item1b10]
-    const itemChoice1b = []
-    count = 0;
-    for (var i = item1b.length - 1; i >= 0; i--) {
-        if (item1b[i].checked) {
-            count = count + 1;
-            itemChoice1b.push(i);
-        }
-    }
-        if (count != 6) {
-            alert("There must be 6 items!")
-            return;
-        }
-    const kill1a = document.querySelector('#kill1a').value
-    const kill1b = document.querySelector('#kill1b').value
-    const assist1a = document.querySelector('#assist1a').value
-    const assist1b = document.querySelector('#assist1b').value
-    const death1a = document.querySelector('#death1a').value
-    const death1b = document.querySelector('#death1b').value
-    const user1a={
-            username:username1a,
-            runes:runesChoice1a,
-            summoners:summonerChoice1a,
-            items:itemChoice1a,
-            kill:kill1a,
-            assist:assist1a,
-            death:assist1a
-        }
-    const user1b={
-            username:username1a,
-            runes:runesChoice1a,
-            summoners:summonerChoice1a,
-            items:itemChoice1a,
-            kill:kill1a,
-            assist:assist1a,
-            death:assist1a
-        }
-    const game = {
-        gameId:games.length,
-        user1a:user1a,
-        user1b:user1b,
-
-    }
-    console.log("game loading done")
-    games.push(game);
-    updateResult();
-    }
-    
-}
 
 function updateResult(){
     for (var i = resultSection.children.length - 1; i >= 0; i--) {
@@ -402,28 +179,6 @@ function displayGame(game){
     resultSection.appendChild(row);
 }
 
-function findReportTime(reports){
-    return reports.length;
-}
-
-function findMostCause(reports){
-    if (reports.length ===0) {
-        return "None";
-    }
-    const causes = reports.reduce(function(cause, report){
-        var c = report.reportCause;
-        if (cause[report.reportCause] !== undefined){
-            cause[report.reportCause] = cause[report.reportCause] + 1;
-        } else {
-            cause[report.reportCause] = 0;
-        }
-        return cause;
-    }, {});
-    const mostCause = Object.entries(causes).reduce((a, b) => a[1] > b[1] ? a : b)[0]
-    return mostCause;
-
-}
-
 function userReport(e){
     e.preventDefault();
     // check if return button was clicked, otherwise do nothing.
@@ -434,29 +189,6 @@ function userReport(e){
     }
 }
 
-function userManage(e){
-    e.preventDefault();
-    // check if return button was clicked, otherwise do nothing.
-    if (e.target.classList.contains('banBtn')) {
-        //console.log("Try ban a user")
-        const username = e.target.parentElement.parentElement.children[0].children[1].innerHTML;
-        const targetUser = users.filter(user => user.username === username);
-        for (var i = users.length - 1; i >= 0; i--) {
-            if (users[i].userId === targetUser[0].userId){
-                users.splice(i, 1);
-            }
-        }
-        displaySearchSection();
-    }
-    if (e.target.classList.contains('clearBtn')) {
-        //console.log("Try clear a user's report")
-        const username = e.target.parentElement.parentElement.children[0].children[1].innerHTML;
-        const targetUser = users.filter(user => user.username === username);
-        reports = reports.filter(reportUser => reportUser.userId !== targetUser[0].userId);
-        displaySearchSection();
-        displayReportSection(targetUser[0]);
-    }
-}
 
 function displaySearchSection(userReports){
     clearReportSection();
@@ -467,9 +199,3 @@ function displaySearchSection(userReports){
         displayUser(users[i]);
     }
 }
-
-function findUserById(id){
-    const wantUser = users.filter(user => user.userId === id);
-    return wantUser[0];
-}
-
