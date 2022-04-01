@@ -1,198 +1,261 @@
 window.onload=function(){
+    getMatches();
+    getPosts();
     addChamp();
 }
 
-//the way we expect to get from json
-const post1={
-    postId: 1,
-    time: new Date("2020-9-16 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 1,
-    champTag: "Champion1",
-    content: "Content"
+const posts = []
+const matches = []
+const champions = []
+
+class Match{
+    constructor(winLoss, userA, champA, kdaA, userB, champB, kdaB) {
+        this.winLoss = winLoss;
+        this.userA = userA;
+        this.championA = champA;
+        this.kdaA = kdaA;
+        this.userB = userB;
+        this.championB = champB;
+        this.kdaB = kdaB;
+    }
 }
 
-const post2={
-    postId: 2,
-    time: new Date("2021-9-16 12:00:00"),
-    userName: "User 2",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 3,
-    champTag: "Champion2",
-    content: "Content"
+class UserPost{
+    constructor(userid, champ){
+        this.userid = userid
+        this.champTag = champ;
+    }
 }
 
-const post3={
-    postId: 3,
-    time: new Date("2022-1-1 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 4,
-    champTag: "Champion1",
-    content: "Content"
+class GameUser{
+    constructor(id, fav){
+        this.id = id;
+        this.fav = fav;
+    }
 }
 
-const match1 = 
-    {   
-        gameId: "1",
-        winLoss: "A",
-        champ1: "champ 1",
-        champ2: "champ 2",
-        champ3: "champ 3",
-        champ4: "champ 4",
-        champ5: "champ 5",
-        teamA: ["Champion1", "Champion2", "Champion3", "Champion4", "Champion5"],
-        kdaA: [13.4, 10.8, 6.0, 9.2, 8.4],
-        champ6: "champ 6",
-        champ7: "champ 7",
-        champ8: "champ 8",
-        champ9: "champ 9",
-        champ10: "champ 10",
-        teamB: ["Champion6", "Champion7", "Champion8", "Champion9", "Champion10"],
-        kdaB: [4.8, 5.8, 6.6, 5.8, 8.3]
-};
+const curr_user = new GameUser("62436866d4cc88a03be4de21", ["62436914d4cc88a03be4de24"])
 
-const match2 = 
-    {   
-        gameId: "2",
-        winLoss: "A",
-        champ1: "champ 1",
-        champ2: "champ 7",
-        champ3: "champ 3",
-        champ4: "champ 9",
-        champ5: "champ 5",
-        teamA:["Champion1", "Champion7", "Champion3", "Champion9", "Champion5"],
-        kdaA: [12.0, 14.4, 8.3, 11.1, 8.4],
-        champ6: "champ 1",
-        champ7: "champ 7",
-        champ8: "champ 4",
-        champ9: "champ 5",
-        champ10: "champ 6",
-        teamB:["Champion1", "Champion7", "Champion4", "Champion6", "Champion5"],
-        kdaB:[4.2, 5.2, 5.2, 5.2, 5.6]
-    };
+function checkUser(){
+    const userType = document.querySelector('#user').value;
+    if (userType != "Select") {
+        getChamp(userType);
+    }
+}
 
-const match3 = 
-    {   
-        gameId: "3",
-        winLoss: "B",
-        champ1: "champ 1",
-        champ2: "champ 2",
-        champ3: "champ 8",
-        champ4: "champ 4",
-        champ5: "champ 7",
-        teamA:["Champion1", "Champion2", "Champion8", "Champion4", "Champion7"],
-        kdaA:[6.6, 7.0, 10.4, 3.8, 4.2],
-        champ6: "champ 2",
-        champ7: "champ 4",
-        champ8: "champ 8",
-        champ9: "champ 5",
-        champ10: "champ 10",
-        teamB:["Champion2", "Champion4", "Champion8", "Champion10", "Champion5"],
-        kdaB:[8.0, 6.4, 12.5, 12.4, 5.7]
-    };
-
-const posts=[post1, post2, post3];
-const matches = [match1, match2, match3];
+function getChamp(type){
+    const champ1 = document.querySelector("#champion1").value;
+    const champ2 = document.querySelector("#champion2").value;
+    if (champ1 != "Select" && champ2 != "Select") {
+        displayPickRate(champ1, champ2, type);
+        displayWinRate(champ1, champ2, type);
+        displayDiscussRate(champ1, champ2, type);
+        displayKDA(champ1, champ2, type);
+    }
+}
 
 
-function pickRate(champ) {
+function pickRate(champ, type) {
     var count = 0;
-    const numMatch = matches.length;
+    var lst = [];
+    if (type === "all") {
+        lst = matches;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const match of matches) {
+            if (match.userA == user) {
+                lst.push(match);
+            }
+            else if (match.userB == user) {
+                lst.push(match);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const match of matches) {
+                if (match.userA == favUser) {
+                    lst.push(match);
+                }
+                else if (match.userB == favUser) {
+                    lst.push(match);
+                }
+            }
+        }
+    }
+    const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
-        const match = matches[index];
-        if (match.teamA.includes(champ)) {
+        const match = lst[index];
+        if (match.championA === champ) {
             count++;
         }
-        if (match.teamB.includes(champ)) {
+        if (match.championB === champ) {
             count++;
         }
     }
     return Math.round(count/(numMatch*2)*100);
 }
 
-function winRate(champ) {
+function winRate(champ, type) {
     var count = 0;
-    const numMatch = matches.length;
+    var lst = [];
+    if (type === "all") {
+        lst = matches;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const match of matches) {
+            if (match.userA == user) {
+                lst.push(match);
+            }
+            else if (match.userB == user) {
+                lst.push(match);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const match of matches) {
+                if (match.userA == favUser) {
+                    lst.push(match);
+                }
+                else if (match.userB == favUser) {
+                    lst.push(match);
+                }
+            }
+        }
+    }
+    const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
         const match = matches[index];
-        if (match.winLoss=="A" && match.teamA.includes(champ)) {
+        if (match.winLoss== match.userA && match.championA === champ) {
             count++;
         }
-        if (match.winLoss=="B" && match.teamB.includes(champ)) {
+        if (match.winLoss== match.userB && match.championB === champ) {
             count++;
         }
     }
     return Math.round(count/numMatch*100);
 }
 
-function discussRate(champ){
+function discussRate(champ, type){
     var count = 0;
-    const numPost = posts.length;
-    for (let index = 0; index < numPost; index++) {
-        const post = posts[index];
-        if (post.champTag == champ) {
+    var lst = [];
+    if (type === "all") {
+        lst = posts;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const post of posts) {
+            if (post.userid == user) {
+                lst.push(post);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const post of posts) {
+                if (post.userid == favUser) {
+                    lst.push(post);
+                }
+            }
+        }
+    }
+    const numPost = lst.length;
+    console.log(lst)
+    for (const post of lst) {
+        if (post.champTag === champ) {
             count++;
         }
     }
     return Math.round(count/numPost*100);
 }
 
-function averageKDA(champ){
+function averageKDA(champ, type){
     var sum = 0;
     var count = 0;
-    const numMatch = matches.length;
+    var lst = [];
+    if (type === "all") {
+        lst = matches;
+    }
+    else if (type === "self") {
+        // Need to change after adding session
+        const user = curr_user.id;
+        for (const match of matches) {
+            if (match.userA == user) {
+                lst.push(match);
+            }
+            else if (match.userB == user) {
+                lst.push(match);
+            }
+        }
+    }
+    else{
+        const fav = curr_user.fav;
+        for (const favUser of fav) {
+            for (const match of matches) {
+                if (match.userA == favUser) {
+                    lst.push(match);
+                }
+                else if (match.userB == favUser) {
+                    lst.push(match);
+                }
+            }
+        }
+    }
+    const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
         const match = matches[index];
-        if (match.teamA.includes(champ)) {
+        if (match.championA === champ) {
             count++;
-            const i = match.teamA.indexOf(champ)
-            sum += match.kdaA[i]
+            const kda = match.kdaA
+            const calc = Math.round((kda[0]+kda[2])/kda[1] * 100)/100
+            sum += calc
         }
-        if (match.teamB.includes(champ)) {
+        if (match.championB === champ) {
             count++;
-            const i = match.teamB.indexOf(champ)
-            sum += match.kdaB[i]
+            const kda = match.kdaB
+            const calc = Math.round((kda[0]+kda[2])/kda[1] * 100)/100
+            sum += calc
         }
+    }
+    if (count === 0) {
+        return 0;
     }
     return Math.round(sum/count*100)/100;
 }
 
-function getChamp(){
-    const champ1 = document.querySelector("#champion1").value;
-    const champ2 = document.querySelector("#champion2").value;
-    if (champ1 != "Select" && champ2 != "select") {
-        displayPickRate(champ1, champ2);
-        displayWinRate(champ1, champ2);
-        displayDiscussRate(champ1, champ2);
-        displayKDA(champ1, champ2);
-    }
-}
-
 //DOM
-function addChamp() {
+async function addChamp() {
+    await new Promise(r => setTimeout(r, 1000));
     const champ1 = document.querySelector('table').children[0].children[0].children[0].children[0];
     const champ2 = document.querySelector('table').children[0].children[0].children[2].children[0];
-    for (let i = 1; i < 11; i++) {
-        const element = "Champion"+String(i);
+    champions.sort(function(a, b){return a-b});
+    for (const element of champions) {
         const option = document.createElement("option");
         option.value=element;
         option.innerText=element;
         champ1.appendChild(option);
     }
-    for (let i = 1; i < 11; i++) {
-        const element = "Champion"+String(i);
+    for (const element of champions) {
         const option = document.createElement("option");
         option.value=element;
         option.innerText=element;
         champ2.appendChild(option);
     }
+
 }
 
-function displayPickRate(champ1, champ2){
-    const r1 = pickRate(champ1);
-    const r2 = pickRate(champ2);
+function displayPickRate(champ1, champ2, type){
+    const r1 = pickRate(champ1, type);
+    const r2 = pickRate(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[0].children[0];
     const pk2 = document.querySelector('table').children[1].children[0].children[2];
     if (r1>=r2) {
@@ -203,9 +266,9 @@ function displayPickRate(champ1, champ2){
     pk2.innerText=r2+"%";
 }
 
-function displayWinRate(champ1, champ2){
-    const r1 = winRate(champ1);
-    const r2 = winRate(champ2);
+function displayWinRate(champ1, champ2, type){
+    const r1 = winRate(champ1, type);
+    const r2 = winRate(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[1].children[0];
     const pk2 = document.querySelector('table').children[1].children[1].children[2];
     if (r1>=r2) {
@@ -216,9 +279,9 @@ function displayWinRate(champ1, champ2){
     pk2.innerText=r2+"%";
 }
 
-function displayDiscussRate(champ1, champ2){
-    const r1 = discussRate(champ1);
-    const r2 = discussRate(champ2);
+function displayDiscussRate(champ1, champ2, type){
+    const r1 = discussRate(champ1, type);
+    const r2 = discussRate(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[2].children[0];
     const pk2 = document.querySelector('table').children[1].children[2].children[2];
     if (r1>=r2) {
@@ -229,9 +292,9 @@ function displayDiscussRate(champ1, champ2){
     pk2.innerText=r2+"%";
 }
 
-function displayKDA(champ1, champ2){
-    const r1 = averageKDA(champ1);
-    const r2 = averageKDA(champ2);
+function displayKDA(champ1, champ2, type){
+    const r1 = averageKDA(champ1, type);
+    const r2 = averageKDA(champ2, type);
     const pk1 = document.querySelector('table').children[1].children[3].children[0];
     const pk2 = document.querySelector('table').children[1].children[3].children[2];
     if (r1>=r2) {
@@ -240,4 +303,61 @@ function displayKDA(champ1, champ2){
     }
     pk1.innerText=r1;
     pk2.innerText=r2;
+}
+
+
+// Database related function
+function getMatches(){
+    const url = 'api/matches';
+    
+    fetch(url).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        json.matches.forEach(element => {
+            const wl = element.win;
+            const uA = element.userA;
+            const uB = element.userB;
+            const cA = "champion".concat(element.championA);
+            const cB = "champion".concat(element.championB);
+            const kA = element.kdaA;
+            const kB = element.kdaB;
+            const match = new Match(wl, uA, cA, kA, uB, cB, kB);
+            if (!champions.includes(cA)) {
+                champions.push(cA);
+            }
+            if (!champions.includes(cB)) {
+                champions.push(cB);
+            }
+            matches.push(match);
+        });
+    }).then().catch((error) => {
+        console.log(error)
+    })
+}
+
+function getPosts(){
+    const url = 'api/posts';
+    
+    fetch(url).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        json.posts.forEach(element => {
+            const id = element.username;
+            const champ = element.tag_champion;
+            const post = new UserPost(id, champ);
+            posts.push(post);
+        });
+    }).catch((error) => {
+        console.log(error)
+    })
 }
