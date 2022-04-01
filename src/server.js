@@ -285,19 +285,34 @@ app.get('/api/userByName/:username', async (req, res) => {
 	})
 })
 
+app.get('/api/userFav/:matchId', async (req, res) => {
+	const matchId = req.params.matchId
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	User.find({ favs: { $all: [matchId] } }, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
 
 /*** match API ************************************/
 //get all matches
 app.get('/api/matches', async(req, res) => {
-
-
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
 		log('Issue with mongoose connection')
 		res.status(500).send('Internal server error')
 		return;
 	}  
-
 	try {
 		const matches = await Match.find()
 		res.send({ matches }) 
@@ -305,7 +320,6 @@ app.get('/api/matches', async(req, res) => {
 		log(error)
 		res.status(500).send("Internal Server Error")
 	}
-
 });
 
 //add match post request
@@ -371,12 +385,39 @@ app.get('/api/matches/player/:id', (req, res) => {
 	})
 })
 
+//delete specific match by match id
+app.delete('/api/matches/:id', async (req, res) => {
+	const id = req.params.id
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send('Resource not found')
+		return;
+	}
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} 
+
+	try {
+		//remove match
+		const match = await Match.findByIdAndDelete(id);
+		if (!match) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		res.send(match)
+		
+	} catch(error) {
+		log(error) 
+		res.status(500).send('Internal server error')
+	}
+})
+
+
 /*** post API ************************************/
 
 //get all post in mongoose
 app.get('/api/posts', async(req, res) => {
-
-
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
 		log('Issue with mongoose connection')
@@ -417,8 +458,6 @@ app.get('/api/posts/:id', (req, res) => {
 })
 
 app.post('/api/posts', async(req, res) => {
-
-
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
 		log('Issue with mongoose connection')

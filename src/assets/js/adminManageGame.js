@@ -188,6 +188,7 @@ function userReport(e){
 }
 
 function deleteGame(gameName){
+    
     console.log("not implemented")
 }
 
