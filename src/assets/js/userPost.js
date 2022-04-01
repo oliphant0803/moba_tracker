@@ -278,7 +278,7 @@ function saveSelection(){
     fetch(request)
     .then(function(res) {
         
-        // location.reload(); 
+        location.reload(); 
     }).catch((error) => {
         console.log(error)
     })

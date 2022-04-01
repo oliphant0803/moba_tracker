@@ -369,9 +369,9 @@ function appendItems(items, wl, id){
 
     var rowTwo = document.createElement("div");
     rowTwo.classList.add("d-flex");
-    rowOne.appendChild(appendItem("assets/images/items/i"+items[3]+".png"));
-    rowOne.appendChild(appendItem("assets/images/items/i"+items[4]+".png"));
-    rowOne.appendChild(appendItem("assets/images/items/i"+items[5]+".png"));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[3]+".png"));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[4]+".png"));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[5]+".png"));
     firstRow.appendChild(rowTwo);
     itemsCon.appendChild(firstRow);
 
@@ -473,7 +473,6 @@ function appendKDA(kill, death, assists){
     kdaa.classList.add("d-flex");
     kdaa.classList.add("justify-content-center");
     var ratioText = document.createElement("h5");
-
     if(parseInt(death) == 0){
         ratioText.innerHTML = "Perfect".concat(":1");
     }else{
@@ -481,7 +480,6 @@ function appendKDA(kill, death, assists){
         ratio = Math.round(ratio * 100) / 100;
         ratioText.innerHTML = ratio.toString().concat(":1");
     }
-
     var greyText = document.createElement("h5");
     greyText.classList.add("grey-text");
     greyText.innerHTML = "&nbsp KDA";
