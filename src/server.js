@@ -313,8 +313,10 @@ app.get('/api/userByName/:username', async (req, res) => {
 		if (err){
 			res.status(404).send(error);
 		}
-		else{
+		else if(obj){
 			res.send(obj);
+		}else{
+			res.status(204).send("No User");
 		}
 	})
 })

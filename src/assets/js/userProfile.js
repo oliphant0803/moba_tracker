@@ -263,59 +263,121 @@ function editProfile(){
         document.getElementById("quoteInput").readOnly = true;
         document.getElementById("edit").innerHTML = "Edit Profile";
         //check for user name constraint
+        fetch('/api/userByName/'+document.getElementById("usernameInput").value.split(" ").join(""))
+        .then((res) => { 
+            if(res.status == 400){
+                return "nouser"
+            }else if(res.status == 200){
+                return res.json()
+            } 
+        })
+        .then((json) => {
+            if(json == "nouser"){
+                const url = '/api/users/' + currentUser;
 
-
-        //save current changes to db
-
-        const url = '/api/users/' + currentUser;
-
-        fetch(url)
-            .then((res) => { 
-                if (res.status === 200) {
-                return res.json() 
-            } else {
-                console.log('Could not get user')
-                }                
-            })
-            .then((json) => { 
-                let data = {
-                    username: document.getElementById("usernameInput").value,
-                    email: json.email,
-                    password: json.password,
-                    bio: document.getElementById("quoteInput").value,
-                    favs: json.favs,
-                    recents: json.recents,
-                    match_history: json.match_history,
-                    icon: json.icon
-                }
-                const request = new Request(url, {
-                    method: 'put', 
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json'
-                    },
-                });
-            
-                fetch(request)
-                .then(function(res) {
-            
+                fetch(url)
+                .then((res) => { 
                     if (res.status === 200) {
-                        console.log('Profile Changes')
-                       
-                    } else {    
-                        console.log('Profile Unchanged')
-                 
+                        return res.json() 
+                    } else {
+                        console.log('Could not get user')
+                    }                
+                })
+                .then((json) => { 
+                    //save current changes to db
+                    let data = {
+                        username: document.getElementById("usernameInput").value.split(" ").join(""),
+                        email: json.email,
+                        password: json.password,
+                        bio: document.getElementById("quoteInput").value,
+                        favs: json.favs,
+                        recents: json.recents,
+                        match_history: json.match_history,
+                        icon: json.icon
                     }
+                    const request = new Request(url, {
+                        method: 'put', 
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json'
+                        },
+                    });
+                
+                    fetch(request)
+                    .then(function(res) {
+                
+                        if (res.status === 200) {
+                            console.log('Profile Changes')
+                        
+                        } else {    
+                            console.log('Profile Unchanged')
                     
+                        }
+                        
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                
                 }).catch((error) => {
                     console.log(error)
                 })
-               
-            }).catch((error) => {
-                console.log(error)
-            })
-        
+            }else{
+                const url = '/api/users/' + currentUser;
+                fetch(url)
+                .then((res) => { 
+                    if (res.status === 200) {
+                    return res.json() 
+                } else {
+                        console.log('Could not get user')
+                }                
+                })
+                .then((json) => { 
+                    if(document.getElementById("usernameInput").value.split(" ").join("") != json.username){
+                        document.getElementById("usernameInput").value = json.username.split(" ").join("");
+                        document.getElementById("quoteInput").value = json.bio;
+                        alert("User name exists");
+                    }
+                    let data = {
+                        username: json.username.split(" ").join(""),
+                        email: json.email,
+                        password: json.password,
+                        bio: document.getElementById("quoteInput").value,
+                        favs: json.favs,
+                        recents: json.recents,
+                        match_history: json.match_history,
+                        icon: json.icon
+                    }
+                    const request = new Request(url, {
+                        method: 'put', 
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json'
+                        },
+                    });
+                
+                    fetch(request)
+                    .then(function(res) {
+                
+                        if (res.status === 200) {
+                            console.log('Profile Changes')
+                        
+                        } else {    
+                            console.log('Profile Unchanged')
+                    
+                        }
+                        
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }).catch((error) => {
+                    console.log(error)
+                })
+
+            }
+        });
+                
     }
 }
 
