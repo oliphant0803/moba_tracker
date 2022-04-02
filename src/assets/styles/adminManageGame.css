@@ -101,10 +101,3 @@
     color: var(--txt-grey);
 }
 
-.victory-bg{
-    background-color: var(--victory-blue);
-}
-
-.defeat-bg{
-    background-color: var(--defeat-red);
-}
