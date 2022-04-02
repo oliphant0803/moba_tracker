@@ -1,110 +1,82 @@
-'use strict';
-window.onload = init;
-    async function init(){
+window.onload = getPosts;
 
-        await new Promise(r => setTimeout(r, 1000));
-        displayUser();
+let posts = [];
+const currentUser = "62436866d4cc88a03be4de21"
+
+async function init(){
+    //get gameids, champions, users, and favs from db
+    await new Promise(r => setTimeout(r, 1000));
+    
+    //sort by time
+    posts.sort(function (a, b) {
+        return b.time.localeCompare(a.time);
+    });
+
+    console.log(posts);
+
+    posts.forEach((post)=>{
+        displayPost(post)
+    })
+
+    const game_url = "/api/matches"
+
+    fetch(game_url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get matches')
+       }                
+    })
+    .then((json) => { 
+        let gameIds=[];
+        let champions=[];
+        json.matches.forEach((match) => {
+            if(!gameIds.includes(match.match_name)){
+                gameIds.push(match.match_name)
+            }
+            if(!champions.includes(match.championA)){
+                champions.push("champion"+match.championA)
+            }
+            if(!champions.includes(match.championB)){
+                champions.push("champion"+match.championB)
+            }
+    
+        })
+        console.log(gameIds)
+        console.log(champions)
         displayAllFilter("dropdownGame", gameIds);
         displayAllFilter("dropdownChamp", champions);
-        for(let i = 0; i< posts.length; i++){
-            displayPost(posts[i]);
-            console.log(posts[i]);
-        }
-        const postSection = document.querySelector('#posts');
-        //get gameids, champions, users, and favs from db
-        
-        //sort by time
-        posts.sort(function (a, b) {
-            return b.time.localeCompare(a.time);
-        });
+    }).catch((error) => {
+        console.log(error)
+    })
 
-        console.log(posts);
-
-        posts.forEach((post)=>{
-            displayPost(post)
+    const user_url = "/api/users"
+    fetch(user_url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get matches')
+       }                
+    })
+    .then((json) => { 
+        let users= [];
+        json.users.forEach((user)=>{
+            users.push(user.username)
         })
-
-        const game_url = "/api/matches"
-
-        fetch(game_url)
-        .then((res) => { 
-            if (res.status === 200) {
-               return res.json() 
-           } else {
-                console.log('Could not get matches')
-           }                
-        })
-        .then((json) => { 
-            let gameIds=[];
-            let champions=[];
-            json.matches.forEach((match) => {
-                if(!gameIds.includes(match.match_name)){
-                    gameIds.push(match.match_name)
-                }
-                if(!champions.includes(match.championA)){
-                    champions.push("champion"+match.championA)
-                }
-                if(!champions.includes(match.championB)){
-                    champions.push("champion"+match.championB)
-                }
-        
-            })
-            console.log(gameIds)
-            console.log(champions)
-            for(let i = 0; i< gameIds.length; i++){
-                displaySelect("select-input-gameid", gameIds[i]);
-
-            }
-            for(let i = 0; i< champions.length; i++){
-                displaySelect("select-input-champion", champions[i]);
-
-            }
-            displayAllFilter("dropdownGame", gameIds);
-            displayAllFilter("dropdownChamp", champions);
-        }).catch((error) => {
-            console.log(error)
-        })
-
-        const user_url = "/api/users"
-        fetch(user_url)
-        .then((res) => { 
-            if (res.status === 200) {
-               return res.json() 
-           } else {
-                console.log('Could not get matches')
-           }                
-        })
-        .then((json) => { 
-            let users= [];
-            json.users.forEach((user)=>{
-                users.push(user.username)
-            })
-            console.log(users)
-            displayUser(users);
-        }).catch((error) => {
-            console.log(error)
-        })
-        postSection.addEventListener('click', deletePost);
-        loadHeader();
-  }
-
-  var filter_posts = [];
-var filter_users = [];
-var curr_posts =[];
-
-function loadHeader(){
-    const headerName = document.querySelector('.header-name');
-    headerName.innerHTML = currentAdmin.username;
-    const headerImgContainer = document.querySelector('.header-img-container');
-    const imgProfile = document.querySelector('.img-profile');
-    imgProfile.src = "../assets/images/login3.png";
-    const headerAnnounce = document.querySelector('.header-announcement');
-    headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
+        console.log(users)
+        displayUser(users);
+    }).catch((error) => {
+        console.log(error)
+    })
+            
 }
 
 var filter_posts = [];
 var filter_users = [];
 var curr_posts =[];
+
 
 function disablePtr(id){
     var selectionDiv = document.getElementById(id);
@@ -120,18 +92,106 @@ function enablePtr(id){
     }
 }
 
+
+function getFavs(){
+    if(document.getElementById("invisFav") == null){
+        let div = document.createElement("p");
+        div.setAttribute("id", "invisFav");
+        div.style.visibility = "hidden";
+        document.body.appendChild(div);
+    }
+
+    // document.getElementById("invisFav").className="";
+
+    const url = '/api/users/' + currentUser;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+        } else {
+                console.log('Could not get user')
+        }                
+    })
+    .then((json) => { 
+        json.favs.forEach((id) => {
+            const fav_url = '/api/users/' + id;
+            fetch(fav_url)
+            .then((res) => { 
+                if (res.status === 200) {
+                    return res.json() 
+                } else {
+                    console.log('Could not get user')
+                }                
+            })
+            .then((json2) => { 
+                document.getElementById("invisFav").classList.add(json2.username);
+                
+            })
+        })
+    }).catch((error) => {
+        console.log(error)
+    })
+
+    init();
+}
+
+function getPosts(){
+    const url = '/api/posts'
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get posts')
+        }                
+    })
+    .then((json) => { 
+        
+        json.forEach((post)=>{
+
+            if(post.parent_post == "parent"){
+                let post_i = { }
+                post_i.postId = post.postname
+                post_i.gameTag = post.tag_gameName
+                post_i.champTag = post.tag_champion
+                post_i.content = post.content
+                post_i.time = post.post_time
+                post_i.comments = []
+                post_i.id = post._id
+                fetch('./api/users/'+post.username)
+                .then((res) => { 
+                    if (res.status === 200) {
+                        return res.json() 
+                    } else {
+                        console.log('Could not get user')
+                    }                
+                }).then((json2) => { 
+                    post_i.userName = json2.username
+                    post_i.userProfile = json2.icon
+                    posts.push(post_i)
+                });
+
+            }
+            
+        })
+    })
+    getFavs()
+        
+
+}
+
 function showUser(filter){
-    filter_users = [];
+    filter_users= [];
     console.log(filter);
     var p = document.getElementById("posts"); 
 
-    if(filter=="all"){
+     if(filter=="all"){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = 0; i< posts.length; i++){
-            displayPost(posts[i]);
-        }
+        posts.forEach((post) => {
+            displayPost(post);
+        })
         enablePtr("dropdownUser");
         enablePtr("dropdownChamp");
         enablePtr("dropdownGame");
@@ -146,9 +206,8 @@ function showUser(filter){
             } 
         }
     }
-    
     console.log(filter_users);
-    if(filter_users.length == posts.length || p.children.length == posts.length - filter_users.length){
+    if(filter_users.length == posts.length || p.children.length == filter_users.length){
         alert("Selected user has not posted");
         return;
     }
@@ -158,20 +217,24 @@ function showUser(filter){
         console.log(filter_users[i]);
         p.removeChild(p.children[filter_users[i]-i]);
     }
+}
 
+function showFilter(instance){
+    console.log(instance);
+    removePost(instance.toString());
 }
 
 function removePost(filter){
     filter_posts = [];
     var p = document.getElementById("posts"); 
-    
+    // console.log(p)
     if(filter=="all"){
         while (p.firstChild) {
             p.removeChild(p.lastChild);
         }
-        for(let i = 0; i< posts.length; i++){
-            displayPost(posts[i]);
-        }
+        posts.forEach((post) => {
+            displayPost(post);
+        })
         enablePtr("dropdownUser");
         enablePtr("dropdownChamp");
         enablePtr("dropdownGame");
@@ -180,12 +243,12 @@ function removePost(filter){
 
     for(let i = 0; i<p.children.length; i++){
         var curr_child = p.children[i];
-        if (curr_child.children[1].children[1].children[0].id != filter && curr_child.children[1].children[1].children[1].id != filter){
+        if (curr_child.children[1].children[1].children[0].id != filter && 
+            curr_child.children[1].children[1].children[1].id != filter){
             filter_posts.push(i);
         } 
     }
     console.log(filter_posts);
-    
     if(filter_posts.length == posts.length){
         alert("Selected filter is not available");
         return;
@@ -193,83 +256,13 @@ function removePost(filter){
     disablePtr("dropdownChamp");
     disablePtr("dropdownGame");
 
-    for(let i = 0; i<filter_posts.length; i++){
+    for(let i = 0; i<filter_posts.length;i++){
         console.log(filter_posts[i]);
         p.removeChild(p.children[filter_posts[i]-i]);
     }
 }
 
-function deletePost(e){
-    e.preventDefault();
-    // check if return button was clicked, otherwise do nothing.
-    if (e.target.classList.contains('btn-delete')) {
-        const deletePost = e.target.parentElement;
-        const deletePostId = deletePost.children[0].children[0].innerHTML;
-        for(let i = 0; i<posts.length; i++){
-            if (posts[i].postId == deletePostId){
-                console.log('find post');
-                posts.pop(i);
-            }
-        }
-        deletePost.parentElement.remove();
-    }
-}
-
-
-function showFilter(instance){
-    console.log(instance);
-    removePost(instance.toString());
-}
-
-
-//hard coded value for tag game id, champion, and posts
-const gameIds=[1, 2, 3, 4, 5, 6];
-
-const champions=["Champion 1", "Champion 2", "Champion 3"];
-
-const users=["User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9"];
-
-
-const currentAdmin = {
-    username: "BestAdmin",
-    password:'password',
-    profilePic:'../assets/images/tiger1.png'
-}
-
-//the way we expect to get from json
-const post1={
-    postId: 1,
-    time: new Date("2020-9-16 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 1,
-    champTag: "Champion 1",
-    content: "Content"
-}
-
-const post2={
-    postId: 2,
-    time: new Date("2021-9-16 12:00:00"),
-    userName: "User 2",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 3,
-    champTag: "Champion 2",
-    content: "Content"
-}
-
-const post3={
-    postId: 3,
-    time: new Date("2022-1-1 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 4,
-    champTag: "Champion 1",
-    content: "Content"
-}
-
-const posts=[post1, post2, post3];
-
-function displayUser(){
+function displayUser(users){
     var uldiv = document.getElementById("dropdownUser");
     var li = document.createElement("li");
     var link = document.createElement("a");
@@ -277,6 +270,7 @@ function displayUser(){
     li.onclick = function(){showUser("all")};
     li.appendChild(link);
     uldiv.appendChild(li);
+    uldiv = document.getElementById("dropdownUser");
     for(let i = 0; i< users.length; i++){
         displayUserFilter("dropdownUser", users[i]);
     }
@@ -316,13 +310,35 @@ function displayFilter(id, instance){
     uldiv.appendChild(li);
 }
 
-//display timeline post admin edition
+function redirect(link, userName){
+    const url = '/api/userByName/' + userName;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+           return res.json() 
+       } else {
+            console.log('Could not get user')
+       }                
+    })
+    .then((json) => { 
+        const currentUser = "62436866d4cc88a03be4de21" //hard coded current user for now
+
+        if(json._id == currentUser){
+            link.href= "userProfile.html"
+        }else{
+            link.href = "otherProfile.html?id="+json._id;
+        }
+    });
+}
+
+//display timeline post
 function displayPost(post_i){
     var mainDiv = document.createElement("div");
     mainDiv.classList.add("posted-timeline");
+    mainDiv.setAttribute("id", post_i.postId);
     var userDiv = document.createElement("div");
     var link = document.createElement("a");
-    link.href = "#"; //will added after have api
+    redirect(link, post_i.userName);
     var icon = document.createElement("img");
     icon.src = post_i.userProfile;
     link.classList.add("summoner-icon");
@@ -331,24 +347,14 @@ function displayPost(post_i){
     var nameHeading = document.createElement("h6");
     nameHeading.classList.add("summoner-name");
     var nameLink = document.createElement("a");
-    nameLink.href = "#"; //will added after have api
-    nameLink.innerHTML = post_i.userName;
+    redirect(nameLink, post_i.userName);
+    nameLink.innerHTML = "<h4>" + post_i.userName + "</h4>";
     nameHeading.appendChild(nameLink);
     userDiv.appendChild(nameHeading);
     mainDiv.appendChild(userDiv);
 
     var contentDiv = document.createElement("div");
     contentDiv.classList.add("post-content");
-
-    //when introduced database will no longer needed
-    var idDiv = document.createElement("div");
-    idDiv.classList.add("posted-time");
-    idDiv.innerHTML = "Post ID: ";
-    var idSpan = document.createElement("span");
-    idSpan.innerHTML = post_i.postId;
-    idDiv.appendChild(idSpan);
-    contentDiv.appendChild(idDiv);
-
     var timeDiv = document.createElement("div");
     timeDiv.classList.add("posted-time");
     timeDiv.innerHTML = timeDiff(post_i.time);
@@ -365,24 +371,108 @@ function displayPost(post_i){
     tag2.setAttribute("id", post_i.champTag);
     tag2.innerHTML = post_i.champTag;
     tagDiv.appendChild(tag2);
+    var tag3 = document.createElement("div");
+    tag3.classList.add("tag");
+    tag3.innerHTML = post_i.postId;
+    tagDiv.appendChild(tag3);
     contentDiv.appendChild(tagDiv);
     var cp = document.createElement("p");
     cp.classList.add("mb-0");
     cp.textContent = post_i.content;
     contentDiv.appendChild(cp);
-    var deleBtn = document.createElement("button");
-    deleBtn.classList.add("btn");
-    deleBtn.classList.add("btn-delete");
-    deleBtn.textContent = "Delete This Post";
-    contentDiv.appendChild(deleBtn);
+
+    commentButton = document.createElement("button");
+    commentButton.classList.add("btn-action");
+    commentButton.classList.add("banBtn");
+    commentButton.classList.add("delete-post");
+    commentButton.classList.add("px-4");
+    commentButton.classList.add("py-1");
+    // commentButton.onclick = function(){postComment(post_i.postId, "comment-post"+post_i.postId)};
+    commentButton.innerHTML = "Delete";
+    contentDiv.appendChild(commentButton)
+
     mainDiv.appendChild(contentDiv);
 
+    var commentArea = document.createElement("div");
+    commentArea.classList.add("comment-area");
+    var comments = document.createElement("div");
+    comments.classList.add("comments");
+    comments.setAttribute("id", "comments"+post_i.postId);
+    
+    displayComment(comments, post_i);
+
+    commentArea.appendChild(comments);
+    
+    mainDiv.appendChild(commentArea);
     document.getElementById("posts").appendChild(mainDiv);
+    
+}
+
+function displayComment(comments, post_i){
+    const url = '/api/posts'
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+            return res.json() 
+        } else {
+            console.log('Could not get posts')
+        }                
+    })
+    .then((json) => { 
+        json.forEach((comment)=>{
+            if(comment.parent_post == post_i.id){
+                let c = {}
+                fetch('./api/users/'+comment.username)
+                .then((res) => { 
+                    if (res.status === 200) {
+                        return res.json() 
+                    } else {
+                        console.log('Could not get user')
+                    } 
+                }).then((json3) => {
+                    c.username = json3.username
+                    c.content = comment.content
+                    post_i.comments.push(c);
+
+                    var commentDiv = document.createElement("div");
+                    commentDiv.classList.add("comment");
+
+                    var commentCol = document.createElement("div");
+
+                    var nameLink = document.createElement("a");
+                    // nameLink.classList.add("d-inline")
+                    redirect(nameLink, c.username);
+                    var commentUser = document.createElement("h6");
+                    commentUser.innerHTML = c.username;
+                    nameLink.appendChild(commentUser);
+                    commentCol.appendChild(nameLink);
+                    var commentContent = document.createElement("span");
+                    commentContent.innerHTML = comment.content;
+                    commentCol.appendChild(commentContent)
+                    commentDiv.appendChild(commentCol)
+
+                    commentButton = document.createElement("button");
+                    commentButton.classList.add("btn-action");
+                    commentButton.classList.add("banBtn");
+                    commentButton.classList.add("delete-comment");
+                    commentButton.classList.add("px-4");
+                    commentButton.classList.add("py-1");
+                    // commentButton.onclick = function(){postComment(post_i.postId, "comment-post"+post_i.postId)};
+                    commentButton.innerHTML = "Delete";
+                    commentDiv.appendChild(commentButton)
+
+                    comments.appendChild(commentDiv);
+                })
+            }
+        });
+    });
+
 }
 
 function timeDiff(curr_date){
+    var post_date = new Date(curr_date)
     var today = new Date();
-    var diffMs = (curr_date - today); 
+    var diffMs = (today-post_date ); 
     var diffDays = Math.floor(diffMs / 86400000); 
     var diffHrs = Math.floor((diffMs % 86400000) / 3600000);
     var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
@@ -391,9 +481,9 @@ function timeDiff(curr_date){
     } else if(diffDays == 0 && diffHrs == 0){
         return "Posted " + Math.abs(diffMins) + " mins ago";
     } else if (diffDays == 0){
-        return "Posted " + Math.abs(diffHrs) + " hours ago";
+        return "Posted " + Math.abs(diffHrs) + " hours, " + Math.abs(diffMins) + " mins ago";
     }
-    return "Posted " + Math.abs(diffDays) + " days, " + Math.abs(diffHrs) + " hours ago";
+    return "Posted " + Math.abs(diffDays) + " days, " + Math.abs(diffHrs) + " hours, " + Math.abs(diffMins) + " mins ago";
 }
 
 function filterUser(){
@@ -439,4 +529,4 @@ function filterChamp() {
         a[i].style.display = "none";
       }
     }
-  }
+    }

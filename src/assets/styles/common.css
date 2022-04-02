@@ -10,6 +10,7 @@
     --expand-blue: #187BB6;
     --victory-blue: #A3CFEC;
     --sea-green: #8FBC8F;
+    --dark-green:#1a7326;
 }
 
 body.bg-blue {
@@ -121,4 +122,8 @@ body.bg-grey {
     height: 40px;
     border-radius: 50%;
     border: 1px solid var(--txt-grey);
+}
+
+.flex-5{
+    flex-grow: 5;
 }
