@@ -12,19 +12,6 @@ const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const oneDay = 1000 * 60 * 60 * 24;
 
-app.use(sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,
-    cookie: { maxAge: oneDay },
-    resave: false
-}));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-app.use("/", express.static(path.join(__dirname)));
-
 // mongoose and mongo connection
 const { mongoose } = require('../src/db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
@@ -52,81 +39,74 @@ function isMongoError(error) { // checks for first error returned by promise rej
 	return typeof error === 'object' && error !== null && error.name === "MongoNetworkError"
 }
 
-/*** Webpage routes below **********************************/
-/// We only allow specific parts of our public directory to be access, rather than giving
-/// access to the entire directory.
+/*** Session handling **************************************/
+// Create a session and session cookie
+app.use(
+	sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// static js directory
-app.use("/js", express.static(path.join(__dirname, '/assets/js')))
-// route for root
-app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/index.html'))
-})
+app.use("/", express.static(path.join(__dirname)));
+
+// // A route to login and create a session
+// app.post("/users/login", (req, res) => {
+    // const email = req.body.email;
+    // const password = req.body.password;
+
+    // // log(email, password);
+    // // Use the static method on the User model to find a user
+    // // by their email and password
+    // User.findByEmailPassword(email, password)
+    //     .then(user => {
+    //         // Add the user's id to the session.
+    //         // We can check later if this exists to ensure we are logged in.
+    //         req.session.user = user._id;
+    //         req.session.email = user.email; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
+    //         res.send({ currentUser: user.email });
+    //     })
+    //     .catch(error => {
+    //         res.status(400).send()
+    //     });
+// });
 
 app.post('/user',(req,res) => {
-	session=req.session;
-	session.userid=req.body.id;
+	req.session.userid=req.body.id;
 	console.log(req.session)
-	res.send(session);
+	// res.send(session);
+	res.send({currentUser: req.body.id })
 })
 
+// A route to check if a user is logged in on the session
 app.get('/user',(req,res) => {
-	res.send(session);
+	console.log(req.session.userid)
+	if (req.session.userid) {
+		res.send({currentUser: req.session.userid});
+	} else {
+		res.status(401).send();
+	}
 })
 
 app.get('/logout',(req,res) => {
-    req.session.destroy();
-    res.redirect('/');
-});
-
-app.get('/index.html', (req, res) => {
+	// Remove the session
+    req.session.destroy(error => {
+        if (error) {
+            res.status(500).send(error);
+        } else {
+            // res.send()
+			// res.redirect('/');
+			res.sendFile(path.join(__dirname, '/templates/index.html'))
+        }
+    });
+	// res.redirect('/');
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
-})
-
-app.get('/register.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/register.html'))
-})
-
-app.get('/userPost.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userPost.html'))
-})
-
-app.get('/userDashboard.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userDashboard.html'))
-})
-
-app.get('/userProfile.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userProfile.html'))
-})
-
-app.get('/userAnalysis.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userAnalysis.html'))
-})
-
-app.get('/championAnalysis.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/championAnalysis.html'))
-})
-
-app.get('/otherProfile.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
-})
-
-app.get('/adminUserManagement.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminUserManagement.html'))
-})
-
-app.get('/adminPostManagement.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminPostManagement.html'))
-})
-
-app.get('/adminAddGame.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminAddGame.html'))
-})
-
-app.get('/adminManageGame.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminManageGame.html'))
-})
+});
 
 
 /*** GameSquad API Routes below ************************************/
@@ -642,6 +622,101 @@ app.post('/api/reports', async(req, res) => {
 	}
 
 });
+
+
+/*** Webpage routes below **********************************/
+/// We only allow specific parts of our public directory to be access, rather than giving
+/// access to the entire directory.
+
+
+// static js directory
+app.use("/js", express.static(path.join(__dirname, '/assets/js')))
+// route for root
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/index.html'))
+})
+
+app.post('/user',(req,res) => {
+	session=req.session;
+	session.userid=req.body.id;
+	console.log(req.session)
+	res.send(session);
+})
+
+app.get('/user',(req,res) => {
+	res.send(session);
+})
+
+app.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
+
+app.get('/index.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/index.html'))
+})
+
+app.get('/register.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/register.html'))
+})
+
+app.get('/userPost.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/userPost.html'))
+})
+
+app.get('/userDashboard.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/userDashboard.html'))
+})
+
+app.get('/userProfile.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/userProfile.html'))
+})
+
+app.get('/userAnalysis.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/userAnalysis.html'))
+})
+
+app.get('/championAnalysis.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/championAnalysis.html'))
+})
+
+app.get('/otherProfile.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
+})
+
+app.get('/adminUserManagement.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminUserManagement.html'))
+})
+
+app.get('/adminPostManagement.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminPostManagement.html'))
+})
+
+app.get('/adminAddGame.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminAddGame.html'))
+})
+
+app.get('/adminManageGame.html', (req, res) => {
+	res.sendFile(path.join(__dirname, '/templates/adminManageGame.html'))
+})
+
+// All routes other than above will go to index.html
+app.get("*", (req, res) => {
+    // check for page routes that we expect in the frontend to provide correct status code.
+    const goodPageRoutes = ["/", "/login", "/login/",
+		"/adminManageGame", '/adminAddGame', 'adminPostManagement', 
+		'/logout'];
+    if (!goodPageRoutes.includes(req.url)) {
+        // if url not in expected page routes, set status to 404.
+        res.status(404);
+		res.sendFile(path.join(__dirname, '/templates/pageNotFound.html'));
+    } 
+	// send index.html
+	res.sendFile(path.join(__dirname, '/templates/index.html'));
+	
+});
+
+
 /*********************************************************/
 
 

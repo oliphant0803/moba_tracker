@@ -2,16 +2,16 @@ window.onload = getPosts;
 
 let posts = [];
 var currentUser;
-fetch('/user')
-.then((res) => { 
+fetch('/user').then((res) => { 
     if (res.status === 200) {
         return res.json() 
     } else {
         console.log('User is not logged in')
     }                
-})
-.then((json) =>{
-    currentUser = json.userid
+}).then((json) =>{
+    // console.log(json.currentUser)
+    currentUser = json.currentUser
+
 })
 
 async function init(){

@@ -189,7 +189,6 @@ function canLogin(type, user){
             console.log(error)
         })
         window.location.href="userPost.html";
-        
     }
     
 }

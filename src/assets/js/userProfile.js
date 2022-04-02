@@ -265,7 +265,7 @@ function editProfile(){
         //check for user name constraint
         fetch('/api/userByName/'+document.getElementById("usernameInput").value.split(" ").join(""))
         .then((res) => { 
-            if(res.status == 400){
+            if(res.status == 204){
                 return "nouser"
             }else if(res.status == 200){
                 return res.json()
