@@ -29,9 +29,6 @@ const UserSchema  = new mongoose.Schema({
     icon: {
         type: String,
         default: "assets/images/login3.png"
-    },
-    match_history: {
-        type: [String] //match schema ids
     }
 });
 
@@ -162,8 +159,11 @@ const ReportSchema = new mongoose.Schema({
         default: Date.now
     },
     report_cause: {
-        type: String,
+        type: [String],
         required: true
+    },
+    report_addition: {
+        type: String
     }
 });
 

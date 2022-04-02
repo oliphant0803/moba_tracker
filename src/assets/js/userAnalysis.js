@@ -1,11 +1,23 @@
 window.onload = init;
 
 let matchHis=[];
-    function init(){
+var currentUser;
+fetch('/user')
+.then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    } else {
+        console.log('Could not get user')
+    }                
+})
+.then((json) =>{
+    currentUser = json.userid
+})
+    async function init(){
+        await new Promise(r => setTimeout(r, 1000));
         document.getElementById("select-input-n").onchange = function(){updateN(matchHis)}
         document.getElementById("select-input-kda").onchange = function(){updateN(matchHis)}
         function getAllMatches(){
-            const currentUser = "62436866d4cc88a03be4de21"
 
             const url = '/api/matches/player/' + currentUser;
 
@@ -98,7 +110,6 @@ function resetCanvas(idcontainer, id){
 }
 
 function updateN(matchHis){
-    const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/matches/player/' + currentUser;
 

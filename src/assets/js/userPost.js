@@ -1,7 +1,18 @@
 window.onload = getPosts;
 
 let posts = [];
-const currentUser = "62436866d4cc88a03be4de21"
+var currentUser;
+fetch('/user')
+.then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    } else {
+        console.log('Could not get user')
+    }                
+})
+.then((json) =>{
+    currentUser = json.userid
+})
 
 async function init(){
     //get gameids, champions, users, and favs from db
@@ -148,7 +159,8 @@ function getFavs(){
     init();
 }
 
-function getPosts(){
+async function getPosts(){
+    await new Promise(r => setTimeout(r, 1000));
     const url = '/api/posts'
     fetch(url)
     .then((res) => { 
@@ -403,7 +415,6 @@ function redirect(link, userName){
        }                
     })
     .then((json) => { 
-        const currentUser = "62436866d4cc88a03be4de21" //hard coded current user for now
 
         if(json._id == currentUser){
             link.href= "userProfile.html"
