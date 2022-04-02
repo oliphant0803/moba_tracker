@@ -33,14 +33,6 @@
     width: 2rem;
 }
 
-.victory-bg{
-    background-color: var(--victory-blue);
-}
-
-.defeat-bg{
-    background-color: var(--defeat-red);
-}
-
 .kda-container{
     padding-top: 0.5rem;
 }

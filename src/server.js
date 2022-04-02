@@ -450,13 +450,14 @@ app.delete('/api/matches/:name', async (req, res) => {
 	try {
 		//remove match
 		const match = await Match.findOneAndDelete({match_name: name});
-		console.log(match)
+		//console.log(match)
 		if (!match) {
 			res.status(404).send('Resource not found') 
 			return;
 		} 
+		// delete related posts as well
+		const posts = Post.deleteMany({tag_gameName: match.match_name})
 		res.send(match)
-		
 	} catch(error) {
 		log(error) 
 		res.status(500).send('Internal server error')
