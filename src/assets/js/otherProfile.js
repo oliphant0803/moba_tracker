@@ -352,12 +352,45 @@ function displayGameSelect(match){
 
 function reportSend(){
     var reason = document.getElementById("report-reason").value;
-    var detail = '';
+    var detail = document.getElementById("usernameInput").value;
     if(document.getElementById("report-reason").value=="reason2"){
         detail = document.getElementById("report-detail-post").value;
     }
+    else if(document.getElementById("report-reason").value=="reason3"){
+        detail = document.getElementById("report-detail-game").value;
+    }
     console.log(reason + ", " + detail);
-    //send to api in phase 2
+    let data = {
+        reported_username: searchedUser,
+        reporter: currentUser,
+        report_cause: [reason, detail],
+        report_addition: document.getElementById("report-additional").value
+    }
+
+    console.log(data)
+    const request = new Request('/api/reports', {
+        method: 'post', 
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+    });
+
+    fetch(request)
+    .then(function(res) {
+
+        if (res.status === 200) {
+            console.log('Report Successfully')
+            
+        } else {    
+            console.log('Report Failed')
+        
+        }
+        
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
 
