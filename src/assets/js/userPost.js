@@ -7,7 +7,7 @@ fetch('/user')
     if (res.status === 200) {
         return res.json() 
     } else {
-        console.log('Could not get user')
+        console.log('User is not logged in')
     }                
 })
 .then((json) =>{
