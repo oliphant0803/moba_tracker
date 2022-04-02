@@ -16,7 +16,8 @@ const userLibrary = [];
 
 // User class
 class User{
-    constructor(email, username, password, type){
+    constructor(id, email, username, password, type){
+        this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -76,10 +77,10 @@ function loginCheck(e){
                 // Redirect to user profile page
                 // So far changes to a message
                 if (type == "Admin") {
-                    canLogin("admin");
+                    canLogin("admin", user);
                 }
                 else{
-                    canLogin("user");
+                    canLogin("user", user);
                 }
             }
             else{
@@ -131,11 +132,56 @@ function noError(section){
     }
 }
 
-function canLogin(type){
+function canLogin(type, user){
+    console.log(user);
     if (type == "admin") {
+        //add to session
+        const data = {
+            id: user.id
+        };
+    
+        console.log(data);
+    
+        const request = new Request('/user', {
+            method: 'post', 
+            body: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+        });
+        fetch(request)
+        .then(function(res) {
+            console.log(res.json())
+        }).catch((error) => {
+            console.log(error)
+        })
         window.location.href="adminPostManagement.html";
+        
     } else {
+        //add to session
+        const data = {
+            id: user.id
+        };
+    
+        console.log(data);
+    
+        const request = new Request('/user', {
+            method: 'post', 
+            body: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+        });
+        fetch(request)
+        .then(function(res) {
+            console.log(res.json())
+        }).catch((error) => {
+            console.log(error)
+        })
         window.location.href="userPost.html";
+        
     }
     
 }
@@ -171,10 +217,11 @@ function getUsers(){
         }
     }).then((json) => {
         json.users.forEach(element => {
+            const id = element._id;
             const username = element.username;
             const email = element.email;
             const password = element.password;
-            const user = new User(email, username, password, "User");
+            const user = new User(id, email, username, password, "User");
             userLibrary.push(user);
         });
     }).catch((error) => {
@@ -194,10 +241,11 @@ function getAdmins(){
         }
     }).then((json) => {
         json.admins.forEach(element => {
+            const id = element._id;
             const username = element.username;
             const email = element.email;
             const password = element.password;
-            const user = new User(email, username, password, "Admin");
+            const user = new User(id, email, username, password, "Admin");
             userLibrary.push(user);
         });
     }).catch((error) => {

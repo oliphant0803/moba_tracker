@@ -4,8 +4,24 @@ const log = console.log
 const path = require('path')
 
 const express = require('express')
+
 // starting the express server
 const app = express();
+
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use("/", express.static(path.join(__dirname)));
 
@@ -21,6 +37,8 @@ const User = gameSquad.User
 const Match = gameSquad.Match
 const Admin = gameSquad.Admin
 const Report = gameSquad.Report
+
+var session;
 
 // to validate object IDs
 const { ObjectID } = require('mongodb')
@@ -38,12 +56,29 @@ function isMongoError(error) { // checks for first error returned by promise rej
 /// We only allow specific parts of our public directory to be access, rather than giving
 /// access to the entire directory.
 
+
 // static js directory
 app.use("/js", express.static(path.join(__dirname, '/assets/js')))
 // route for root
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
 })
+
+app.post('/user',(req,res) => {
+	session=req.session;
+	session.userid=req.body.id;
+	console.log(req.session)
+	res.send(session);
+})
+
+app.get('/user',(req,res) => {
+	res.send(session);
+})
+
+app.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
 
 app.get('/index.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
