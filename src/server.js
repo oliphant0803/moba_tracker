@@ -322,6 +322,24 @@ app.get('/api/matches', async(req, res) => {
 	}
 });
 
+app.get('/api/matches/:matchname', async(req, res) => {
+	const matchname = req.params.matchname;
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+	Match.findOne( { match_name:matchname }, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+});
+
 //add match post request
 app.post('/api/matches', async(req, res) => {
 

@@ -166,3 +166,18 @@ body {
 .comment h6{
     color: var(--txt-grey);
 }
+
+button .tag{
+    border: none;
+    outline: none;
+}
+
+#gameInfo .modal-dialog {
+    max-width: 60%; 
+}
+
+.modal-body .btn-primary{
+    background-color: var(--light-blue);
+    color: var(--white);
+    margin-left: 1rem;
+}
