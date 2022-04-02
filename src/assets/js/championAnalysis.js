@@ -2,6 +2,8 @@ window.onload=function(){
     getMatches();
     getPosts();
     addChamp();
+    currUser();
+    getFav();
 }
 
 const posts = []
@@ -34,7 +36,8 @@ class GameUser{
     }
 }
 
-const curr_user = new GameUser("62436866d4cc88a03be4de21", ["62436914d4cc88a03be4de24"])
+var currentUserId;
+var curr_user;
 
 function checkUser(){
     const userType = document.querySelector('#user').value;
@@ -96,7 +99,12 @@ function pickRate(champ, type) {
             count++;
         }
     }
-    return Math.round(count/(numMatch*2)*100);
+    if (numMatch == 0) {
+        return 0;
+    }
+    else{
+        return Math.round(count/(numMatch*2)*100);
+    }
 }
 
 function winRate(champ, type) {
@@ -132,7 +140,7 @@ function winRate(champ, type) {
     }
     const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
-        const match = matches[index];
+        const match = lst[index];
         if (match.winLoss== match.userA && match.championA === champ) {
             count++;
         }
@@ -140,7 +148,12 @@ function winRate(champ, type) {
             count++;
         }
     }
-    return Math.round(count/numMatch*100);
+    if (numMatch == 0) {
+        return 0;
+    }
+    else{
+        return Math.round(count/numMatch*100);
+    }
 }
 
 function discussRate(champ, type){
@@ -174,7 +187,13 @@ function discussRate(champ, type){
             count++;
         }
     }
-    return Math.round(count/numPost*100);
+    if (numPost == 0) {
+        return 0;
+    }
+    else{
+        return Math.round(count/numPost*100);
+    }
+    
 }
 
 function averageKDA(champ, type){
@@ -211,7 +230,7 @@ function averageKDA(champ, type){
     }
     const numMatch = lst.length;
     for (let index = 0; index < numMatch; index++) {
-        const match = matches[index];
+        const match = lst[index];
         if (match.championA === champ) {
             count++;
             const kda = match.kdaA
@@ -350,7 +369,7 @@ function getPosts(){
             alert('Could not get users');
         }
     }).then((json) => {
-        json.posts.forEach(element => {
+        json.forEach(element => {
             const id = element.username;
             const champ = element.tag_champion;
             const post = new UserPost(id, champ);
@@ -358,5 +377,36 @@ function getPosts(){
         });
     }).catch((error) => {
         console.log(error)
+    })
+}
+
+function currUser(){
+    fetch('/user').then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    } else {
+        console.log('Could not get user')
+    }                
+}).then((json) =>{
+    currentUserId = json.userid;
+}).catch((error)=>{
+    console.log(error);
+})
+}
+
+async function getFav(){
+    await new Promise(r => setTimeout(r, 1000));
+    const url = '/api/users/' + currentUserId;
+    fetch(url)
+    .then((res) => { 
+        if (res.status === 200) {
+        return res.json() 
+    } else {
+            console.log('Could not get user')
+    }                
+    })
+    .then((json) => {
+        const fav = json.favs;
+        curr_user = new GameUser(currentUserId, fav);
     })
 }
