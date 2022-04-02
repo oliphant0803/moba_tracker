@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
   <link rel="stylesheet" href="../assets/styles/userPost.css"/>
   <link rel="stylesheet" href="../assets/styles/common.css"/>
+  <link rel="stylesheet" href="../assets/styles/userProfile.css"/>
+
 
   <!-- Bootstrap js -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -28,6 +30,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
   </script>
+
 
   <!-- Custom js -->
   <script src="../assets/js/userPost.js">
@@ -59,7 +62,7 @@
               <a class="nav-link" href="userAnalysis.html">My Analysis</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="index.html">Logout</a>
+              <a class="nav-link" href="logout">Logout</a>
             </li>
       </div>
     </nav>
@@ -70,15 +73,19 @@
             <div class="tab-pane active">
                 <div class="editor">
                     <div class="d-flex tag-area">
-                      <select id="select-input-gameid" class="selectpicker" data-live-search="true" >
+                      <select id="select-input-gameid" class="selectpicker" data-live-search="true">
                         <option value="" disabled selected>Tag game id</option>
-        
                       </select>
                     
                       <select id="select-input-champion" class="selectpicker" data-live-search="true">
                         <option value="" disabled selected>Tag champion</option>
                         
                       </select>
+
+                      <input type="text" class="form-control" id="post-name-input">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Post Title</span>
+                      </div>
                       <button type="button" class="btn btn-post btn-clear" onclick="clearSelection()">Clear</button>
                     </div>
                     <textarea id="input-post" class="input-post" placeholder="Post here"></textarea>
@@ -120,6 +127,45 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+  <div class="modal fade" id="gameInfo" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="gameInfoBody">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="champInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body " id="champInfoBody">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
     
 
     <!-- Footer -->

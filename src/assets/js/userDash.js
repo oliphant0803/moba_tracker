@@ -1,12 +1,26 @@
 let fav_searches;
 let recent_searches;
 
+
 window.onload = init;
 
 
-  function init(){
-    //hard coded for now for logged in user
-    const currentUser = "62436866d4cc88a03be4de21"
+var currentUser;
+fetch('/user')
+.then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    } else {
+        console.log('Could not get user')
+    }                
+})
+.then((json) =>{
+    currentUser = json.userid
+})
+
+
+async function init(){
+    await new Promise(r => setTimeout(r, 1000));
 
     const url = '/api/users/' + currentUser;
     fetch(url)
@@ -39,9 +53,6 @@ window.onload = init;
   }
 
 function showFav() {
-
-    //hard coded for now for logged in user
-    const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/users/' + currentUser;
     fetch(url)
@@ -76,9 +87,6 @@ function showFav() {
 }
 
 function showRecent() {
-
-    //hard coded for now for logged in user
-    const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/users/' + currentUser;
     fetch(url)
@@ -124,7 +132,6 @@ function searchOther(){
         }                
         })
         .then((json) => { 
-            const currentUser = "62436866d4cc88a03be4de21" //hard coded current user for now
             
             //append to recent searches of the current user
             fetch('/api/users/' + currentUser)
@@ -200,7 +207,6 @@ function redirect(aDiv, userName){
        }                
     })
     .then((json) => { 
-        const currentUser = "62436866d4cc88a03be4de21" //hard coded current user for now
 
         if(json._id == currentUser){
             aDiv.href= "userProfile.html"

@@ -1,6 +1,6 @@
 #search-section {
     background-color: var(--bg-grey);
-    margin: 10rem 10rem 10rem 10rem;
+    margin: 5rem 10rem 10rem 10rem;
     
 }
 
@@ -15,3 +15,89 @@
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
+
+
+.user-info-container{
+    border-top: 1px solid var(--txt-grey);
+    display:flex;
+    background-color: var(--white);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+
+.user-img-container{
+    float: left;
+    width: 50px;
+    height: 50px;
+    padding-top: 5px;
+}
+
+.username{
+    float: left;
+    width: 70px;
+    height: 50px;
+    margin-left: 5px;
+    padding-top: 10px;
+    text-align: left;
+}
+
+.user-champ-container{
+    border-top: 1px solid var(--txt-grey);
+    display:flex;
+    flex-grow: 1;
+    background-color: var(--white);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    text-align: left;
+}
+
+.img-champ, .img-rune{
+    border-radius: 50%;
+    border: 1px var(--txt-grey) solid;
+}
+
+.img-champ{
+    margin-left: 1rem;
+    width: 3rem;
+}
+
+.img-rune{
+    margin-left: 0.5rem;
+    background-color: var(--bg-grey);
+    width: 2rem;
+}
+
+.img-item{
+    width: 1.8rem;
+}
+
+.img-sumon{
+    border: 1px var(--txt-grey) solid;
+    width: 2rem;
+}
+
+.flex-half{
+    flex-grow: 0.5;
+}
+
+
+.flex-2{
+    flex-grow: 2;
+}
+
+.flex-3{
+    flex-grow: 3;
+}
+
+.user-champ-link-container{
+    max-width: 170px;
+    height: 50px;
+    margin-left: 5px;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: left;
+    color: var(--txt-grey);
+}
+

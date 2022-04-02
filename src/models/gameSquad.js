@@ -29,9 +29,6 @@ const UserSchema  = new mongoose.Schema({
     icon: {
         type: String,
         default: "assets/images/login3.png"
-    },
-    match_history: {
-        type: [String] //match schema ids
     }
 });
 
@@ -122,6 +119,10 @@ const PostSchema  = new mongoose.Schema({
         type: String, //user schema
         required: true
     },
+    postname: {
+        type: String,
+        unique: true
+    },
     post_time: {
         type: Date,
         default: Date.now
@@ -131,7 +132,7 @@ const PostSchema  = new mongoose.Schema({
         required: true
     },
     tag_gameName: {
-        type: String, //match schema id
+        type: String,
         required: true
     },
     content:{
@@ -140,8 +141,7 @@ const PostSchema  = new mongoose.Schema({
     },
     parent_post:{
         type: String,
-        enum : ['Comment', 'Post'],
-        required: 'Post'
+        default: "parent"
     }
 });
 
@@ -159,8 +159,11 @@ const ReportSchema = new mongoose.Schema({
         default: Date.now
     },
     report_cause: {
-        type: String,
+        type: [String],
         required: true
+    },
+    report_addition: {
+        type: String
     }
 });
 

@@ -62,7 +62,7 @@
             <a class="nav-link" href="#">My Analysis</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Logout</a>
+            <a class="nav-link" href="logout">Logout</a>
           </li>
       </div>
     </nav>
@@ -106,6 +106,12 @@
           </div>
             <div class="col-md-6 py-1">
                 <div class="card">
+                    <select id="select-input-kda" class="selectpicker">
+                      <option value="kda" selected>Kill Death Assist Ratio</option>
+                      <option value="kill" >Total Kills</option>
+                      <option value="death" >Total Death</option>
+                      <option value="assist" >Total Assists</option>
+                    </select>
                     <div class="card-body" id="champBarContainer">
                       
                       <canvas id="champBar"></canvas>

@@ -4,8 +4,24 @@ const log = console.log
 const path = require('path')
 
 const express = require('express')
+
 // starting the express server
 const app = express();
+
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use("/", express.static(path.join(__dirname)));
 
@@ -21,6 +37,8 @@ const User = gameSquad.User
 const Match = gameSquad.Match
 const Admin = gameSquad.Admin
 const Report = gameSquad.Report
+
+var session;
 
 // to validate object IDs
 const { ObjectID } = require('mongodb')
@@ -38,12 +56,29 @@ function isMongoError(error) { // checks for first error returned by promise rej
 /// We only allow specific parts of our public directory to be access, rather than giving
 /// access to the entire directory.
 
+
 // static js directory
 app.use("/js", express.static(path.join(__dirname, '/assets/js')))
 // route for root
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
 })
+
+app.post('/user',(req,res) => {
+	session=req.session;
+	session.userid=req.body.id;
+	console.log(req.session)
+	res.send(session);
+})
+
+app.get('/user',(req,res) => {
+	res.send(session);
+})
+
+app.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
 
 app.get('/index.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
@@ -100,7 +135,6 @@ app.get('/adminManageGame.html', (req, res) => {
 //get all users
 app.get('/api/users', async(req, res) => {
 
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -121,7 +155,6 @@ app.get('/api/users', async(req, res) => {
 //add users post request
 app.post('/api/users', async(req, res) => {
 
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -137,8 +170,7 @@ app.post('/api/users', async(req, res) => {
 		bio: req.body.icon,
 		favs: [],
 		recents: [],
-		icon: req.body.icon,
-		match_history: []
+		icon: req.body.icon
 	})
 
 	try {
@@ -158,7 +190,6 @@ app.post('/api/users', async(req, res) => {
 //get all admins
 app.get('/api/admins', async(req, res) => {
 
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -179,8 +210,6 @@ app.get('/api/admins', async(req, res) => {
 
 //add admins post request
 app.post('/api/admins', async(req, res) => {
-
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -290,76 +319,34 @@ app.get('/api/userByName/:username', async (req, res) => {
 	})
 })
 
-//get all post in mongoose
-app.get('/api/posts', async(req, res) => {
+app.get('/api/userFav/:matchId', async (req, res) => {
+	const matchId = req.params.matchId
 
-	log(req.body)
-
-	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
 		return;
-	}  
-
-	try {
-		const posts = await Post.find()
-		res.send({ posts }) 
-	} catch(error) {
-		log(error)
-		res.status(500).send("Internal Server Error")
 	}
 
-});
-
-app.post('/api/posts', async(req, res) => {
-
-	log(req.body)
-
-	// check mongoose connection established.
-	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
-		res.status(500).send('Internal server error')
-		return;
-	}  
-
-	const post = new Post({
-		username: req.body.username,
-		post_time: req.body.post_time,
-		tag_champion: req.body.tag_champion,
-		tag_gameName: req.body.tag_gameName,
-		content: req.body.content,
-		parent_post: req.body.parent_post
-	})
-
-	try {
-		const result = await post.save()	
-		res.send(result)
-	} catch(error) {
-		log(error) 
-		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-			res.status(500).send('Internal server error')
-		} else {
-			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+	User.find({ favs: { $all: [matchId] } }, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
 		}
-	}
-
-});
-
+		else{
+			res.send(obj);
+		}
+	})
+})
 
 /*** match API ************************************/
 //get all matches
 app.get('/api/matches', async(req, res) => {
-
-	log(req.body)
-
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
 		log('Issue with mongoose connection')
 		res.status(500).send('Internal server error')
 		return;
 	}  
-
 	try {
 		const matches = await Match.find()
 		res.send({ matches }) 
@@ -367,13 +354,28 @@ app.get('/api/matches', async(req, res) => {
 		log(error)
 		res.status(500).send("Internal Server Error")
 	}
+});
 
+app.get('/api/matches/:matchname', async(req, res) => {
+	const matchname = req.params.matchname;
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+	Match.findOne( { match_name:matchname }, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
 });
 
 //add match post request
 app.post('/api/matches', async(req, res) => {
-
-	log(req.body)
 
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -435,6 +437,209 @@ app.get('/api/matches/player/:id', (req, res) => {
 	})
 })
 
+//delete specific match by match id
+app.delete('/api/matches/:name', async (req, res) => {
+	const name = req.params.name
+
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} 
+
+	try {
+		//remove match
+		const match = await Match.findOneAndDelete({match_name: name});
+		//console.log(match)
+		if (!match) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		// delete related posts as well
+		const posts = Post.deleteMany({tag_gameName: match.match_name})
+		res.send(match)
+	} catch(error) {
+		log(error) 
+		res.status(500).send('Internal server error')
+	}
+})
+
+
+/*** post API ************************************/
+
+//get all post in mongoose
+app.get('/api/posts', async(req, res) => {
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	await Post.find({}).sort({post_time: -1}).exec((err, obj) => { 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	});
+
+});
+
+//find posts of sepecific name
+app.get('/api/posts/:id', (req, res) => {
+	// Add code here
+	const postName = req.params.id;
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Post.findOne({postname : postName}, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
+
+//find post by id
+app.get('/api/post/:id', (req, res) => {
+	// Add code here
+	const id = req.params.id;
+
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		res.status(404).send();
+		return;
+	}else if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Post.findById(id).then((post) => {
+		if (!post) {
+			res.status(404).send();
+		} else {
+			res.send(post);
+		}
+	}).catch((error) => {
+		res.status(400).send(error);
+	})
+})
+
+
+//find posts of posted by a user or commented
+app.get('/api/posts/user/:id', (req, res) => {
+	// Add code here
+	const user = req.params.id;
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Post.find({username: user}, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
+
+app.post('/api/posts', async(req, res) => {
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	const post = new Post({
+		username: req.body.username,
+		post_time: req.body.post_time,
+		tag_champion: req.body.tag_champion,
+		tag_gameName: req.body.tag_gameName,
+		content: req.body.content,
+		parent_post: req.body.parent_post,
+		postname: req.body.postname
+	})
+
+	try {
+		const result = await post.save()	
+		res.send(result)
+	} catch(error) {
+		log(error) 
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+
+});
+
+/**************Report API********************/
+//get all reports in mongoose
+app.get('/api/reports', async(req, res) => {
+
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	try {
+		const reports = await Report.find()
+		res.send({ reports }) 
+	} catch(error) {
+		log(error)
+		res.status(500).send("Internal Server Error")
+	}
+});
+
+//add reports request
+app.post('/api/reports', async(req, res) => {
+
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	const report = new Report({
+		reported_username: req.body.reported_username,
+		reporter: req.body.reporter,
+		report_time: req.body.report_time,
+		report_cause: req.body.report_cause,
+		report_addition: req.body.report_addition 
+	})
+
+	try {
+		const result = await report.save()	
+		res.send(result)
+	} catch(error) {
+		log(error) 
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+
+});
 /*********************************************************/
 
 

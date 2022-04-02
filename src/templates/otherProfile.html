@@ -59,7 +59,7 @@
             <a class="nav-link" href="userAnalysis.html">My Analysis</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Logout</a>
+            <a class="nav-link" href="logout">Logout</a>
           </li>
       </div>
     </nav>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="change-container">
-                  <button data-toggle="modal" data-target="#report" class="mod-btn">Report</button>
+                  <button data-toggle="modal" data-target="#report" class="btn-report mod-btn">Report</button>
                 </div>
 
             </div>
@@ -127,16 +127,28 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
+
+                
+
                 <label for="report-reason">Select Report Reasons</label>
                 <select class="form-control" id="report-reason" onchange="selectReport()">
                   <option value="reason1">Inappropriate Name</option>
                   <option value="reason2">Offensive Post</option>
+                  <option value="reason3">Bad Performance</option>
                 </select>
 
-                <label id="details" for="report-detail-post">Which Post</label>
+                <label id="details1" for="report-detail-post">Which Post</label>
                 <select class="form-control" id="report-detail-post" onchange="selectPost()">
                     
                 </select>
+
+                <label id="details2" for="report-detail-game">Which Game</label>
+                <select class="form-control" id="report-detail-game" onchange="selectGame()">
+                    
+                </select>
+
+                <label for="report-additional">Additional comments on report</label>
+                <input class="form-control" id="report-additional" placeholder="optional">
               </div>
           </div>
           <div class="modal-footer">

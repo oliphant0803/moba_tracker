@@ -8,22 +8,6 @@ body {
     padding-right: 2rem;
 }
 
-.btn-post{
-    background-color: var(--light-blue);
-    color: var(--white);
-    margin-left: 1rem;
-}
-
-.btn-delete{
-    margin-top: 2rem;
-    background-color: var(--light-blue);
-    color: var(--white);
-    margin-left: 1rem;
-}
-
-.btn-post.btn-clear{
-    background-color: var(--defeat-red);
-}
 
 .editor{
     padding: 1rem;
@@ -53,8 +37,8 @@ body {
 
 .summoner-icon {
     display: inline-block;
-    height: 5rem;
-    width: 5rem;
+    height: 4rem;
+    width: 4rem;
     margin-right: 3rem;
 }
 
@@ -67,13 +51,14 @@ body {
 
 .summoner-name {
     position: absolute;
+
     left: 5rem;
     top: 2rem;
     padding: 1rem 2rem;
 }
 
 .summoner-name a  {
-    color: var(--txt-grey);
+    color: black;
 }
 
 .post-content {
@@ -100,12 +85,13 @@ body {
 }
 
 .filter{
-    background-color: var(--light-blue);
+    border-color: var(--dark-green);
+    background-color: var(--sea-green);
     margin-right: 2rem;
 }
 
 .filter:active, .filter:focus, .filter:hover{
-    background-color: var(--dark-blue);
+    background-color: var(--dark-green);
 }
 
 .dropdown-menu{
@@ -115,7 +101,7 @@ body {
 
 .dropdown-menu a:hover{
     text-decoration: none;
-    color: var(--dark-blue);
+    color: var(--dark-green);
 }
 
 .dropdown-menu a.disable{
@@ -142,16 +128,11 @@ body {
     margin: 2rem 2rem 2rem 5rem;
 }
 
-.comment-area button{
-    min-width: 4rem;
-}
-
 .comment-post{
     height: 5rem;
     border-radius: 15px;
     padding: 1rem;
     border-color: transparent;
-    width: 100%;
 }
 
 .comment{
@@ -161,23 +142,9 @@ body {
     border-radius: 15px;
     padding: 1rem;
     border-color: transparent;
+
 }
 
 .comment h6{
     color: var(--txt-grey);
-}
-
-button .tag{
-    border: none;
-    outline: none;
-}
-
-#gameInfo .modal-dialog {
-    max-width: 60%; 
-}
-
-.modal-body .btn-primary{
-    background-color: var(--light-blue);
-    color: var(--white);
-    margin-left: 1rem;
 }

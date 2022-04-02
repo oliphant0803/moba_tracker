@@ -1,12 +1,23 @@
 window.onload = init;
-    function init(){
-
+var currentUser;
+fetch('/user')
+.then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    } else {
+        console.log('Could not get user')
+    }                
+})
+.then((json) =>{
+    currentUser = json.userid
+})
+    async function init(){
+        await new Promise(r => setTimeout(r, 1000));
         //hard coded current user
         loadCurrentUser()
         // document.getElementById("usernameInput").value = "User 1";
         // document.getElementById("quoteInput").value = "Hi";
         function getAllMatches(){
-            const currentUser = "62436866d4cc88a03be4de21"
 
             const url = '/api/matches/player/' + currentUser;
 
@@ -24,7 +35,7 @@ window.onload = init;
                     if(match.userA == currentUser){
                         let match_i = {   };
                         match_i.gameId = match.match_name;
-                        match_i.champ = match.championA;
+                        match_i.champ = "assets/images/champions/c"+match.championA+".webp";
                         if(match.win == currentUser){
                             match_i.winLoss = "win"
                         }else{
@@ -43,7 +54,7 @@ window.onload = init;
                     }else{
                         let match_i = {   };
                         match_i.gameId = match.match_name;
-                        match_i.champ = match.championB;
+                        match_i.champ = "assets/images/champions/c"+match.championB+".webp";;
                         if(match.win == currentUser){
                             match_i.winLoss = "win"
                         }else{
@@ -78,8 +89,6 @@ window.onload = init;
 
 function loadCurrentUser(){
 
-    //hard coded for now for logged in user
-    const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/users/' + currentUser;
     fetch(url)
@@ -103,13 +112,9 @@ function loadCurrentUser(){
 
 let matchHis = [];
 
-// function getAllMatches(){
-    
-// }
 
 
 function displaySaved(){
-    const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/users/' + currentUser;
     fetch(url)
@@ -139,7 +144,6 @@ function saveAsFav(){
         document.getElementById("star").classList.remove("saved");
         
         //update in db. remove current user as fav list
-        const currentUser = "62436866d4cc88a03be4de21"
 
         const url = '/api/users/' + currentUser;
 
@@ -193,8 +197,7 @@ function saveAsFav(){
         })
     }else{
         document.getElementById("star").classList.add("saved");
-        //update in db. add current user as fav list
-        const currentUser = "62436866d4cc88a03be4de21"
+
 
         const url = '/api/users/' + currentUser;
 
@@ -263,7 +266,6 @@ function editProfile(){
 
 
         //save current changes to db
-        const currentUser = "62436866d4cc88a03be4de21"
 
         const url = '/api/users/' + currentUser;
 
@@ -366,7 +368,6 @@ function confirmChange(){
 
     console.log(icon_path)
     //update to the db
-    const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/users/' + currentUser;
 
@@ -488,16 +489,16 @@ function appendItems(items, wl, id){
     var firstRow = document.createElement("div");
     var rowOne = document.createElement("div");
     rowOne.classList.add("d-flex");
-    rowOne.appendChild(appendItem(items[0]));
-    rowOne.appendChild(appendItem(items[1]));
-    rowOne.appendChild(appendItem(items[2]));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[0]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[1]+".png"));
+    rowOne.appendChild(appendItem("assets/images/items/i"+items[2]+".png"));
     firstRow.appendChild(rowOne);
 
     var rowTwo = document.createElement("div");
     rowTwo.classList.add("d-flex");
-    rowTwo.appendChild(appendItem(items[3]));
-    rowTwo.appendChild(appendItem(items[4]));
-    rowTwo.appendChild(appendItem(items[5]));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[3]+".png"));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[4]+".png"));
+    rowTwo.appendChild(appendItem("assets/images/items/i"+items[5]+".png"));
     firstRow.appendChild(rowTwo);
     itemsCon.appendChild(firstRow);
 
@@ -599,9 +600,13 @@ function appendKDA(kill, death, assists){
     kdaa.classList.add("d-flex");
     kdaa.classList.add("justify-content-center");
     var ratioText = document.createElement("h5");
-    var ratio = ((parseInt(kill) + parseInt(assists))/parseInt(death));
-    ratio = Math.round(ratio * 100) / 100;
-    ratioText.innerHTML = ratio.toString().concat(":1");
+    if(parseInt(death) == 0){
+        ratioText.innerHTML = "Perfect".concat(":1");
+    }else{
+        var ratio = ((parseInt(kill) + parseInt(assists))/parseInt(death));
+        ratio = Math.round(ratio * 100) / 100;
+        ratioText.innerHTML = ratio.toString().concat(":1");
+    }
     var greyText = document.createElement("h5");
     greyText.classList.add("grey-text");
     greyText.innerHTML = "&nbsp KDA";

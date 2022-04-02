@@ -1,10 +1,23 @@
 window.onload = init;
 
 let matchHis=[];
-    function init(){
+var currentUser;
+fetch('/user')
+.then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    } else {
+        console.log('Could not get user')
+    }                
+})
+.then((json) =>{
+    currentUser = json.userid
+})
+    async function init(){
+        await new Promise(r => setTimeout(r, 1000));
         document.getElementById("select-input-n").onchange = function(){updateN(matchHis)}
+        document.getElementById("select-input-kda").onchange = function(){updateN(matchHis)}
         function getAllMatches(){
-            const currentUser = "62436866d4cc88a03be4de21"
 
             const url = '/api/matches/player/' + currentUser;
 
@@ -22,7 +35,7 @@ let matchHis=[];
                     if(match.userA == currentUser){
                         let match_i = {   };
                         match_i.gameId = match.match_name;
-                        match_i.champ = match.championA;
+                        match_i.champ = "champion"+match.championA;
                         if(match.win == currentUser){
                             match_i.winLoss = "win"
                         }else{
@@ -40,7 +53,7 @@ let matchHis=[];
                     }else{
                         let match_i = {   };
                         match_i.gameId = match.match_name;
-                        match_i.champ = match.championB;
+                        match_i.champ = "champion"+match.championB;
                         if(match.win == currentUser){
                             match_i.winLoss = "win"
                         }else{
@@ -97,7 +110,6 @@ function resetCanvas(idcontainer, id){
 }
 
 function updateN(matchHis){
-    const currentUser = "62436866d4cc88a03be4de21"
 
     const url = '/api/matches/player/' + currentUser;
 
@@ -115,7 +127,7 @@ function updateN(matchHis){
             if(match.userA == currentUser){
                 let match_i = {   };
                 match_i.gameId = match.match_name;
-                match_i.champ = match.championA;
+                match_i.champ = "champion"+match.championA;
                 if(match.win == currentUser){
                     match_i.winLoss = "win"
                 }else{
@@ -133,7 +145,7 @@ function updateN(matchHis){
             }else{
                 let match_i = {   };
                 match_i.gameId = match.match_name;
-                match_i.champ = match.championB;
+                match_i.champ = "champion"+match.championB;
                 if(match.win == currentUser){
                     match_i.winLoss = "win"
                 }else{
@@ -157,7 +169,15 @@ function updateN(matchHis){
         resetCanvas("rpieContainer", "runePie");
         resetCanvas("spieContainer", "summonerPie");
         var barColors = randomizeColors(matchHis);
-        var championsBar = computeChampionKDA(matchHis);
+        if(document.getElementById("select-input-kda").value == "death"){
+            var championsBar = computeChampionDeath(matchHis);
+        }else if(document.getElementById("select-input-kda").value == "kill"){
+            var championsBar = computeChampionKills(matchHis);
+        }else if(document.getElementById("select-input-kda").value == "assists"){
+            var championsBar = computeChampionAssits(matchHis);
+        }else{
+            var championsBar = computeChampionKDA(matchHis);
+        }
         //computed values for chart
         console.log(championsBar.championsX);
         console.log(championsBar.championsY);
@@ -178,7 +198,6 @@ function updateN(matchHis){
             }
             }
         });
-        console.log(document.getElementById("select-input-n").value);
         n = document.getElementById("select-input-n").value;
         if(n == "all"){
             n = matchHis.length;
@@ -254,11 +273,62 @@ function randomizeColors(matchHis){
 
 function computeTotalWinrate(matchHis){
     const wins = matchHis.filter(match => match.winLoss == "win");
-    document.getElementById("t-winrate").innerHTML = (wins.length)/(matchHis.length);
+    document.getElementById("t-winrate").innerHTML = Math.round((wins.length)/(matchHis.length)*100)/100;
 }
 
 function computeGamePlayer(matchHis){
     document.getElementById("t-games").innerHTML = matchHis.length;
+}
+
+function computeChampionKills(matchHis){
+    var championsX = [];
+    var championsY = [];
+    for (let i=0; i<matchHis.length; i++){
+        const curr_champ = matchHis[i].champ;
+        if (!championsX.includes(curr_champ)){
+            championsX.push(curr_champ);
+            championsY.push(0);
+
+        }
+        const j = championsX.indexOf(curr_champ);
+        championsY[j] += parseInt(matchHis[i].kill);
+    }
+
+    return {championsX, championsY}
+}
+
+function computeChampionAssits(matchHis){
+    var championsX = [];
+    var championsY = [];
+    for (let i=0; i<matchHis.length; i++){
+        const curr_champ = matchHis[i].champ;
+        if (!championsX.includes(curr_champ)){
+            championsX.push(curr_champ);
+            championsY.push(0);
+
+        }
+        const j = championsX.indexOf(curr_champ);
+        championsY[j] += parseInt(matchHis[i].assists);
+    }
+
+    return {championsX, championsY}
+}
+
+function computeChampionDeath(matchHis){
+    var championsX = [];
+    var championsY = [];
+    for (let i=0; i<matchHis.length; i++){
+        const curr_champ = matchHis[i].champ;
+        if (!championsX.includes(curr_champ)){
+            championsX.push(curr_champ);
+            championsY.push(0);
+
+        }
+        const j = championsX.indexOf(curr_champ);
+        championsY[j] += parseInt(matchHis[i].death);
+    }
+
+    return {championsX, championsY}
 }
 
 function computeAverageKDA(matchHis){

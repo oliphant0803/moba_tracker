@@ -36,7 +36,6 @@
 }
 
 
-
 .user-img-container{
     float: left;
     width: 50px;
@@ -62,14 +61,6 @@
     padding-bottom: 0.5rem;
     text-align: left;
     color: var(--txt-grey);
-}
-
-.flex-2{
-    flex-grow: 2;
-}
-
-.flex-3{
-    flex-grow: 3;
 }
 
 .user-champ-link-container{

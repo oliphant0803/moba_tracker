@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/csc309-winter-2022/team47#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
+    "express-session": "^1.17.2",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.9"
   }
