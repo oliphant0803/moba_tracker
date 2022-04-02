@@ -7,6 +7,14 @@ window.onload=function(){
     // // DOM elements
     const userInfo = document.querySelector('#userInfo');
     // Event Listerners
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    
+    togglePassword.addEventListener('click', function (e) {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+    });
     userInfo.addEventListener('submit', loginCheck);
     getUsers();
     getAdmins();

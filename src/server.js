@@ -170,8 +170,7 @@ app.post('/api/users', async(req, res) => {
 		bio: req.body.icon,
 		favs: [],
 		recents: [],
-		icon: req.body.icon,
-		match_history: []
+		icon: req.body.icon
 	})
 
 	try {
@@ -509,6 +508,53 @@ app.get('/api/posts/:id', (req, res) => {
 	})
 })
 
+//find post by id
+app.get('/api/post/:id', (req, res) => {
+	// Add code here
+	const id = req.params.id;
+
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		res.status(404).send();
+		return;
+	}else if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Post.findById(id).then((post) => {
+		if (!post) {
+			res.status(404).send();
+		} else {
+			res.send(post);
+		}
+	}).catch((error) => {
+		res.status(400).send(error);
+	})
+})
+
+
+//find posts of posted by a user or commented
+app.get('/api/posts/user/:id', (req, res) => {
+	// Add code here
+	const user = req.params.id;
+
+	if (mongoose.connection.readyState != 1) {
+		log('Mongoose connection failed');
+		res.status(500).send('Internal server error');
+		return;
+	}
+
+	Post.find({username: user}, function(err,obj){ 
+		if (err){
+			res.status(404).send(error);
+		}
+		else{
+			res.send(obj);
+		}
+	})
+})
+
 app.post('/api/posts', async(req, res) => {
 	// check mongoose connection established.
 	if (mongoose.connection.readyState != 1) {
@@ -541,6 +587,59 @@ app.post('/api/posts', async(req, res) => {
 
 });
 
+/**************Report API********************/
+//get all reports in mongoose
+app.get('/api/reports', async(req, res) => {
+
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	try {
+		const reports = await Report.find()
+		res.send({ reports }) 
+	} catch(error) {
+		log(error)
+		res.status(500).send("Internal Server Error")
+	}
+});
+
+//add reports request
+app.post('/api/reports', async(req, res) => {
+
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	const report = new Report({
+		reported_username: req.body.reported_username,
+		reporter: req.body.reporter,
+		report_time: req.body.report_time,
+		report_cause: req.body.report_cause,
+		report_addition: req.body.report_addition 
+	})
+
+	try {
+		const result = await report.save()	
+		res.send(result)
+	} catch(error) {
+		log(error) 
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+
+});
 /*********************************************************/
 
 

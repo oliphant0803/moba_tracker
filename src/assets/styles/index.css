@@ -138,3 +138,9 @@ img.img-tiger{
     margin-left: 20%;
     display: flex;
 }
+
+#togglePassword{
+    margin-top: 10px;
+    margin-left: -30px; 
+    cursor: pointer;
+}

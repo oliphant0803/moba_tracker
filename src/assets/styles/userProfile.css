@@ -180,6 +180,10 @@ h5{
     box-shadow: none;
 }
 
-#details, #report-detail-post{
+#details1, #report-detail-post, #details2, #report-detail-game{
     display: none;
+}
+
+.btn-report{
+    background-color: var(--expand-red);
 }
