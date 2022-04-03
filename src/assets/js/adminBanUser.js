@@ -37,9 +37,6 @@ function init(){
 
     resultSection = document.querySelector('#result-container');
     resultSection.addEventListener('click', userReport);
-
-    reportSection = document.querySelector('#report-container');
-    reportSection.addEventListener('click', userManage);
     fetch('api/users').then((res) => {
         if (res.status === 200) {
             return res.json();
@@ -205,29 +202,66 @@ function userReport(e){
         const targetUser = userLibrary.filter(user => user.username === username);
         displayReportSection(targetUser[0])
     }
-}
-
-function userManage(e){
-    e.preventDefault();
     // check if return button was clicked, otherwise do nothing.
     if (e.target.classList.contains('banBtn')) {
         //console.log("Try ban a user")
-        const username = e.target.parentElement.parentElement.children[0].children[1].innerHTML;
-        const targetUser = users.filter(user => user.username === username);
-        for (var i = users.length - 1; i >= 0; i--) {
-            if (users[i].userId === targetUser[0].userId){
-                users.splice(i, 1);
-            }
-        }
-        displaySearchSection();
+        const userId = e.target.parentElement.parentElement.children[0].children[0].innerHTML;
+        deleteUser(userId)
+        // const targetUser = users.filter(user => user.username === username);
+        // for (var i = users.length - 1; i >= 0; i--) {
+        //     if (users[i].userId === targetUser[0].userId){
+        //         users.splice(i, 1);
+        //     }
+        // }
+        // displaySearchSection();
     }
     if (e.target.classList.contains('clearBtn')) {
-        //console.log("Try clear a user's report")
-        const username = e.target.parentElement.parentElement.children[0].children[1].innerHTML;
+        console.log("Try clear a user's report")
+        const userId = e.target.parentElement.parentElement.children[0].children[0].innerHTML;
         const targetUser = users.filter(user => user.username === username);
         reports = reports.filter(reportUser => reportUser.userId !== targetUser[0].userId);
         displayReportSection(targetUser[0]);
     }
+}
+
+function deleteUser(user_id){
+    const url = '/api/users/' + user_id
+    fetch('api/users').then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            else{
+                alert('Could not get users');
+            }
+        }).then((json) => {
+            userLibrary = json.users
+            
+            const request = new Request(url, {
+            method: 'delete', 
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            });
+
+            fetch(request)
+            .then(function(res) {
+                if (res.status === 200) {
+                    currentResult = currentResult.filter((user) => user._id !== user_id)
+                    gameLibrary = gameLibrary.filter((user) => user._id !== user_id)
+                    alert('Deleted successfully!')
+                    updateResult()
+                } else {    
+                    alert('Deleted cannot be completed. Please try again.')
+             
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+
+        }).catch((error) => {
+            console.log(error)
+        })
 }
 
 function displayReportSection(user){
@@ -273,7 +307,7 @@ function displayReportedUser(user){
     ban.classList.add('btn');
     ban.classList.add('banBtn');
     ban.classList.add('btn-action');
-    ban.innerHTML = 'Ban User';
+    ban.innerHTML = 'Delete User';
     banContainer.appendChild(ban);
 
     const clearContainer = document.createElement('div');
