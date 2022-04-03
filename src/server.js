@@ -31,7 +31,8 @@ var session;
 const { ObjectID } = require('mongodb')
 
 // body-parser: middleware for parsing HTTP JSON body into a usable object
-const bodyParser = require('body-parser') 
+const bodyParser = require('body-parser'); 
+const e = require('express');
 app.use(bodyParser.json())
 
 /*** Helper functions below **********************************/
@@ -695,10 +696,10 @@ app.get("*", (req, res) => {
         // if url not in expected page routes, set status to 404.
         res.status(404);
 		res.sendFile(path.join(__dirname, '/templates/pageNotFound.html'));
-    } 
-	// send index.html
-	res.sendFile(path.join(__dirname, '/templates/index.html'));
-	
+    } else {
+		// send index.html
+		res.sendFile(path.join(__dirname, '/templates/index.html'));
+	}
 });
 
 
