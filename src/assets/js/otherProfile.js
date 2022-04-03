@@ -374,10 +374,10 @@ function displayGameSelect(match){
 function reportSend(){
     var reason = document.getElementById("report-reason").value;
     var detail = document.getElementById("usernameInput").value;
-    if(document.getElementById("report-reason").value=="reason2"){
+    if(document.getElementById("report-reason").value=="Offensive Post"){
         detail = document.getElementById("report-detail-post").value;
     }
-    else if(document.getElementById("report-reason").value=="reason3"){
+    else if(document.getElementById("report-reason").value=="Bad Performance"){
         detail = document.getElementById("report-detail-game").value;
     }
     let data = {
