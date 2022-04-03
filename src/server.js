@@ -56,26 +56,6 @@ app.use(cookieParser());
 app.use("/", express.static(path.join(__dirname)));
 
 // // A route to login and create a session
-// app.post("/users/login", (req, res) => {
-    // const email = req.body.email;
-    // const password = req.body.password;
-
-    // // log(email, password);
-    // // Use the static method on the User model to find a user
-    // // by their email and password
-    // User.findByEmailPassword(email, password)
-    //     .then(user => {
-    //         // Add the user's id to the session.
-    //         // We can check later if this exists to ensure we are logged in.
-    //         req.session.user = user._id;
-    //         req.session.email = user.email; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
-    //         res.send({ currentUser: user.email });
-    //     })
-    //     .catch(error => {
-    //         res.status(400).send()
-    //     });
-// });
-
 app.post('/user',(req,res) => {
 	req.session.userid=req.body.id;
 	console.log(req.session)
@@ -90,6 +70,7 @@ app.get('/user',(req,res) => {
 		res.send({currentUser: req.session.userid});
 	} else {
 		res.status(401).send();
+		res.sendFile(path.join(__dirname, '/templates/index.html'))
 	}
 })
 
@@ -636,32 +617,36 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
 })
 
-app.post('/user',(req,res) => {
-	session=req.session;
-	session.userid=req.body.id;
-	console.log(req.session)
-	res.send(session);
-})
+// app.post('/user',(req,res) => {
+// 	session=req.session;
+// 	session.userid=req.body.id;
+// 	console.log(req.session)
+// 	res.send(session);
+// })
 
-app.get('/user',(req,res) => {
-	res.send(session);
-})
+// app.get('/user',(req,res) => {
+// 	res.send(session);
+// })
 
-app.get('/logout',(req,res) => {
-    req.session.destroy();
-    res.redirect('/');
-});
+// app.get('/logout',(req,res) => {
+//     req.session.destroy();
+//     res.redirect('/');
+// });
 
 app.get('/index.html', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/index.html'))
 })
 
-app.get('/register.html', (req, res) => {
+app.get('/register', (req, res) => {
 	res.sendFile(path.join(__dirname, '/templates/register.html'))
 })
 
-app.get('/userPost.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userPost.html'))
+app.get('/userPost', (req, res) => {
+	if (req.session.userid){
+		res.sendFile(path.join(__dirname, '/templates/userPost.html'))
+	} else {
+		res.redirect("/")
+	}
 })
 
 app.get('/userDashboard.html', (req, res) => {

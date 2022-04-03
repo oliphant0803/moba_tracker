@@ -1,18 +1,21 @@
 window.onload = getPosts;
-
 let posts = [];
 var currentUser;
 fetch('/user').then((res) => { 
     if (res.status === 200) {
         return res.json() 
     } else {
-        console.log('User is not logged in')
+        // console.log('User is not logged in')
+        // window.location.href="/login";
     }                
 }).then((json) =>{
     // console.log(json.currentUser)
     currentUser = json.currentUser
 
-})
+}).catch(error => {
+    // console.log(error);
+    // window.location.href="/login";
+});
 
 async function init(){
     //get gameids, champions, users, and favs from db
@@ -87,8 +90,7 @@ async function init(){
         displayUser(users);
     }).catch((error) => {
         console.log(error)
-    })
-            
+    })           
 }
 
 function clearSelection(){
@@ -201,8 +203,6 @@ async function getPosts(){
         })
     })
     getFavs()
-        
-
 }
 
 function showUser(filter){
