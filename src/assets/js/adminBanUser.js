@@ -3,6 +3,7 @@ var currentAdmin;
 userLibrary = []
 gameLibrary = []
 reportLibrary = []
+postLibrary = []
 currentResult = []
 fetch('/admin').then((res) => { 
     if (res.status === 200) {
@@ -67,10 +68,23 @@ function init(){
                     }
                 }).then((json) => {
                     reportLibrary = json.reports
-                    for (var i = userLibrary.length - 1; i >= 0; i--) {
-                        currentResult.push(userLibrary[i])
-                    }
-                    updateResult()
+                    fetch('api/posts').then((res) => {
+                        if (res.status === 200) {
+                            return res.json();
+                        }
+                        else{
+                            alert('Could not get reports');
+                        }
+                    }).then((json) => {
+                        postLibrary = json.posts
+    
+                        for (var i = userLibrary.length - 1; i >= 0; i--) {
+                            currentResult.push(userLibrary[i])
+                        }
+                        updateResult()
+                    }).catch((error) => {
+                        console.log(error)
+                    })
                 }).catch((error) => {
                     console.log(error)
             })
@@ -186,6 +200,7 @@ function userReport(e){
     e.preventDefault();
     // check if return button was clicked, otherwise do nothing.
     if (e.target.classList.contains('viewBtn')) {
+        updateResult()
         const username = e.target.parentElement.parentElement.children[0].children[1].innerHTML;
         const targetUser = userLibrary.filter(user => user.username === username);
         displayReportSection(targetUser[0])
@@ -216,11 +231,15 @@ function userManage(e){
 }
 
 function displayReportSection(user){
-    const userReports = reportLibrary.filter((report) => report.reported_username === user.userId);
-    clearReportSection();
-    displayReportedUser(user);
+    let index = currentResult.findIndex((resultUser)=> resultUser._id === user._id)
+    let resultSection = document.querySelector('#result-container');
+    let reportedUser = displayReportedUser(user);
+    resultSection.children[currentResult.length - index-1].insertAdjacentElement("afterend", reportedUser);
+    // user_i.insertAdjacentElement("afterend", reportedUser);
+    const userReports = reportLibrary.filter((report) => report.reported_username === user._id);
     for(let i = 0; i< userReports.length; i++){
-        displayReport(userReports[i]);
+        let report = displayReport(userReports[i])
+        reportedUser.insertAdjacentElement("afterend", report);
     }
 }
 
@@ -236,21 +255,16 @@ function displayReportedUser(user){
     const infoContainer = document.createElement('div');
     infoContainer.classList.add('col');
     infoContainer.classList.add('user-info-container');
+    infoContainer.classList.add('flex-2');
+    infoContainer.classList.add("align-items-center");
     row.appendChild(infoContainer);
 
-
-    const imgContainer = document.createElement('div');
-    imgContainer.classList.add('user-img-container');
-    const img = document.createElement('img');
-    img.src = user.profilePic;
-    img.classList.add("img-profile");
-    imgContainer.appendChild(img);
-
-    const userLink = document.createElement('a');
+    const userLink = document.createElement('h5');
     userLink.classList.add('username');
-    userLink.classList.add('justify-content-start');
-    userLink.href = "https://github.com/csc309-winter-2022/team47"
-    userLink.innerHTML = user.username;
+    userLink.classList.add('text-dark');
+    userLink.classList.add("mb-0");
+    userLink.classList.add("pt-2.5");
+    userLink.innerHTML = user._id;
 
     const banContainer = document.createElement('div');
     banContainer.classList.add('user-info-container');
@@ -272,13 +286,11 @@ function displayReportedUser(user){
     clear.innerHTML = 'Clear Reports';
     clearContainer.appendChild(clear);
 
-    infoContainer.appendChild(imgContainer);
     infoContainer.appendChild(userLink);
 
     row.appendChild(banContainer);
     row.appendChild(clearContainer);
-
-    reportSection.appendChild(row);
+    return row;
 }
 
 function displayReport(report){
@@ -288,20 +300,20 @@ function displayReport(report){
     const reporter = document.createElement('div');
     reporter.classList.add('col');
     reporter.classList.add('user-info-container');
-    reporter.innerHTML = "Reporter<br>" + report.reporterId;
+    reporter.innerHTML = "Reporter<br>" + userLibrary.filter((user)=> user._id === report.reporter)[0].username;
     row.appendChild(reporter);
 
     const reportTime = document.createElement('div');
     reportTime.classList.add('col');
     reportTime.classList.add('user-info-container');
     reportTime.classList.add('flex-2');
-    reportTime.innerHTML = "Report Time<br>" + report.reportTime.toLocaleString();
+    reportTime.innerHTML = "Report Time<br>" + report.report_time.toLocaleString();
     row.appendChild(reportTime);
 
     const reportCause = document.createElement('div');
     reportCause.classList.add('col');
     reportCause.classList.add('user-info-container');
-    reportCause.innerHTML = "Cause<br>" + report.reportCause;
+    reportCause.innerHTML = "Cause<br>" + report.report_cause[0];
     row.appendChild(reportCause);
 
     const reportPost = document.createElement('div');
@@ -309,12 +321,12 @@ function displayReport(report){
     reportPost.classList.add('user-info-container');
     reportPost.classList.add('flex-3');
     reportPost.classList.add('justify-content-center');
-    if (report.reportCause === "Offensive Post") {
+    if (report.reportCause === "reason2") {
         offensivePost = report.reportPost;
         reportPost.innerHTML = "Post Id: " + offensivePost.postId + "<br>" + offensivePost.content;
     }
     row.appendChild(reportPost);
-    reportSection.appendChild(row);
+    return row;
 }
 
 

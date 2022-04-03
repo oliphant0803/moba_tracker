@@ -27,3 +27,17 @@
     width: 8rem;
     border-radius: 15px;
 }
+
+
+.flex-half{
+    flex-grow: 0.5;
+}
+
+
+.flex-2{
+    flex-grow: 2;
+}
+
+.flex-3{
+    flex-grow: 3;
+}

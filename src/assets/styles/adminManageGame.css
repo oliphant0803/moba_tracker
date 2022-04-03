@@ -77,18 +77,6 @@
     width: 2rem;
 }
 
-.flex-half{
-    flex-grow: 0.5;
-}
-
-
-.flex-2{
-    flex-grow: 2;
-}
-
-.flex-3{
-    flex-grow: 3;
-}
 
 .user-champ-link-container{
     max-width: 170px;
