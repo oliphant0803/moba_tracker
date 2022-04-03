@@ -58,6 +58,7 @@ fetch('/user')
                 json.forEach((match) => {
                     if(match.userA == searchedUser){
                         let match_i = {   };
+                        match_i.id = match._id;
                         match_i.gameId = match.match_name;
                         match_i.champ = "assets/images/champions/c"+match.championA+".webp";
                         if(match.win == searchedUser){
@@ -77,6 +78,7 @@ fetch('/user')
                         matchHis.push(match_i);
                     }else{
                         let match_i = {   };
+                        match_i.id = match._id;
                         match_i.gameId = match.match_name;
                         match_i.champ = "assets/images/champions/c"+match.championB+".webp";
                         if(match.win == searchedUser){
@@ -122,7 +124,7 @@ fetch('/user')
             console.log(json)
             json.forEach((post)=> {
                 if(post.parent_post == "parent"){
-                    displayPost(post.postname, true);
+                    displayPost(post, true);
                 }else{
                     //get the parent post name
                     fetch('/api/post/' + post.parent_post)
@@ -133,7 +135,7 @@ fetch('/user')
                             console.log('Could not get post')
                         }                
                     }).then((json2) => { 
-                        displayPost(json2.postname, false);
+                        displayPost(json2, false);
                     });
                 }
             })
@@ -323,12 +325,12 @@ function saveAsFav(){
 
 
 function selectReport(){
-    if(document.getElementById("report-reason").value=="reason2"){
+    if(document.getElementById("report-reason").value=="Offensive Post"){
         document.getElementById("details2").style.display = "none";
         document.getElementById("report-detail-game").style.display = "none";
         document.getElementById("details1").style.display = "block";
         document.getElementById("report-detail-post").style.display = "block";
-    }else if(document.getElementById("report-reason").value=="reason3"){
+    }else if(document.getElementById("report-reason").value=="Bad Performance"){
         document.getElementById("details1").style.display = "none";
         document.getElementById("report-detail-post").style.display = "none";
         document.getElementById("details2").style.display = "block";
@@ -347,13 +349,13 @@ function displayPost(post, isParent){
     var selectCon = document.getElementById("report-detail-post");
     if(isParent){
         var selectOption = document.createElement("option");
-        selectOption.textContent = "post "+post;
-        selectOption.value = post;
+        selectOption.textContent = "post "+post.postname;
+        selectOption.value = post._id;
         selectCon.add(selectOption);
     }else{
         var selectOption = document.createElement("option");
-        selectOption.textContent = "comment for "+post;
-        selectOption.value = post;
+        selectOption.textContent = "comment for "+post.postname;
+        selectOption.value = post._id;
         selectCon.add(selectOption);
     }
     
@@ -364,7 +366,7 @@ function displayGameSelect(match){
     var selectCon = document.getElementById("report-detail-game");
     var selectOption = document.createElement("option");
     selectOption.textContent = match.gameId;
-    selectOption.value = match.gameId;
+    selectOption.value = match.id;
     selectCon.add(selectOption);
     
 }
@@ -378,7 +380,6 @@ function reportSend(){
     else if(document.getElementById("report-reason").value=="reason3"){
         detail = document.getElementById("report-detail-game").value;
     }
-    console.log(reason + ", " + detail);
     let data = {
         reported_username: searchedUser,
         reporter: currentUser,
