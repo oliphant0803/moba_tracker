@@ -1,7 +1,6 @@
 let fav_searches;
 let recent_searches;
 
-
 window.onload = init;
 
 
@@ -10,13 +9,13 @@ fetch('/user')
 .then((res) => { 
     if (res.status === 200) {
         return res.json() 
-    } else {
-        console.log('Could not get user')
-    }                
+    }             
 })
 .then((json) =>{
-    currentUser = json.userid
-})
+    currentUser = json.currentUser
+}).catch(error => {
+    console.log(error);
+});
 
 
 async function init(){
@@ -148,9 +147,9 @@ function searchOther(){
                 if(recentList.includes(json._id)){
                     console.log(json._id);
                     if(json._id == currentUser){
-                        window.location.href = "userProfile.html";
+                        window.location.href = "my-profile";
                     }else {
-                        window.location.href = "otherProfile.html?id="+json._id;
+                        window.location.href = "other-profile?id="+json._id;
                     }
                     return
                 }
@@ -180,9 +179,9 @@ function searchOther(){
                 fetch(request)
                 .then(function(res) {
                     if(json._id == currentUser){
-                        window.location.replace("userProfile.html");
+                        window.location.replace("my-profile");
                     }else {
-                        window.location.replace("otherProfile.html?id="+json._id);
+                        window.location.replace("other-profile?id="+json._id);
                     }
                 }).catch((error) => {
                     console.log(error)
@@ -209,9 +208,9 @@ function redirect(aDiv, userName){
     .then((json) => { 
 
         if(json._id == currentUser){
-            aDiv.href= "userProfile.html"
+            aDiv.href= "my-profile"
         }else{
-            aDiv.href = "otherProfile.html?id="+json._id;
+            aDiv.href = "other-profile?id="+json._id;
         }
     });
 }

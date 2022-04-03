@@ -4,16 +4,13 @@ var currentUser;
 fetch('/user').then((res) => { 
     if (res.status === 200) {
         return res.json() 
-    } else {
-        // console.log('User is not logged in')
-        // window.location.href="/login";
-    }                
+    }    
 }).then((json) =>{
     // console.log(json.currentUser)
     currentUser = json.currentUser
 
 }).catch(error => {
-    // console.log(error);
+    console.log(error);
     // window.location.href="/login";
 });
 

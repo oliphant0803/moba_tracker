@@ -388,7 +388,7 @@ function currUser(){
         console.log('Could not get user')
     }                
 }).then((json) =>{
-    currentUserId = json.userid;
+    currentUserId = json.currentUser;
 }).catch((error)=>{
     console.log(error);
 })

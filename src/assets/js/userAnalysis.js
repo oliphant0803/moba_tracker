@@ -11,7 +11,7 @@ fetch('/user')
     }                
 })
 .then((json) =>{
-    currentUser = json.userid
+    currentUser = json.currentUser
 })
     async function init(){
         await new Promise(r => setTimeout(r, 1000));

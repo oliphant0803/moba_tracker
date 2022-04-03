@@ -13,7 +13,7 @@ fetch('/user')
     }                
 })
 .then((json) =>{
-    currentUser = json.userid
+    currentUser = json.currentUser
 })
 
     async function init(){

@@ -75,19 +75,34 @@ app.get('/user',(req,res) => {
 	}
 })
 
+// // A route to login as admin and create a session
+app.post('/admin',(req,res) => {
+	req.session.adminid=req.body.id;
+	console.log(req.session)
+	// res.send(session);
+	res.send({currentAdmin: req.body.id })
+})
+
+// A route to check if a admin is logged in on the session
+app.get('/admin',(req,res) => {
+	console.log(req.session.adminid)
+	if (req.session.adminid) {
+		res.send({currentAdmin: req.session.adminid});
+	} else {
+		res.status(401).send();
+		res.sendFile(path.join(__dirname, '/templates/index.html'))
+	}
+})
+
 app.get('/logout',(req,res) => {
 	// Remove the session
     req.session.destroy(error => {
         if (error) {
             res.status(500).send(error);
-        } else {
-            // res.send()
-			// res.redirect('/');
-			res.sendFile(path.join(__dirname, '/templates/index.html'))
         }
-    });
-	// res.redirect('/');
-	res.sendFile(path.join(__dirname, '/templates/index.html'))
+    })
+	log(req.session)
+	res.sendFile(path.join(__dirname, '/templates/index.html' ))
 });
 
 
@@ -615,90 +630,135 @@ app.post('/api/reports', async(req, res) => {
 app.use("/js", express.static(path.join(__dirname, '/assets/js')))
 // route for root
 app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/index.html'))
-})
-
-// app.post('/user',(req,res) => {
-// 	session=req.session;
-// 	session.userid=req.body.id;
-// 	console.log(req.session)
-// 	res.send(session);
-// })
-
-// app.get('/user',(req,res) => {
-// 	res.send(session);
-// })
-
-// app.get('/logout',(req,res) => {
-//     req.session.destroy();
-//     res.redirect('/');
-// });
-
-app.get('/index.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/index.html'))
+	if (req.session.userid){
+		res.redirect("/forum")
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
+	} else {
+		res.sendFile(path.join(__dirname, '/templates/index.html'))
+	}
 })
 
 app.get('/register', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/register.html'))
+	if (req.session.userid){
+		res.redirect("/forum")
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
+	} else {
+		res.sendFile(path.join(__dirname, '/templates/register.html'))
+	}
 })
 
-app.get('/userPost', (req, res) => {
+app.get('/forum', (req, res) => {
 	if (req.session.userid){
 		res.sendFile(path.join(__dirname, '/templates/userPost.html'))
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
 	} else {
 		res.redirect("/")
 	}
 })
 
-app.get('/userDashboard.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userDashboard.html'))
+app.get('/search', (req, res) => {
+	if (req.session.userid){
+		res.sendFile(path.join(__dirname, '/templates/userDashboard.html'))
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/userProfile.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userProfile.html'))
+app.get('/my-profile', (req, res) => {
+	if (req.session.userid){
+		res.sendFile(path.join(__dirname, '/templates/userProfile.html'))
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/userAnalysis.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/userAnalysis.html'))
+app.get('/user-analysis', (req, res) => {
+	if (req.session.userid){
+		res.sendFile(path.join(__dirname, '/templates/userAnalysis.html'))
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/championAnalysis.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/championAnalysis.html'))
+app.get('/champion-analysis', (req, res) => {
+	if (req.session.userid){
+		res.sendFile(path.join(__dirname, '/templates/championAnalysis.html'))
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/otherProfile.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
+app.get('/other-profile?*', (req, res) => {
+	if (req.session.userid){
+		res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
+	} else if (req.session.adminid){
+		res.redirect("/post-management")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/adminUserManagement.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminUserManagement.html'))
+app.get('/user-management', (req, res) => {
+	if (req.session.adminid){
+		res.sendFile(path.join(__dirname, '/templates/adminUserManagement.html'))
+	} else if (req.session.userid){
+		res.redirect("/forum")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/adminPostManagement.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminPostManagement.html'))
+app.get('/post-management', (req, res) => {
+	if (req.session.adminid){
+		res.sendFile(path.join(__dirname, '/templates/adminPostManagement.html'))
+	} else if (req.session.userid){
+		res.redirect("/forum")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/adminAddGame.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminAddGame.html'))
+app.get('/add-game', (req, res) => {
+	if (req.session.adminid){
+		res.sendFile(path.join(__dirname, '/templates/adminAddGame.html'))
+	} else if (req.session.userid){
+		res.redirect("/forum")
+	} else {
+		res.redirect("/")
+	}
 })
 
-app.get('/adminManageGame.html', (req, res) => {
-	res.sendFile(path.join(__dirname, '/templates/adminManageGame.html'))
+app.get('/game-management', (req, res) => {
+	if (req.session.adminid){
+		res.sendFile(path.join(__dirname, '/templates/adminManageGame.html'))
+	} else if (req.session.userid){
+		res.redirect("/forum")
+	} else {
+		res.redirect("/")
+	}
 })
 
-// All routes other than above will go to index.html
+// All routes other than above will go to pageNotFound
 app.get("*", (req, res) => {
-    // check for page routes that we expect in the frontend to provide correct status code.
-    const goodPageRoutes = ["/", "/login", "/login/",
-		"/adminManageGame", '/adminAddGame', 'adminPostManagement', 
-		'/logout'];
+	var goodPageRoutes = ['/', '/index', '/login', '/login/']
     if (!goodPageRoutes.includes(req.url)) {
         // if url not in expected page routes, set status to 404.
         res.status(404);
 		res.sendFile(path.join(__dirname, '/templates/pageNotFound.html'));
     } else {
 		// send index.html
-		res.sendFile(path.join(__dirname, '/templates/index.html'));
+		res.redirect("/")
 	}
 });
 

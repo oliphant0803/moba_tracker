@@ -150,7 +150,7 @@ function canLogin(type, user){
     
         console.log(data);
     
-        const request = new Request('/user', {
+        const request = new Request('/admin', {
             method: 'post', 
             body: JSON.stringify(data),
             headers: {
@@ -164,7 +164,7 @@ function canLogin(type, user){
         }).catch((error) => {
             console.log(error)
         })
-        window.location.href="adminPostManagement.html";
+        window.location.href="post-management";
         
     } else {
         //add to session
@@ -188,7 +188,7 @@ function canLogin(type, user){
         }).catch((error) => {
             console.log(error)
         })
-        window.location.href="userPost.html";
+        window.location.href="forum";
     }
     
 }
