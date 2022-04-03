@@ -78,7 +78,7 @@ app.get('/user',(req,res) => {
 // // A route to login as admin and create a session
 app.post('/admin',(req,res) => {
 	req.session.adminid=req.body.id;
-	console.log(req.session)
+	// console.log(req.session)
 	// res.send(session);
 	res.send({currentAdmin: req.body.id })
 })

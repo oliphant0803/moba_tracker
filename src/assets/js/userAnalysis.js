@@ -12,6 +12,25 @@ fetch('/user')
 })
 .then((json) =>{
     currentUser = json.currentUser
+    fetch('api/users/'+currentUser).then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get admins');
+        }
+    }).then((json) => {
+        let user = json
+        const headerName = document.querySelector('.header-name');
+        headerName.innerHTML = user.username;
+        const headerImgContainer = document.querySelector('.header-img-container');
+        const imgProfile = document.querySelector('.img-profile');
+        imgProfile.src = user.icon;
+        const headerAnnounce = document.querySelector('.header-announcement');
+        headerAnnounce.innerHTML = "Welcome, " + user.username + ". ";
+    }).catch((error) => {
+        console.log(error)
+    })
 })
     async function init(){
         await new Promise(r => setTimeout(r, 1000));
