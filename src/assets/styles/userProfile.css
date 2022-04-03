@@ -1,0 +1,189 @@
+#myProfile{
+    margin-top: 5rem;
+}
+
+.profilePic-container img{
+    width: 12rem;
+    height: 12rem;
+    border-radius: 15px;
+    border: 1px var(--txt-grey) solid;
+    padding: 1rem 1rem 1rem 1rem;
+    background-color: white; 
+}
+
+.fav-btn{
+    margin-top: 1rem;
+    border: 0;
+    background-color: var(--bg-grey);
+    box-shadow: none;
+    outline: none;
+}
+
+.fa-star.saved{
+    color: darkgoldenrod;
+}
+
+.fav-btn:active, .fav-btn:focus, .fav-btn:visited, .fav-btn:hover{
+    border: 0;
+    box-shadow: none;
+    outline: none;
+}
+
+.fa-star{
+    color: var(--txt-grey);
+    font-size: xx-large;
+}
+
+.match-container{
+    margin-right: 10rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-bottom: 1px var(--txt-grey) solid;
+}
+
+.victory-bg{
+    background-color: var(--victory-blue);
+}
+
+.defeat-bg{
+    background-color: var(--defeat-red);
+}
+
+.mod-btn{
+    margin-top: 2rem;
+    width: 5rem;
+    background-color: var(--txt-grey);
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    color:white;
+    height: 2rem;
+}
+
+.mod-btn:active, .mod-btn:focus, .mod-btn:visited, .mod-btn:hover{
+    outline: none;
+}
+
+.input-quote{
+    width: 25rem;
+}
+
+.input-user{
+    width: 15rem;
+}
+
+.input-group-text{
+    background-color: var(--light-blue);
+    color: var(--white);
+}
+
+.img-champ, .img-rune{
+    border-radius: 50%;
+    border: 1px var(--txt-grey) solid;
+}
+
+.img-champ{
+    margin-left: 1rem;
+    width: 6rem;
+}
+
+h5{
+    color: grey;
+}
+
+.img-rune{
+    margin-left: 0.5rem;
+    width: 3rem;
+}
+
+.img-sumon{
+    border-radius: 15px;
+    border: 1px var(--txt-grey) solid;
+    width: 3rem;
+}
+
+.grey-text{
+    color: var(--txt-grey);
+}
+
+.kda-container{
+    width: 50%;
+    margin: auto;
+    align-items:center;
+    justify-content:center;
+}
+
+.img-item{
+    /* width: 10%; */
+    margin: 0.2rem 0.5rem 0.2rem 0.5rem;
+    border-radius: 15px;
+    border: 1px var(--txt-grey) solid;
+}
+
+.vl-container{
+    margin-left: auto;
+    order: 2;
+}
+
+.btn-victory{
+    color:var(--expand-blue);
+    font-size: xx-large;
+    position: relative;
+    box-shadow: none;
+    outline: none;
+}
+
+.btn-loss{
+    color:var(--expand-red);
+    font-size: xx-large;
+    position: relative;
+    box-shadow: none;
+    outline: none;
+}
+
+.fav-btn, .mod-btn{
+    width: 10rem;
+}
+
+.collapse{
+    margin-top: 1rem;
+}
+
+@media (max-width: 1450px) {
+    h5{
+        font-size: small;
+    }
+
+    .btn-victory, .btn-loss{
+        font-size:medium;
+    }
+
+    .match-container{
+        margin-right: 5rem;
+    }
+}
+
+@media (min-width: 1750px) {
+    h5{
+        font-size: xx-large;
+    }
+}
+
+#analysis, .cap-fav{
+    display: none;
+}
+
+.cap-fav, .cap-fav:active, .cap-fav:hover, .cap-fav:visited, .cap-fav:focus{
+    float: right;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+#details1, #report-detail-post, #details2, #report-detail-game{
+    display: none;
+}
+
+.btn-report{
+    background-color: var(--expand-red);
+}

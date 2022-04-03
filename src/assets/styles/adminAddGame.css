@@ -1,0 +1,38 @@
+#add-section {
+    background-color: var(--bg-grey);
+    margin: 5rem 10rem 10rem 10rem;
+}
+
+#display-section {
+    background-color: var(--bg-grey);
+    margin: 2rem 10rem 0rem 10rem;
+}
+
+.img-champ, .img-rune{
+    border-radius: 50%;
+    border: 1px var(--txt-grey) solid;
+}
+
+.img-champ{
+    margin-left: 1rem;
+    width: 4rem;
+}
+
+.img-rune{
+    margin-left: 0.5rem;
+    width: 2rem;
+}
+
+.img-item{
+    width: 2rem;
+}
+
+.img-sumon{
+    border-radius: 15px;
+    border: 1px var(--txt-grey) solid;
+    width: 2rem;
+}
+
+.kda-container{
+    padding-top: 0.5rem;
+}

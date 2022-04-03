@@ -1,0 +1,27 @@
+{
+  "name": "team47",
+  "version": "1.0.0",
+  "description": "309 group project",
+  "main": "..//src//server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src//server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csc309-winter-2022/team47.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csc309-winter-2022/team47/issues"
+  },
+  "homepage": "https://github.com/csc309-winter-2022/team47#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.2.9"
+  }
+}
