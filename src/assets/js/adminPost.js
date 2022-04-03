@@ -1,19 +1,30 @@
 window.onload = getPosts;
 
 let posts = [];
-var currentUser = "1";
 var currentAdmin;
-fetch('/user').then((res) => { 
+fetch('/admin').then((res) => { 
     if (res.status === 200) {
         return res.json() 
     }    
 }).then((json) =>{
-    // console.log(json.currentUser)
     currentAdmin = json.currentAdmin
-
+    fetch('api/admins').then((res) => {
+    if (res.status === 200) {
+        return res.json();
+    }
+    else{
+        alert('Could not get admins');
+    }
+    }).then((json) => {
+        currentAdmin = json.admins.filter((admin) => admin._id === currentAdmin)[0]
+        const headerAnnounce = document.querySelector('.header-announcement');
+        headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
+    }).catch((error) => {
+        console.log(error)
+    })
+    
 }).catch(error => {
     console.log(error);
-    // window.location.href="/login";
 });
 
 async function init(){
@@ -106,48 +117,6 @@ function enablePtr(id){
 }
 
 
-function getFavs(){
-    if(document.getElementById("invisFav") == null){
-        let div = document.createElement("p");
-        div.setAttribute("id", "invisFav");
-        div.style.visibility = "hidden";
-        document.body.appendChild(div);
-    }
-
-    // document.getElementById("invisFav").className="";
-
-    const url = '/api/users/' + currentUser;
-    fetch(url)
-    .then((res) => { 
-        if (res.status === 200) {
-            return res.json() 
-        } else {
-                console.log('Could not get user')
-        }                
-    })
-    .then((json) => { 
-        json.favs.forEach((id) => {
-            const fav_url = '/api/users/' + id;
-            fetch(fav_url)
-            .then((res) => { 
-                if (res.status === 200) {
-                    return res.json() 
-                } else {
-                    console.log('Could not get user')
-                }                
-            })
-            .then((json2) => { 
-                document.getElementById("invisFav").classList.add(json2.username);
-                
-            })
-        })
-    }).catch((error) => {
-        console.log(error)
-    })
-
-    init();
-}
-
 function getPosts(){
     const url = '/api/posts'
     fetch(url)
@@ -188,9 +157,8 @@ function getPosts(){
             
         })
     })
-    getFavs()
         
-
+    init();
 }
 
 function showUser(filter){
@@ -334,13 +302,7 @@ function redirect(link, userName){
        }                
     })
     .then((json) => { 
-        const currentUser = "62436866d4cc88a03be4de21" //hard coded current user for now
-
-        if(json._id == currentUser){
-            link.href= "userProfile.html"
-        }else{
-            link.href = "otherProfile.html?id="+json._id;
-        }
+        link.href = "/admin/user-profile?id="+json._id;
     });
 }
 

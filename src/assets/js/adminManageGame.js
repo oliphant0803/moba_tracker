@@ -17,7 +17,8 @@ fetch('/admin').then((res) => {
         }
     }).then((json) => {
         currentAdmin = json.admins.filter((admin) => admin._id === currentAdmin)[0]
-        loadHeader();
+        const headerAnnounce = document.querySelector('.header-announcement');
+        headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
     }).catch((error) => {
         console.log(error)
     })
@@ -69,16 +70,6 @@ function init(){
 userLibrary = []
 gameLibrary = []
 currentResult = []
-
-function loadHeader(){
-    // const headerName = document.querySelector('.header-name');
-    // headerName.innerHTML = currentAdmin.username;
-    // const headerImgContainer = document.querySelector('.header-img-container');
-    // const imgProfile = document.querySelector('.img-profile');
-    // imgProfile.src = "../assets/images/login3.png";
-    const headerAnnounce = document.querySelector('.header-announcement');
-    headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
-}
 
 function updateResult(){
     for (var i = resultSection.children.length - 1; i >= 0; i--) {

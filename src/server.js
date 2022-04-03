@@ -212,7 +212,6 @@ app.post('/api/admins', async(req, res) => {
 			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
 		}
 	}
-
 });
 
 
@@ -704,6 +703,16 @@ app.get('/other-profile?*', (req, res) => {
 		res.sendFile(path.join(__dirname, '/templates/otherProfile.html'))
 	} else if (req.session.adminid){
 		res.redirect("/post-management")
+	} else {
+		res.redirect("/")
+	}
+})
+
+app.get('/admin/user-profile?*', (req, res) => {
+	if (req.session.adminid){
+		res.sendFile(path.join(__dirname, '/templates/adminUserProfile.html'))
+	} else if (req.session.userid){
+		res.redirect("/forum")
 	} else {
 		res.redirect("/")
 	}

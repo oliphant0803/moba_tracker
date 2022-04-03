@@ -1,4 +1,35 @@
 window.onload = init;
+var currentAdmin;
+userLibrary = []
+gameLibrary = []
+reportLibrary = []
+currentResult = []
+fetch('/admin').then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    }    
+}).then((json) =>{
+    currentAdmin = json.currentAdmin
+    fetch('api/admins').then((res) => {
+    if (res.status === 200) {
+        return res.json();
+    }
+    else{
+        alert('Could not get admins');
+    }
+    }).then((json) => {
+        currentAdmin = json.admins.filter((admin) => admin._id === currentAdmin)[0]
+        const headerAnnounce = document.querySelector('.header-announcement');
+        headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
+    }).catch((error) => {
+        console.log(error)
+    })
+    
+}).catch(error => {
+    console.log(error);
+});
+
+
 function init(){
     const search = document.querySelector('.searchBut');
     search.addEventListener('click', searchAction);
@@ -8,123 +39,71 @@ function init(){
 
     reportSection = document.querySelector('#report-container');
     reportSection.addEventListener('click', userManage);
+    fetch('api/users').then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get users');
+        }
+    }).then((json) => {
+        userLibrary = json.users
 
-    displaySearchSection();
-    loadHeader();
+        fetch('api/matches').then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            else{
+                alert('Could not get games');
+            }
+        }).then((json) => {
+            gameLibrary = json.matches
+            fetch('api/reports').then((res) => {
+                    if (res.status === 200) {
+                        return res.json();
+                    }
+                    else{
+                        alert('Could not get reports');
+                    }
+                }).then((json) => {
+                    reportLibrary = json.reports
+                    for (var i = userLibrary.length - 1; i >= 0; i--) {
+                        currentResult.push(userLibrary[i])
+                    }
+                    updateResult()
+                }).catch((error) => {
+                    console.log(error)
+            })
+
+        }).catch((error) => {
+            console.log(error)
+        })
+
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
-function loadHeader(){
-    const headerName = document.querySelector('.header-name');
-    headerName.innerHTML = currentAdmin.username;
-    const headerImgContainer = document.querySelector('.header-img-container');
-    const imgProfile = document.querySelector('.img-profile');
-    imgProfile.src = "../assets/images/login3.png";
-    const headerAnnounce = document.querySelector('.header-announcement');
-    headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
-}
-
-//hard coded value for tag game id, champion, and posts
-const currentAdmin = {
-    username: "BestAdmin",
-    password:'password',
-    profilePic:'../assets/images/tiger1.png'
-}
-
-//the way we expect to get from json
-const post1={
-    postId: 1,
-    time: new Date("2020-9-16 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 1,
-    champTag: "Champion 1",
-    content: "Bad Things"
-}
-
-const post2={
-    postId: 2,
-    time: new Date("2021-9-16 12:00:00"),
-    userName: "User 2",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 3,
-    champTag: "Champion 2",
-    content: "Content Content Content Content Content Content Content"
-}
-
-const post3={
-    postId: 3,
-    time: new Date("2022-1-1 13:30:58"),
-    userName: "User 1",
-    userProfile: "../assets/images/login3.png",
-    gameTag: 4,
-    champTag: "Champion 1",
-    content: "Bad Things Bad Things Bad Things Bad Things Bad Things "
-}
-
-posts = [post1, post2, post3]
-
-const users = [
-    {
-        username: 'User 1',
-        userId: 1,
-        profilePic:'../assets/images/tiger1.png'
-    },
-    {
-        username: 'User 2',
-        userId: 2,
-        profilePic:'../assets/images/tiger1.png'
-    },
-    {
-        username: 'User 3',
-        userId: 3,
-        profilePic:'../assets/images/tiger1.png'
-    }
-];
-
-var reports = [
-    {
-        reporterId:2,
-        reportTime: new Date("2022-1-5 13:30:58"),
-        userId: 1,
-        reportCause: 'Offensive Post',
-        reportPost: post3
-    },
-    {
-        reporterId:1,
-        reportTime: new Date("2022-1-3 13:30:58"),
-        userId: 2,
-        reportCause: 'Inappropriate Name',
-        reportPost: null
-    },
-    {
-        reporterId:3,
-        reportTime: new Date("2022-1-4 13:30:58"),
-        userId: 1,
-        reportCause: 'Offensive Post',
-        reportPost: post1
-    },
-    {
-        reporterId:3,
-        reportTime: new Date("2022-1-5 13:30:58"),
-        userId: 1,
-        reportCause: 'Offensive Post',
-        reportPost: post3
-    }
-];
-
-function searchAction(e){
-    e.preventDefault();
-    //console.log("search user");
-    const searchUsername = document.querySelector('#search').value;
+function updateResult(){
     for (var i = resultSection.children.length - 1; i >= 0; i--) {
         resultSection.children[i].remove();
     }
-    for (var i = users.length - 1; i >= 0; i--) {
-        if (users[i].username == searchUsername){
-            displayUser(users[i]);
-        }
+    for (var i = currentResult.length - 1; i >= 0; i--) {
+        displayUser(currentResult[i]);
     }
+}
 
+function searchAction(e){
+    e.preventDefault();
+    const value = document.querySelector('#search').value;
+    currentResult = []
+
+    for (var i = userLibrary.length - 1; i >= 0; i--) {
+        if (userLibrary[i].username.includes(value)){
+            currentResult.push(userLibrary[i]);
+        } 
+    }
+    updateResult()
 }
 
 function displayUser(user){
@@ -140,7 +119,7 @@ function displayUser(user){
     const imgContainer = document.createElement('div');
     imgContainer.classList.add('user-img-container');
     const img = document.createElement('img');
-    img.src = user.profilePic;
+    img.src = user.icon;
     img.classList.add("img-profile");
     imgContainer.appendChild(img);
 
@@ -153,7 +132,7 @@ function displayUser(user){
     const report = document.createElement('div');
     report.classList.add('col');
     report.classList.add('user-info-container');
-    const userReports = reports.filter(reportUser => reportUser.userId === user.userId);
+    const userReports = reportLibrary.filter((report) => report.reported_username === user._id);
     report.innerHTML = "Report Time<br>" + findReportTime(userReports);
 
     const cause = document.createElement('div');
@@ -190,11 +169,11 @@ function findMostCause(reports){
         return "None";
     }
     const causes = reports.reduce(function(cause, report){
-        var c = report.reportCause;
-        if (cause[report.reportCause] !== undefined){
-            cause[report.reportCause] = cause[report.reportCause] + 1;
+        var c = report.report_cause[0];
+        if (cause[report.report_cause[0]] !== undefined){
+            cause[report.report_cause[0]] = cause[report.report_cause[0]] + 1;
         } else {
-            cause[report.reportCause] = 0;
+            cause[report.report_cause[0]] = 0;
         }
         return cause;
     }, {});
@@ -208,7 +187,7 @@ function userReport(e){
     // check if return button was clicked, otherwise do nothing.
     if (e.target.classList.contains('viewBtn')) {
         const username = e.target.parentElement.parentElement.children[0].children[1].innerHTML;
-        const targetUser = users.filter(user => user.username === username);
+        const targetUser = userLibrary.filter(user => user.username === username);
         displayReportSection(targetUser[0])
     }
 }
@@ -232,30 +211,12 @@ function userManage(e){
         const username = e.target.parentElement.parentElement.children[0].children[1].innerHTML;
         const targetUser = users.filter(user => user.username === username);
         reports = reports.filter(reportUser => reportUser.userId !== targetUser[0].userId);
-        displaySearchSection();
         displayReportSection(targetUser[0]);
     }
 }
 
-function displaySearchSection(userReports){
-    clearReportSection();
-    for (var i = resultSection.children.length - 1; i >= 0; i--) {
-        resultSection.children[i].remove();
-    }
-    for(let i = 0; i< users.length; i++){
-        displayUser(users[i]);
-    }
-}
-
-function clearReportSection(){
-    for (var i = reportSection.children.length - 1; i >= 0; i--) {
-        reportSection.children[i].remove();
-    }
-
-}
-
 function displayReportSection(user){
-    const userReports = reports.filter(reportUser => reportUser.userId === user.userId);
+    const userReports = reportLibrary.filter((report) => report.reported_username === user.userId);
     clearReportSection();
     displayReportedUser(user);
     for(let i = 0; i< userReports.length; i++){

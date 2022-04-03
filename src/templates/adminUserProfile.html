@@ -1,0 +1,168 @@
+<!-- user dashboard page -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Todo: change title name -->
+  <title>User Profile</title>
+  <link rel="icon" href="../assets/images/login3.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="../assets/styles/userProfile.css"/>
+  <link rel="stylesheet" href="../assets/styles/common.css"/>
+
+  <!-- Bootstrap js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+  </script>
+
+  <!-- Custom js -->
+  <script src="../assets/js/adminUserProfile.js">
+  </script>
+</head>
+
+  <body class="d-flex flex-column min-vh-100 bg-grey">
+    <!--Header bar -->
+    <div class="container-fluid header bg-white">
+      
+      <div class="container header-announcement">
+        <!-- fill in by adminDash.js -->
+      </div>
+    </div>
+    <!--Header bar -->
+    <!--Navbar -->
+    <nav class="navbar navbar-expand-xl">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="../post-management">Posts Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../user-management">Users Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../add-game">Add Games</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../game-management">Games Management</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../logout">Logout</a>
+            </li>
+      </div>
+    </nav>
+    <!--Navbar -->
+
+    <!--body section -->
+    <section id="myProfile">
+        <div class="row">
+          <div class="col-6 col-md-4">
+            <div class="profile-container d-block text-center">
+                <div class="profilePic-container">
+                    <a href="#"><img  id="iconPic" class="img-fluid img-tiger" alt=""></a>
+                </div>
+
+            </div>
+          </div>
+          <div class="col-12 col-md-8">
+              <!-- user info -->
+              <div class="row">
+                  <div class="col-4">
+                    <div class="input-group mb-3 input-user">
+                      <input type="text" class="form-control" id="usernameInput" maxlength="8" readonly>
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Username</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="input-group mb-3 input-quote">
+                      <input type="text" class="form-control" id="quoteInput" maxlength="25" readonly>
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Quote</span>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <!-- user info -->
+
+              <!-- user history -->
+              <div class="user-history" id="history">
+                
+              </div>
+              <!-- user history -->
+          </div>
+        </div>
+        
+    </section>
+    <!--body section -->
+
+    <div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Report</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+
+                
+
+                <label for="report-reason">Select Report Reasons</label>
+                <select class="form-control" id="report-reason" onchange="selectReport()">
+                  <option value="reason1">Inappropriate Name</option>
+                  <option value="reason2">Offensive Post</option>
+                  <option value="reason3">Bad Performance</option>
+                </select>
+
+                <label id="details1" for="report-detail-post">Which Post</label>
+                <select class="form-control" id="report-detail-post">
+                    
+                </select>
+
+                <label id="details2" for="report-detail-game">Which Game</label>
+                <select class="form-control" id="report-detail-game">
+                    
+                </select>
+
+                <label for="report-additional">Additional comments on report</label>
+                <input class="form-control" id="report-additional" placeholder="optional">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="reportSend()" data-dismiss="modal">Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer mt-auto bg-grey">
+      <div class="text-center py-3 footer-text">© 2022 CSC309 Winter:
+        <a href="https://github.com/csc309-winter-2022/team47"> Team 47</a>
+      </div>
+    </footer>
+  <!-- Footer -->
+  </body>
+</html> 

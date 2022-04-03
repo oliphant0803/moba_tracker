@@ -431,9 +431,9 @@ function redirect(link, userName){
     .then((json) => { 
 
         if(json._id == currentUser){
-            link.href= "userProfile.html"
+            link.href= "my-profile"
         }else{
-            link.href = "otherProfile.html?id="+json._id;
+            link.href = "other-profile?id="+json._id;
         }
     });
 }
