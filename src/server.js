@@ -751,7 +751,7 @@ app.get('/game-management', (req, res) => {
 
 // All routes other than above will go to pageNotFound
 app.get("*", (req, res) => {
-	var goodPageRoutes = ['/', '/index', '/login', '/login/']
+	var goodPageRoutes = ['/', '/index', '/login', '/login/', '/index.html']
     if (!goodPageRoutes.includes(req.url)) {
         // if url not in expected page routes, set status to 404.
         res.status(404);

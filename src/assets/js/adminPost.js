@@ -1,7 +1,20 @@
 window.onload = getPosts;
 
 let posts = [];
-const currentUser = "62436866d4cc88a03be4de21"
+var currentUser = "1";
+var currentAdmin;
+fetch('/user').then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    }    
+}).then((json) =>{
+    // console.log(json.currentUser)
+    currentAdmin = json.currentAdmin
+
+}).catch(error => {
+    console.log(error);
+    // window.location.href="/login";
+});
 
 async function init(){
     //get gameids, champions, users, and favs from db

@@ -1,13 +1,38 @@
 window.onload = init;
+var currentAdmin;
+fetch('/admin').then((res) => { 
+    if (res.status === 200) {
+        return res.json() 
+    }    
+}).then((json) =>{
+    // console.log(json.currentUser)
+
+    currentAdmin = json.currentAdmin
+    fetch('api/admins').then((res) => {
+        if (res.status === 200) {
+            return res.json();
+        }
+        else{
+            alert('Could not get admins');
+        }
+    }).then((json) => {
+        currentAdmin = json.admins.filter((admin) => admin._id === currentAdmin)[0]
+        loadHeader();
+    }).catch((error) => {
+        console.log(error)
+    })
+
+}).catch(error => {
+    console.log(error);
+    // window.location.href="/login";
+});
+
 function init(){
     const search = document.querySelector('.searchBut');
     search.addEventListener('click', searchAction);
 
     resultSection = document.querySelector('#result-container');
     resultSection.addEventListener('click', userReport);
-
-    loadHeader();
-
     fetch('api/users').then((res) => {
         if (res.status === 200) {
             return res.json();
@@ -46,21 +71,13 @@ gameLibrary = []
 currentResult = []
 
 function loadHeader(){
-    const headerName = document.querySelector('.header-name');
-    headerName.innerHTML = currentAdmin.username;
-    const headerImgContainer = document.querySelector('.header-img-container');
-    const imgProfile = document.querySelector('.img-profile');
-    imgProfile.src = "../assets/images/login3.png";
+    // const headerName = document.querySelector('.header-name');
+    // headerName.innerHTML = currentAdmin.username;
+    // const headerImgContainer = document.querySelector('.header-img-container');
+    // const imgProfile = document.querySelector('.img-profile');
+    // imgProfile.src = "../assets/images/login3.png";
     const headerAnnounce = document.querySelector('.header-announcement');
     headerAnnounce.innerHTML = "Welcome, " + currentAdmin.username + ". ";
-}
-
-
-//hard coded value for tag game id, champion, and posts
-const currentAdmin = {
-    username: "BestAdmin",
-    password:'password',
-    profilePic:'../assets/images/tiger1.png'
 }
 
 function updateResult(){

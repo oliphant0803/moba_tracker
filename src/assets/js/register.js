@@ -150,7 +150,7 @@ function noError(section){
 }
 
 function backToIndex(){
-    window.location.href="index.html";
+    window.location.href="login";
 }
 
 
