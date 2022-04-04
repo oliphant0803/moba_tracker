@@ -75,7 +75,25 @@ fetch('/user')
                         match_i.death = match.kdaA[1].toString();
                         match_i.assists = match.kdaA[2].toString();
 
-                        matchHis.push(match_i);
+                        let op = {};
+                        op.gameId = match.match_name;
+                        op.champ = "assets/images/champions/c"+match.championB+".webp";
+                        if(match.win == searchedUser){
+                            op.winLoss = "loss"
+                        }else{
+                            op.winLoss = "win"
+                        }
+                        op.r1url = "assets/images/runes/r"+match.runeB[0]+".png"
+                        op.r2url = "assets/images/runes/r"+match.runeB[1]+".png"
+                        op.s1url = "assets/images/summoners/summoner"+match.summonerB[0]+".png"
+                        op.s2url =  "assets/images/summoners/summoner"+match.summonerB[1]+".png"
+                        op.items = match.buildB
+                        op.kill = match.kdaB[0].toString();
+                        op.death = match.kdaB[1].toString();
+                        op.assists = match.kdaB[2].toString();
+
+                        matchHis.push([match_i, op]);
+
                     }else{
                         let match_i = {   };
                         match_i.id = match._id;
@@ -94,7 +112,25 @@ fetch('/user')
                         match_i.kill = match.kdaB[0].toString();
                         match_i.death = match.kdaB[1].toString();
                         match_i.assists = match.kdaB[2].toString();
-                        matchHis.push(match_i);
+                        
+                        let op = {};
+                        op.gameId = match.match_name;
+                        op.champ = "assets/images/champions/c"+match.championB+".webp";
+                        if(match.win == searchedUser){
+                            op.winLoss = "loss"
+                        }else{
+                            op.winLoss = "win"
+                        }
+                        op.r1url = "assets/images/runes/r"+match.runeB[0]+".png"
+                        op.r2url = "assets/images/runes/r"+match.runeB[1]+".png"
+                        op.s1url = "assets/images/summoners/summoner"+match.summonerB[0]+".png"
+                        op.s2url =  "assets/images/summoners/summoner"+match.summonerB[1]+".png"
+                        op.items = match.buildB
+                        op.kill = match.kdaB[0].toString();
+                        op.death = match.kdaB[1].toString();
+                        op.assists = match.kdaB[2].toString();
+
+                        matchHis.push([match_i, op]);
                         
                     }
 
@@ -102,8 +138,8 @@ fetch('/user')
                 console.log(matchHis);
                 matchHis.forEach((match) => {
                     console.log(match);
-                    displayGameSelect(match)
-                    displayOneGame(match);
+                    displayGameSelect(match[0])
+                    displayOneGame(match[0], match[1]);
                 })
             });
 
@@ -428,7 +464,7 @@ function displayCap(id){
     return favBtn;
 }
 
-function displayOneGame(match_i){
+function displayOneGame(match_i, op){
     var  matchContainer = document.createElement("div");
     matchContainer.classList.add("match-container"); 
     if(match_i.winLoss == "win"){
@@ -443,16 +479,16 @@ function displayOneGame(match_i){
     
     rowCol4.appendChild(appendChamp(match_i));
     rowCol4.appendChild(appendKDA(match_i.kill, match_i.death, match_i.assists));
-    rowCol4.appendChild(appendItems(match_i.items, match_i.winLoss, match_i.gameId));
+    rowCol4.appendChild(appendItems(match_i.items, match_i.winLoss, match_i.gameId, true));
     rowCol4.appendChild(displayCap( match_i.gameId));
 
     matchContainer.appendChild(rowCol4);
-    matchContainer.appendChild(appendCollapse(match_i.gameId));
+    matchContainer.appendChild(appendCollapse(match_i.gameId, op));
     // matchContainer.appendChild(displayCap( match_i.gameId));
     document.getElementById("history").appendChild(matchContainer);
 }
 
-function appendCollapse(gid){
+function appendCollapse(gid, op){
     const gameid = "collapseGame".concat(gid);
     var collapseDiv = document.createElement("div");
     collapseDiv.classList.add("collapse");
@@ -462,8 +498,32 @@ function appendCollapse(gid){
     detailCon.classList.add("card");
     detailCon.classList.add("card-body");
     detailCon.innerHTML = "Game Details for ".concat(gid);
+    detailCon.appendChild(detailGame(op));
     collapseDiv.appendChild(detailCon);
     return collapseDiv;
+}
+
+function detailGame(match_i){
+    var  matchContainer = document.createElement("div");
+    matchContainer.classList.add("match-container"); 
+    if(match_i.winLoss == "win"){
+        matchContainer.classList.add("victory-bg");
+    } else if(match_i.winLoss == "loss"){
+        matchContainer.classList.add("defeat-bg");
+    }
+
+    var rowCol4 = document.createElement("div");
+    rowCol4.classList.add("row");
+    rowCol4.classList.add("row-col-4");
+    
+    rowCol4.appendChild(appendChamp(match_i));
+    rowCol4.appendChild(appendKDA(match_i.kill, match_i.death, match_i.assists));
+    rowCol4.appendChild(appendItems(match_i.items, match_i.winLoss, match_i.gameId, false));
+    rowCol4.appendChild(displayCap( match_i.gameId));
+
+    matchContainer.appendChild(rowCol4);
+    return matchContainer;
+    
 }
 
 function appendItem(item){
@@ -474,7 +534,7 @@ function appendItem(item){
     return itemImg;
 }
 
-function appendItems(items, wl, id){
+function appendItems(items, wl, id, isChild){
     var itemsCon = document.createElement("div");
     itemsCon.classList.add("col-6");
     itemsCon.classList.add("d-flex");
@@ -509,7 +569,9 @@ function appendItems(items, wl, id){
     expandBtn.innerHTML = "+";
     expandRow.classList.add("vl-container");
     expandRow.appendChild(expandBtn);
-    itemsCon.appendChild(expandRow);
+    if(isChild){
+        itemsCon.appendChild(expandRow);
+    }
     return itemsCon;
 }
 
