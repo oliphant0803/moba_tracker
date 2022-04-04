@@ -258,10 +258,10 @@ function deleteUser(user_id){
                     currentResult = currentResult.filter((user) => user._id !== user_id)
                     gameLibrary = gameLibrary.filter((user) => user._id !== user_id)
                     alert('Deleted successfully!')
-                    updateResult()
+                    location.reload()
                 } else {    
                     alert('Deleted cannot be completed. Please try again.')
-             
+                    location.reload()
                 }
             }).catch((error) => {
                 console.log(error)
@@ -296,11 +296,11 @@ function deleteReport(user_id){
             fetch(request)
             .then(function(res) {
                 if (res.status === 200) {
-                    alert('Deleted successfully!')
-                    updateResult()
+                    alert('Report cleared successfully!')
+                    location.reload()
                 } else {    
-                    alert('Deleted cannot be completed. Please try again.')
-             
+                    alert('Action cannot be completed. Please try again.')
+                    location.reload()
                 }
             }).catch((error) => {
                 console.log(error)

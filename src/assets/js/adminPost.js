@@ -362,7 +362,7 @@ function displayPost(post_i){
     commentButton.classList.add("delete-post");
     commentButton.classList.add("px-4");
     commentButton.classList.add("py-1");
-    // commentButton.onclick = function(){postComment(post_i.postId, "comment-post"+post_i.postId)};
+    commentButton.onclick = function(){deletePost(post_i.id)};
     commentButton.innerHTML = "Delete";
     contentDiv.appendChild(commentButton)
 
@@ -432,7 +432,7 @@ function displayComment(comments, post_i){
                     commentButton.classList.add("delete-comment");
                     commentButton.classList.add("px-4");
                     commentButton.classList.add("py-1");
-                    // commentButton.onclick = function(){postComment(post_i.postId, "comment-post"+post_i.postId)};
+                    commentButton.onclick = function(){deletePost(comment._id)};
                     commentButton.innerHTML = "Delete";
                     commentDiv.appendChild(commentButton)
 
@@ -505,3 +505,43 @@ function filterChamp() {
       }
     }
     }
+
+function deletePost(postId) {
+    if (window.confirm('Are you sure to delete this post? All comments to this post will be deleted. Press OK to proceed.')) {
+        const url = '/api/posts/' + postId
+        fetch('api/posts').then((res) => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+                else{
+                    alert('Could not get posts');
+                }
+            }).then((json) => {
+                const request = new Request(url, {
+                method: 'delete', 
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                });
+
+                fetch(request)
+                .then(function(res) {
+                    if (res.status === 200) {
+                        alert('Deleted successfully!')
+                        location.reload()
+                    } else {    
+                        alert('Deleted cannot be completed. Please try again.')
+                        location.reload()
+                    }
+                    
+                }).catch((error) => {
+                    console.log(error)
+                })
+
+            }).catch((error) => {
+                console.log(error)
+            })
+        
+    }
+}

@@ -220,10 +220,11 @@ function deleteGame(gameName){
                     currentResult = currentResult.filter((match) => match.match_name !== gameName)
                     gameLibrary = gameLibrary.filter((match) => match.match_name !== gameName)
                     alert('Deleted successfully!')
-                    updateResult()
+                    // updateResult()
+                    location.reload()
                 } else {    
                     alert('Deleted cannot be completed. Please try again.')
-             
+                    location.reload()
                 }
                 
             }).catch((error) => {
