@@ -37,6 +37,10 @@ function init(){
 
     resultSection = document.querySelector('#result-container');
     resultSection.addEventListener('click', userReport);
+    loadData()
+}
+
+function loadData(){
     fetch('api/users').then((res) => {
         if (res.status === 200) {
             return res.json();
@@ -73,8 +77,8 @@ function init(){
                             alert('Could not get reports');
                         }
                     }).then((json) => {
-                        postLibrary = json.posts
-    
+                        postLibrary = json
+                        currentResult = []
                         for (var i = userLibrary.length - 1; i >= 0; i--) {
                             currentResult.push(userLibrary[i])
                         }
@@ -137,7 +141,7 @@ function displayUser(user){
     const userLink = document.createElement('a');
     userLink.classList.add('username');
     userLink.classList.add('justify-content-start');
-    userLink.href = "https://github.com/csc309-winter-2022/team47"
+    userLink.href = "/admin/user-profile?id="+user._id;
     userLink.innerHTML = user.username;
 
     const report = document.createElement('div');
@@ -148,7 +152,8 @@ function displayUser(user){
 
     const cause = document.createElement('div');
     cause.classList.add('col');
-    cause.classList.add('user-champ-container');
+    cause.classList.add('user-info-container');
+    cause.classList.add('text-left');
     cause.innerHTML = "Most Cause<br>" + findMostCause(userReports) + "</div>";
 
     const banContainer = document.createElement('div');
@@ -193,8 +198,10 @@ function findMostCause(reports){
 
 }
 
+
 function userReport(e){
     e.preventDefault();
+
     // check if return button was clicked, otherwise do nothing.
     if (e.target.classList.contains('viewBtn')) {
         updateResult()
@@ -202,26 +209,27 @@ function userReport(e){
         const targetUser = userLibrary.filter(user => user.username === username);
         displayReportSection(targetUser[0])
     }
+    // check if link was clicked, otherwise do nothing.
+    if (e.target.classList.contains('username')) {
+        window.location.href=e.target.href;
+    }
     // check if return button was clicked, otherwise do nothing.
     if (e.target.classList.contains('banBtn')) {
         //console.log("Try ban a user")
         const userId = e.target.parentElement.parentElement.children[0].children[0].innerHTML;
-        deleteUser(userId)
-        // const targetUser = users.filter(user => user.username === username);
-        // for (var i = users.length - 1; i >= 0; i--) {
-        //     if (users[i].userId === targetUser[0].userId){
-        //         users.splice(i, 1);
-        //     }
-        // }
-        // displaySearchSection();
+        if (window.confirm('Are you sure to delete this user? All related posts, reports and games will also be deleted. Press OK to proceed.')) {
+            deleteUser(userId)
+            loadData()
+        }
     }
     if (e.target.classList.contains('clearBtn')) {
-        console.log("Try clear a user's report")
         const userId = e.target.parentElement.parentElement.children[0].children[0].innerHTML;
-        const targetUser = users.filter(user => user.username === username);
-        reports = reports.filter(reportUser => reportUser.userId !== targetUser[0].userId);
-        displayReportSection(targetUser[0]);
+        if (window.confirm('Are you sure to delete all reports of this user? Press OK to proceed.')) {
+            deleteReport(userId)
+            loadData()
+        }
     }
+    
 }
 
 function deleteUser(user_id){
@@ -264,6 +272,45 @@ function deleteUser(user_id){
         })
 }
 
+
+function deleteReport(user_id){
+    const url = '/api/reports/' + user_id
+    fetch('api/users').then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            else{
+                alert('Could not get users');
+            }
+        }).then((json) => {
+            userLibrary = json.users
+            
+            const request = new Request(url, {
+            method: 'delete', 
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            });
+
+            fetch(request)
+            .then(function(res) {
+                if (res.status === 200) {
+                    alert('Deleted successfully!')
+                    updateResult()
+                } else {    
+                    alert('Deleted cannot be completed. Please try again.')
+             
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+
+        }).catch((error) => {
+            console.log(error)
+        })
+}
+
 function displayReportSection(user){
     let index = currentResult.findIndex((resultUser)=> resultUser._id === user._id)
     let resultSection = document.querySelector('#result-container');
@@ -274,12 +321,10 @@ function displayReportSection(user){
     for(let i = 0; i< userReports.length; i++){
         let report = displayReport(userReports[i])
         reportedUser.insertAdjacentElement("afterend", report);
+        if (userReports[i].report_cause[0] !== "Inappropriate Name"){
+            report.insertAdjacentElement("afterend", displayReportDetail(userReports[i]))
+        }
     }
-}
-
-function findUserById(id){
-    const wantUser = users.filter(user => user.userId === id);
-    return wantUser[0];
 }
 
 function displayReportedUser(user){
@@ -330,37 +375,62 @@ function displayReportedUser(user){
 function displayReport(report){
     const row = document.createElement('div');
     row.classList.add('row');
+    row.classList.add('text-dark');
 
     const reporter = document.createElement('div');
     reporter.classList.add('col');
-    reporter.classList.add('user-info-container');
-    reporter.innerHTML = "Reporter<br>" + userLibrary.filter((user)=> user._id === report.reporter)[0].username;
+    reporter.classList.add('user-report-title-container');
+    reporter.innerHTML = "Reporter<br>"
+         + userLibrary.filter((user)=> user._id === report.reporter)[0].username;
     row.appendChild(reporter);
 
     const reportTime = document.createElement('div');
     reportTime.classList.add('col');
-    reportTime.classList.add('user-info-container');
+    reportTime.classList.add('user-report-title-container');
     reportTime.classList.add('flex-2');
-    reportTime.innerHTML = "Report Time<br>" + report.report_time.toLocaleString();
+    reportTime.innerHTML = "Report Time<br>" + (new Date(report.report_time)).toLocaleString();
     row.appendChild(reportTime);
 
     const reportCause = document.createElement('div');
     reportCause.classList.add('col');
-    reportCause.classList.add('user-info-container');
+    reportCause.classList.add('user-report-title-container');
     reportCause.innerHTML = "Cause<br>" + report.report_cause[0];
     row.appendChild(reportCause);
 
-    const reportPost = document.createElement('div');
-    reportPost.classList.add('col');
-    reportPost.classList.add('user-info-container');
-    reportPost.classList.add('flex-3');
-    reportPost.classList.add('justify-content-center');
-    if (report.reportCause === "reason2") {
-        offensivePost = report.reportPost;
-        reportPost.innerHTML = "Post Id: " + offensivePost.postId + "<br>" + offensivePost.content;
+    const reportAdd = document.createElement('div');
+    reportAdd.classList.add('col');
+    reportAdd.classList.add('flex-3');
+    reportAdd.classList.add('user-report-title-container');
+    reportAdd.classList.add('justify-content-center');
+    if (report.report_addition === ""){
+        reportAdd.innerHTML = "Explanation<br>None"
+    } else {
+        reportAdd.innerHTML = "Explanation<br>" + report.report_addition;
     }
-    row.appendChild(reportPost);
+    row.appendChild(reportAdd);
+    
     return row;
+}
+
+function displayReportDetail(report){
+    const reportPost = document.createElement('div');
+    if (report.report_cause[0] === "Offensive Post") {
+        console.log(postLibrary)
+        const post = postLibrary.filter((post)=> post._id === report.report_cause[1])[0];
+        reportPost.classList.add('row');
+        reportPost.classList.add('flex-3');
+        reportPost.classList.add('user-report-content-container');
+        reportPost.classList.add('justify-content-center');
+        reportPost.innerHTML = "Post Title: " + post.postname + "<br>" + post.content;
+    } else if (report.report_cause[0] === "Bad Performance"){
+        const game = gameLibrary.filter((game)=> game._id === report.report_cause[1])[0];
+        reportPost.classList.add('row');
+        reportPost.classList.add('flex-3');
+        reportPost.classList.add('user-report-content-container');
+        reportPost.classList.add('justify-content-center');
+        reportPost.innerHTML = "Game Title: " + game.match_name + "<br> Game ID: " + game._id;
+    }
+    return reportPost;
 }
 
 

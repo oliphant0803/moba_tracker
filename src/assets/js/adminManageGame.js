@@ -84,7 +84,6 @@ function searchAction(e){
     e.preventDefault();
     const value = document.querySelector('#search').value;
     currentResult = []
-
     for (var i = gameLibrary.length - 1; i >= 0; i--) {
         if (gameLibrary[i]._id === value){
             currentResult.push(gameLibrary[i]);
