@@ -84,7 +84,6 @@ function searchAction(e){
     e.preventDefault();
     const value = document.querySelector('#search').value;
     currentResult = []
-
     for (var i = gameLibrary.length - 1; i >= 0; i--) {
         if (gameLibrary[i]._id === value){
             currentResult.push(gameLibrary[i]);
@@ -221,10 +220,11 @@ function deleteGame(gameName){
                     currentResult = currentResult.filter((match) => match.match_name !== gameName)
                     gameLibrary = gameLibrary.filter((match) => match.match_name !== gameName)
                     alert('Deleted successfully!')
-                    updateResult()
+                    // updateResult()
+                    location.reload()
                 } else {    
                     alert('Deleted cannot be completed. Please try again.')
-             
+                    location.reload()
                 }
                 
             }).catch((error) => {

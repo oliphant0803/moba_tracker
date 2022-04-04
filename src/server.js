@@ -316,6 +316,67 @@ app.get('/api/userFav/:matchId', async (req, res) => {
 	})
 })
 
+//delete specific user by user id
+app.delete('/api/users/:id', async (req, res) => {
+	const id = req.params.id
+
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} 
+
+	try {
+		//remove user
+		let user = await User.findOneAndDelete({_id: id});
+		// const user = await User.find({_id: id});
+		//console.log(user)
+		if (!user) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		// delete related reports as well
+		let report = await Report.deleteMany({reported_username: id})
+		if (!report) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		report = await Report.deleteMany({reporter: id})
+		if (!report) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		// delete related posts as well
+		const deletedPosts = await Post.find({username: id})
+		const posts = await Post.deleteMany({username: id})
+		if (!posts) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		// console.log(deletedPosts)
+		const deletedPostsId = deletedPosts.filter(
+			(post)=>post.parent_post==="parent"
+			).map((post)=>post._id)
+		const comments = await Post.deleteMany({parent_post: { $all: deletedPostsId }})
+
+		// delete related favourites as well
+		const users = await User.find()
+		if (!users) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		users.forEach(element => {
+			element.favs = element.favs.filter((fav) => fav !== id)
+			element.recents = element.recents.filter((recent) => recent !== id)
+			element.save()
+		});
+		res.send(user)
+	} catch(error) {
+		log(error) 
+		res.status(500).send('Internal server error')
+	}
+})
+
 /*** match API ************************************/
 //get all matches
 app.get('/api/matches', async(req, res) => {
@@ -565,6 +626,38 @@ app.post('/api/posts', async(req, res) => {
 
 });
 
+
+//delete specific post by post id
+app.delete('/api/posts/:id', async (req, res) => {
+	const id = req.params.id
+
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} 
+
+	try {
+		//remove post
+		const post = await Post.findOneAndDelete({_id: id});
+		if (!post) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		
+		// delete related comments as well
+		const comments = await Post.deleteMany({parent_post: id})
+		if (!comments) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		res.send(post)
+	} catch(error) {
+		log(error) 
+		res.status(500).send('Internal server error')
+	}
+})
+
 /**************Report API********************/
 //get all reports in mongoose
 app.get('/api/reports', async(req, res) => {
@@ -618,6 +711,30 @@ app.post('/api/reports', async(req, res) => {
 	}
 
 });
+
+
+//delete specific reports by user id
+app.delete('/api/reports/:id', async (req, res) => {
+	const id = req.params.id
+
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} 
+
+	try {
+		const report = await Report.deleteMany({reported_username: id})
+		if (!report) {
+			res.status(404).send('Resource not found') 
+			return;
+		} 
+		res.send()
+	} catch(error) {
+		log(error) 
+		res.status(500).send('Internal server error')
+	}
+})
 
 
 /*** Webpage routes below **********************************/

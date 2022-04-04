@@ -1,17 +1,6 @@
-#menu-container {
-    padding-left: 15px;
-}
-
 #search-section {
     background-color: var(--bg-grey);
     margin: 10rem 10rem 0rem 10rem;
-    height: 30rem;
-}
-
-#report-section {
-    background-color: var(--bg-grey);
-    margin: 0rem 10rem 0rem 10rem;
-    height: 30rem;
 }
 
 .search-container {
@@ -32,9 +21,8 @@
     background-color: var(--white);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-    color: var(--txt-grey);
+    color:black;
 }
-
 
 .user-img-container{
     float: left;
@@ -43,6 +31,24 @@
     padding-top: 5px;
 }
 
+.user-report-title-container{
+    border-top: 1px solid var(--txt-grey);
+    display:flex;
+    background-color: var(--report-title-blue);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color:black;
+}
+.user-report-content-container{
+    border-top: 1px solid var(--txt-grey);
+    display:flex;
+    background-color: var(--report-content-blue);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color:black;
+}
+
+
 .username{
     float: left;
     width: 70px;
@@ -50,41 +56,4 @@
     margin-left: 5px;
     padding-top: 10px;
     text-align: left;
-}
-
-.user-champ-container{
-    border-top: 1px solid var(--txt-grey);
-    display:flex;
-    flex-grow: 1;
-    background-color: var(--white);
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    text-align: left;
-    color: var(--txt-grey);
-}
-
-.user-champ-link-container{
-    max-width: 170px;
-    height: 50px;
-    margin-left: 5px;
-    padding-top: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-    text-align: left;
-    color: var(--txt-grey);
-}
-
-.btn-action{
-    background-color: var(--light-blue);
-    color: var(--white);
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    width: 8rem;
-    border-radius: 15px;
-}
-
-.btn-action:hover, .btn-action:focus{
-    background-color: var(--dark-blue);
-    color: var(--bg-grey);
-    box-shadow: none;
 }
