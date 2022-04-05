@@ -297,25 +297,6 @@ app.get('/api/userByName/:username', async (req, res) => {
 	})
 })
 
-app.get('/api/userFav/:matchId', async (req, res) => {
-	const matchId = req.params.matchId
-
-	if (mongoose.connection.readyState != 1) {
-		log('Mongoose connection failed');
-		res.status(500).send('Internal server error');
-		return;
-	}
-
-	User.find({ favs: { $all: [matchId] } }, function(err,obj){ 
-		if (err){
-			res.status(404).send(error);
-		}
-		else{
-			res.send(obj);
-		}
-	})
-})
-
 //delete specific user by user id
 app.delete('/api/users/:id', async (req, res) => {
 	const id = req.params.id
