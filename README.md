@@ -564,13 +564,26 @@ Expected request format:
         * search button to search for a specific user
     * "View details" for each user display their report history at the bottom
     * "Clear reports" button cleans the user's match history
-    * "Ban user" button will remove the user from the app system
+    * "Delete user" button will remove the user from the app system
+
+* Add Games:
+    * Add 2 users that played a game, includes their champions, runes, summoners, items and performance in the game.
+      * Use "Submit" to upload the new game
+    * Will update the new game in the database
 
 * Game Management:
-    * Add users from two teams, their runes, summoners, items and performance in the game.
-      * Use "Submit" to upload the new game
-    * Will update the new game in the game list below
-    * Can search for specific games below using game id
+    * Show all games in the database.
+      * Use "Check details" to see the complete game history
+      * Use "Delete" to delete a game from the database
+    * Can search for specific games using game id or key words for game name
+
+* User Profile
+    * Displays a user's match history by that player's id shown in URL
+
+### Other views:
+
+* 404 Not found:
+    * When user/admin tries to access a page that doesn't exist, a page showed up displaying "404 Not Found".
 
 ## Third-party libraries/frameworks:
 
