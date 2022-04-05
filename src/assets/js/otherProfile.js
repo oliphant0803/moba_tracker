@@ -115,20 +115,20 @@ fetch('/user')
                         
                         let op = {};
                         op.gameId = match.match_name;
-                        op.champ = "assets/images/champions/c"+match.championB+".webp";
+                        op.champ = "assets/images/champions/c"+match.championA+".webp";
                         if(match.win == searchedUser){
                             op.winLoss = "loss"
                         }else{
                             op.winLoss = "win"
                         }
-                        op.r1url = "assets/images/runes/r"+match.runeB[0]+".png"
-                        op.r2url = "assets/images/runes/r"+match.runeB[1]+".png"
-                        op.s1url = "assets/images/summoners/summoner"+match.summonerB[0]+".png"
-                        op.s2url =  "assets/images/summoners/summoner"+match.summonerB[1]+".png"
-                        op.items = match.buildB
-                        op.kill = match.kdaB[0].toString();
-                        op.death = match.kdaB[1].toString();
-                        op.assists = match.kdaB[2].toString();
+                        op.r1url = "assets/images/runes/r"+match.runeA[0]+".png"
+                        op.r2url = "assets/images/runes/r"+match.runeA[1]+".png"
+                        op.s1url = "assets/images/summoners/summoner"+match.summonerA[0]+".png"
+                        op.s2url =  "assets/images/summoners/summoner"+match.summonerA[1]+".png"
+                        op.items = match.buildA
+                        op.kill = match.kdaA[0].toString();
+                        op.death = match.kdaA[1].toString();
+                        op.assists = match.kdaA[2].toString();
 
                         matchHis.push([match_i, op]);
                         

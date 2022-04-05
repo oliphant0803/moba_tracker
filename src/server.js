@@ -144,7 +144,7 @@ app.post('/api/users', async(req, res) => {
 		username: req.body.username,
 		email: req.body.email,
 		password: req.body.password,
-		bio: req.body.icon,
+		bio: req.body.bio,
 		favs: [],
 		recents: [],
 		icon: req.body.icon
