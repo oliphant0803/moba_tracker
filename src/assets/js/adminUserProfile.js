@@ -198,23 +198,7 @@ function displayOneGame(match_i){
     rowCol4.appendChild(displayCap( match_i.gameId));
 
     matchContainer.appendChild(rowCol4);
-    matchContainer.appendChild(appendCollapse(match_i.gameId));
-    // matchContainer.appendChild(displayCap( match_i.gameId));
     document.getElementById("history").appendChild(matchContainer);
-}
-
-function appendCollapse(gid){
-    const gameid = "collapseGame".concat(gid);
-    var collapseDiv = document.createElement("div");
-    collapseDiv.classList.add("collapse");
-    collapseDiv.setAttribute("id", gameid);
-    console.log(gameid);
-    var detailCon = document.createElement("div");
-    detailCon.classList.add("card");
-    detailCon.classList.add("card-body");
-    detailCon.innerHTML = "Game Details for ".concat(gid);
-    collapseDiv.appendChild(detailCon);
-    return collapseDiv;
 }
 
 function appendItem(item){
@@ -227,7 +211,7 @@ function appendItem(item){
 
 function appendItems(items, wl, id){
     var itemsCon = document.createElement("div");
-    itemsCon.classList.add("col-6");
+    itemsCon.classList.add("col-5");
     itemsCon.classList.add("d-flex");
     itemsCon.classList.add("align-items-center");
     var firstRow = document.createElement("div");
@@ -246,21 +230,21 @@ function appendItems(items, wl, id){
     firstRow.appendChild(rowTwo);
     itemsCon.appendChild(firstRow);
 
-    var expandRow = document.createElement("div");
-    var expandBtn = document.createElement("button");
-    expandBtn.classList.add("btn");
-    if(wl == "win"){
-        expandBtn.classList.add("btn-victory");
-    }else if(wl == "loss"){
-        expandBtn.classList.add("btn-loss");
-    }
-    const gid = "#collapseGame".concat(id);
-    expandBtn.setAttribute("data-toggle", "collapse");
-    expandBtn.setAttribute("data-target", gid);
-    expandBtn.innerHTML = "+";
-    expandRow.classList.add("vl-container");
-    expandRow.appendChild(expandBtn);
-    itemsCon.appendChild(expandRow);
+    // var expandRow = document.createElement("div");
+    // var expandBtn = document.createElement("button");
+    // // expandBtn.classList.add("btn");
+    // if(wl == "win"){
+    //     expandBtn.classList.add("btn-victory");
+    // }else if(wl == "loss"){
+    //     expandBtn.classList.add("btn-loss");
+    // }
+    // const gid = "#collapseGame".concat(id);
+    // expandBtn.setAttribute("data-toggle", "collapse");
+    // expandBtn.setAttribute("data-target", gid);
+    // expandBtn.innerHTML = "+";
+    // expandRow.classList.add("vl-container");
+    // expandRow.appendChild(expandBtn);
+    // itemsCon.appendChild(expandRow);
     return itemsCon;
 }
 
