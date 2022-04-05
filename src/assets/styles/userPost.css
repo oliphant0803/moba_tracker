@@ -9,7 +9,8 @@ body {
 }
 
 .btn-post{
-    background-color: var(--light-blue);
+    border-color: var(--dark-green);
+    background-color: var(--sea-green);
     color: var(--white);
     margin-left: 1rem;
 }
@@ -100,12 +101,14 @@ body {
 }
 
 .filter{
-    background-color: var(--light-blue);
+    border-color: var(--dark-green);
+    background-color: var(--sea-green);
     margin-right: 2rem;
 }
 
 .filter:active, .filter:focus, .filter:hover{
-    background-color: var(--dark-blue);
+    border-color: var(--dark-green);
+    background-color: var(--sea-green);
 }
 
 .dropdown-menu{
